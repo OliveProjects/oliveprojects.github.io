@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olive Projects</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:       #0a0a0a;
+            --surface:  #141414;
+            --card:     #161616;
+            --border:   rgba(255,255,255,0.07);
+            --text:     #f0f0f0;
+            --subtext:  #777;
+            --z1: #E53935;
+            --z2: #FF7043;
+            --z3: #FDD835;
+            --z4: #43A047;
+            --z5: #00E676;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 48px;
+            background: rgba(10,10,10,0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .nav-dot {
+            display: inline-block;
+            width: 6px; height: 6px;
+            background: var(--z5);
+            border-radius: 50%;
+            margin-left: 5px;
+            vertical-align: middle;
+            margin-bottom: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 36px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--subtext);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+            letter-spacing: 0.1px;
+        }
+
+        .nav-links a:hover { color: var(--text); }
+
+        /* ── HERO ── */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 100px 48px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #hero::before {
+            content: '';
+            position: absolute;
+            top: -200px; left: -200px;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(0,230,118,0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-eyebrow {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--z5);
+            margin-bottom: 28px;
+        }
+
+        .hero-title {
+            font-size: clamp(56px, 9vw, 104px);
+            font-weight: 800;
+            letter-spacing: -4px;
+            line-height: 0.95;
+            margin-bottom: 32px;
+            background: linear-gradient(150deg, #ffffff 30%, #444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-sub {
+            font-size: 18px;
+            color: var(--subtext);
+            max-width: 480px;
+            line-height: 1.75;
+            margin-bottom: 48px;
+            font-weight: 300;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 26px;
+            background: var(--z5);
+            color: #000;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: opacity 0.2s, transform 0.2s;
+            letter-spacing: 0.1px;
+        }
+
+        .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+        .btn-ghost {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 26px;
+            background: transparent;
+            color: var(--subtext);
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 8px;
+            text-decoration: none;
+            border: 1px solid var(--border);
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+        /* ── DIVIDER ── */
+        .divider {
+            border: none;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ── SECTION ── */
+        section {
+            padding: 112px 48px;
+            max-width: 1140px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--subtext);
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: clamp(34px, 4vw, 52px);
+            font-weight: 700;
+            letter-spacing: -2px;
+            line-height: 1.05;
+            margin-bottom: 20px;
+        }
+
+        .section-desc {
+            font-size: 16px;
+            color: var(--subtext);
+            max-width: 460px;
+            line-height: 1.75;
+            margin-bottom: 64px;
+            font-weight: 300;
+        }
+
+        /* ── PROJECT CARDS ── */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .project-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,255,255,0.12);
+        }
+
+        .project-card.card-1:hover { box-shadow: 0 20px 60px rgba(0,230,118,0.07); }
+        .project-card.card-2:hover { box-shadow: 0 20px 60px rgba(67,160,71,0.07); }
+        .project-card.card-3:hover { box-shadow: 0 20px 60px rgba(253,216,53,0.07); }
+        .project-card.card-4:hover { box-shadow: 0 20px 60px rgba(255,112,67,0.07); }
+
+        .card-accent {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+        }
+
+        .card-1 .card-accent { background: linear-gradient(90deg, transparent, var(--z5), transparent); }
+        .card-2 .card-accent { background: linear-gradient(90deg, transparent, var(--z4), transparent); }
+        .card-3 .card-accent { background: linear-gradient(90deg, transparent, var(--z3), transparent); }
+        .card-4 .card-accent { background: linear-gradient(90deg, transparent, var(--z2), transparent); }
+
+        .card-tag {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .card-1 .card-tag { color: var(--z5); }
+        .card-2 .card-tag { color: var(--z4); }
+        .card-3 .card-tag { color: var(--z3); }
+        .card-4 .card-tag { color: var(--z2); }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.8px;
+            margin-bottom: 12px;
+        }
+
+        .card-desc {
+            font-size: 14px;
+            color: var(--subtext);
+            line-height: 1.7;
+            margin-bottom: 28px;
+            font-weight: 300;
+        }
+
+        .card-link {
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: gap 0.2s;
+        }
+
+        .card-link:hover { gap: 10px; }
+        .card-1 .card-link { color: var(--z5); }
+        .card-2 .card-link { color: var(--z4); }
+        .card-3 .card-link { color: var(--z3); }
+        .card-4 .card-link { color: var(--z2); }
+
+        /* ── ABOUT ── */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: start;
+        }
+
+        .about-text p {
+            color: var(--subtext);
+            font-size: 16px;
+            line-height: 1.85;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .about-text p:last-child { margin-bottom: 0; }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .stat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 24px;
+            transition: border-color 0.2s;
+        }
+
+        .stat-card:hover { border-color: rgba(255,255,255,0.14); }
+
+        .stat-number {
+            font-size: 40px;
+            font-weight: 800;
+            letter-spacing: -2px;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--subtext);
+            font-weight: 400;
+        }
+
+        /* ── CONTACT ── */
+        #contact { text-align: center; }
+        #contact .section-title,
+        #contact .section-desc { margin-left: auto; margin-right: auto; }
+
+        .contact-link {
+            display: inline-block;
+            font-size: clamp(22px, 3vw, 34px);
+            font-weight: 700;
+            letter-spacing: -1px;
+            color: var(--text);
+            text-decoration: none;
+            border-bottom: 2px solid var(--z5);
+            padding-bottom: 3px;
+            transition: color 0.2s;
+        }
+
+        .contact-link:hover { color: var(--z5); }
+
+        /* ── FOOTER ── */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 28px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--subtext);
+            font-size: 13px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 28px;
+        }
+
+        .footer-links a {
+            color: var(--subtext);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--text); }
+
+        /* ── ANIMATIONS ── */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.65s ease, transform 0.65s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-in:nth-child(2) { transition-delay: 0.1s; }
+        .fade-in:nth-child(3) { transition-delay: 0.2s; }
+        .fade-in:nth-child(4) { transition-delay: 0.3s; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+            .projects-grid { grid-template-columns: 1fr; }
+            .about-grid { grid-template-columns: 1fr; gap: 48px; }
+        }
+
+        @media (max-width: 640px) {
+            nav { padding: 16px 24px; }
+            .nav-links { display: none; }
+            #hero { padding: 100px 24px 64px; }
+            section { padding: 80px 24px; }
+            footer { flex-direction: column; gap: 20px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="#hero" class="nav-logo">Olive Projects<span class="nav-dot"></span></a>
+        <ul class="nav-links">
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- HERO -->
+    <div id="hero">
+        <p class="hero-eyebrow">Olive Projects · Est. 2024</p>
+        <h1 class="hero-title">Title 1</h1>
+        <p class="hero-sub">Placeholder subtitle. A short, personal line about what you build, who you are, and what drives you to create.</p>
+        <div class="hero-actions">
+            <a href="#projects" class="btn-primary">See Projects →</a>
+            <a href="#about" class="btn-ghost">About me</a>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+        <p class="section-label">Work &amp; Projects</p>
+        <h2 class="section-title fade-in">Title 2</h2>
+        <p class="section-desc fade-in">Placeholder. A sentence or two introducing your work — what you build and why it matters to you.</p>
+
+        <div class="projects-grid">
+            <div class="project-card card-1 fade-in">
+                <div class="card-accent"></div>
+                <span class="card-tag">App · Android</span>
+                <h3 class="card-title">Market Moood</h3>
+                <p class="card-desc">Placeholder project description. What it does, why you built it, and what makes it stand out. Keep it short and honest.</p>
+                <a href="#" class="card-link">View on Play Store →</a>
+            </div>
+            <div class="project-card card-2 fade-in">
+                <div class="card-accent"></div>
+                <span class="card-tag">Project · Category</span>
+                <h3 class="card-title">Project Title</h3>
+                <p class="card-desc">Placeholder project description. What it does, why you built it, and what makes it interesting. Keep it short and honest.</p>
+                <a href="#" class="card-link">Learn more →</a>
+            </div>
+            <div class="project-card card-3 fade-in">
+                <div class="card-accent"></div>
+                <span class="card-tag">Hobby · Category</span>
+                <h3 class="card-title">Project Title</h3>
+                <p class="card-desc">Placeholder project description. What it does, why you built it, and what makes it interesting. Keep it short and honest.</p>
+                <a href="#" class="card-link">Learn more →</a>
+            </div>
+            <div class="project-card card-4 fade-in">
+                <div class="card-accent"></div>
+                <span class="card-tag">Project · Category</span>
+                <h3 class="card-title">Project Title</h3>
+                <p class="card-desc">Placeholder project description. What it does, why you built it, and what makes it interesting. Keep it short and honest.</p>
+                <a href="#" class="card-link">Learn more →</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ABOUT -->
+    <section id="about">
+        <p class="section-label">About</p>
+        <div class="about-grid">
+            <div>
+                <h2 class="section-title fade-in">Title 3</h2>
+                <div class="about-text fade-in">
+                    <p>Placeholder paragraph one. A bit about who you are, your background, and what drives you. Keep it genuine — this is the part people actually read.</p>
+                    <p>Placeholder paragraph two. Your hobbies, interests, or what you're currently exploring beyond your main projects.</p>
+                    <p>Placeholder paragraph three. Something personal — what you care about beyond the screen.</p>
+                </div>
+            </div>
+            <div class="about-stats fade-in">
+                <div class="stat-card">
+                    <div class="stat-number" style="color:var(--z5)">00</div>
+                    <div class="stat-label">Stat label one</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" style="color:var(--z4)">00</div>
+                    <div class="stat-label">Stat label two</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" style="color:var(--z3)">00</div>
+                    <div class="stat-label">Stat label three</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" style="color:var(--z2)">00</div>
+                    <div class="stat-label">Stat label four</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- CONTACT -->
+    <section id="contact">
+        <p class="section-label">Get in touch</p>
+        <h2 class="section-title fade-in">Title 4</h2>
+        <p class="section-desc fade-in">Placeholder. An open invitation to reach out — whether it's about a project, a collaboration, or just to say hi.</p>
+        <a href="mailto:hello@oliveprojects.eu" class="contact-link fade-in">hello@oliveprojects.eu</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <span>© 2026 Olive Projects</span>
+        <div class="footer-links">
+            <a href="/privacy.html">Privacy Policy</a>
+            <a href="https://github.com/OliveProjects" target="_blank">GitHub</a>
+        </div>
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(el => {
+                if (el.isIntersecting) el.target.classList.add('visible');
+            });
+        }, { threshold: 0.12 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+
+</body>
+</html>
