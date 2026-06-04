@@ -10,17 +10,34 @@
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --bg:       #0a0a0a;
-            --surface:  #141414;
-            --card:     #161616;
-            --border:   rgba(255,255,255,0.07);
-            --text:     #f0f0f0;
-            --subtext:  #777;
+            --bg:               #0a0a0a;
+            --surface:          #141414;
+            --card:             #161616;
+            --border:           rgba(255,255,255,0.07);
+            --text:             #f0f0f0;
+            --subtext:          #777;
+            --nav-bg:           rgba(10,10,10,0.85);
+            --hero-gradient:    linear-gradient(150deg, #ffffff 30%, #555 100%);
+            --btn-border-hover: rgba(255,255,255,0.2);
+            --stat-border:      rgba(255,255,255,0.14);
             --z1: #E53935;
             --z2: #FF7043;
             --z3: #FDD835;
             --z4: #43A047;
             --z5: #00E676;
+        }
+
+        [data-theme="light"] {
+            --bg:               #f5f5f5;
+            --surface:          #ebebeb;
+            --card:             #ffffff;
+            --border:           rgba(0,0,0,0.08);
+            --text:             #0a0a0a;
+            --subtext:          #555;
+            --nav-bg:           rgba(245,245,245,0.85);
+            --hero-gradient:    linear-gradient(150deg, #0a0a0a 30%, #888 100%);
+            --btn-border-hover: rgba(0,0,0,0.2);
+            --stat-border:      rgba(0,0,0,0.1);
         }
 
         html { scroll-behavior: smooth; }
@@ -31,7 +48,24 @@
             color: var(--text);
             line-height: 1.6;
             overflow-x: hidden;
+            transition: background 0.2s, color 0.2s;
         }
+
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 34px; height: 34px;
+            cursor: pointer;
+            font-size: 15px;
+            line-height: 1;
+            color: var(--subtext);
+            transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .theme-toggle:hover { color: var(--text); border-color: var(--btn-border-hover); }
 
         /* ── NAV ── */
         nav {
@@ -42,7 +76,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 20px 48px;
-            background: rgba(10,10,10,0.85);
+            background: var(--nav-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--border);
@@ -118,7 +152,7 @@
             letter-spacing: -4px;
             line-height: 0.95;
             margin-bottom: 32px;
-            background: linear-gradient(150deg, #ffffff 30%, #444 100%);
+            background: var(--hero-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -172,7 +206,7 @@
             transition: color 0.2s, border-color 0.2s;
         }
 
-        .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+        .btn-ghost:hover { color: var(--text); border-color: var(--btn-border-hover); }
 
         /* ── DIVIDER ── */
         .divider {
@@ -324,7 +358,7 @@
             transition: border-color 0.2s;
         }
 
-        .stat-card:hover { border-color: rgba(255,255,255,0.14); }
+        .stat-card:hover { border-color: var(--stat-border); }
 
         .stat-number {
             font-size: 40px;
@@ -448,6 +482,7 @@
             <li><a href="#about">About</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme"></button>
     </nav>
 
     <!-- HERO -->
@@ -554,6 +589,23 @@
     </footer>
 
     <script>
+        const btn = document.getElementById('theme-toggle');
+        const root = document.documentElement;
+
+        const savedTheme = localStorage.getItem('op-theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        let theme = savedTheme || (prefersDark ? 'dark' : 'light');
+
+        function applyTheme(t) {
+            theme = t;
+            root.dataset.theme = t;
+            btn.textContent = t === 'dark' ? '☀' : '🌙';
+            localStorage.setItem('op-theme', t);
+        }
+
+        applyTheme(theme);
+        btn.addEventListener('click', () => applyTheme(theme === 'dark' ? 'light' : 'dark'));
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(el => {
                 if (el.isIntersecting) el.target.classList.add('visible');
