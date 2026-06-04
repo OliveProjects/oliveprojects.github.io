@@ -291,6 +291,7 @@
         .project-card.card-1:hover { box-shadow: 0 20px 60px rgba(0,230,118,0.07); }
         .project-card.card-2:hover { box-shadow: 0 20px 60px rgba(253,216,53,0.07); }
         .project-card.card-3:hover { box-shadow: 0 20px 60px rgba(255,112,67,0.07); }
+        .project-card.card-4:hover { box-shadow: 0 20px 60px rgba(229,57,53,0.07); }
 
         .card-accent {
             position: absolute;
@@ -301,6 +302,7 @@
         .card-1 .card-accent { background: linear-gradient(90deg, transparent, var(--z5), transparent); }
         .card-2 .card-accent { background: linear-gradient(90deg, transparent, var(--z3), transparent); }
         .card-3 .card-accent { background: linear-gradient(90deg, transparent, var(--z2), transparent); }
+        .card-4 .card-accent { background: linear-gradient(90deg, transparent, var(--z1), transparent); }
 
         .card-tag {
             font-size: 11px;
@@ -314,6 +316,7 @@
         .card-1 .card-tag { color: var(--z5); }
         .card-2 .card-tag { color: var(--z3); }
         .card-3 .card-tag { color: var(--z2); }
+        .card-4 .card-tag { color: var(--z1); }
 
         .card-title {
             font-size: 24px;
@@ -324,7 +327,8 @@
 
         .card-img {
             width: 100%;
-            height: 160px;
+            height: auto;
+            aspect-ratio: 1024/500;
             object-fit: cover;
             border-radius: 8px;
             margin-bottom: 20px;
@@ -353,6 +357,7 @@
         .card-1 .card-link { color: var(--z5); }
         .card-2 .card-link { color: var(--z3); }
         .card-3 .card-link { color: var(--z2); }
+        .card-4 .card-link { color: var(--z1); }
 
         /* ── ABOUT ── */
         .about-grid {
@@ -548,7 +553,7 @@
         <div class="projects-grid">
             <div class="project-card card-1 fade-in">
                 <div class="card-accent"></div>
-                <img src="assets/market-moood.jpg" alt="Market Moood app" class="card-img" style="height:auto;object-fit:unset;">
+                <img src="assets/market-moood.jpg" alt="Market Moood app" class="card-img">
                 <span class="card-tag">App · Android</span>
                 <h3 class="card-title">Market Moood</h3>
                 <p class="card-desc">A minimalist Android app and home screen widget that tracks the CNN Fear &amp; Greed Index in real time. Know the market's emotional temperature at a glance, from Extreme Fear to Extreme Greed, with quotes from Buffett, Munger and Morgan Housel.</p>
@@ -568,6 +573,12 @@
                 <h3 class="card-title">Kite Aero View</h3>
                 <p class="card-desc">FPV racing and cinematic drone footage. Building, tuning and flying custom drones, with a preference for filming cars and landscapes. Follow the builds and crashes at @kiteaeroview.</p>
                 <a href="https://www.instagram.com/kiteaeroview" target="_blank" class="card-link">Follow on Instagram →</a>
+            </div>
+            <div class="project-card card-4 fade-in">
+                <div class="card-accent"></div>
+                <span class="card-tag">In Progress · iOS</span>
+                <h3 class="card-title">Market Moood for iOS</h3>
+                <p class="card-desc">Bringing Market Moood to iPhone. The same minimalist Fear &amp; Greed tracker, rebuilt natively for iOS with home screen widgets. The Android version ships weekly updates while the iOS version takes shape.</p>
             </div>
         </div>
     </section>
