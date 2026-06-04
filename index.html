@@ -4,6 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Olive Projects</title>
+    <meta name="description" content="Environmental Inspector. Retail Investor. Drone Pilot. Vibecoder. Personal projects by K. Olivero.">
+
+    <!-- Open Graph -->
+    <meta property="og:type"        content="website">
+    <meta property="og:url"         content="https://oliveprojects.github.io">
+    <meta property="og:title"       content="Olive Projects">
+    <meta property="og:description" content="Environmental Inspector. Retail Investor. Drone Pilot. Vibecoder. Personal projects by K. Olivero.">
+    <!-- og:image: lägg till en URL till en 1200×630px bild när du har en -->
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card"        content="summary_large_image">
+    <meta name="twitter:site"        content="@K__Olivero">
+    <meta name="twitter:creator"     content="@K__Olivero">
+    <meta name="twitter:title"       content="Olive Projects">
+    <meta name="twitter:description" content="Environmental Inspector. Retail Investor. Drone Pilot. Vibecoder.">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&display=swap" rel="stylesheet">
     <style>
@@ -253,6 +269,8 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 16px;
         }
+
+        .project-card:last-child:nth-child(odd) { grid-column: span 2; }
 
         .project-card {
             background: var(--card);
