@@ -510,19 +510,19 @@
             </div>
             <div class="about-stats fade-in">
                 <div class="stat-card">
-                    <div class="stat-number" style="color:var(--z5)">12</div>
+                    <div id="stat-inspector" class="stat-number" style="color:var(--z5)"></div>
                     <div class="stat-label">Years as an inspector</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" style="color:var(--z3)">8</div>
+                    <div id="stat-investor" class="stat-number" style="color:var(--z3)"></div>
                     <div class="stat-label">Years in the market</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" style="color:var(--z2)">2</div>
+                    <div id="stat-pilot" class="stat-number" style="color:var(--z2)"></div>
                     <div class="stat-label">Years as a drone pilot</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" style="color:var(--z1)">3<span style="font-size:0.5em; letter-spacing:0; font-weight:600;"> mo</span></div>
+                    <div id="stat-vibe" class="stat-number" style="color:var(--z1)"></div>
                     <div class="stat-label">Of vibe coding</div>
                 </div>
             </div>
@@ -561,6 +561,20 @@
         }, { threshold: 0.12 });
 
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        function timeSince(startDate) {
+            const now = new Date();
+            const start = new Date(startDate);
+            const months = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
+            const years = Math.floor(months / 12);
+            if (years < 1) return `${months}<span style="font-size:0.5em;letter-spacing:0;font-weight:600"> mo</span>`;
+            return `${years}`;
+        }
+
+        document.getElementById('stat-inspector').innerHTML = timeSince('2014-04-01');
+        document.getElementById('stat-investor').innerHTML  = timeSince('2017-10-01');
+        document.getElementById('stat-pilot').innerHTML     = timeSince('2023-10-01');
+        document.getElementById('stat-vibe').innerHTML      = timeSince('2026-03-01');
     </script>
 
 </body>
