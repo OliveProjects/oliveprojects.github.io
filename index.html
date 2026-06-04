@@ -349,19 +349,43 @@
         #contact .section-title,
         #contact .section-desc { margin-left: auto; margin-right: auto; }
 
-        .contact-link {
-            display: inline-block;
-            font-size: clamp(22px, 3vw, 34px);
-            font-weight: 700;
-            letter-spacing: -1px;
-            color: var(--text);
+        .social-links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 28px;
+        }
+
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 28px;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            color: var(--subtext);
             text-decoration: none;
-            border-bottom: 2px solid var(--z5);
-            padding-bottom: 3px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s, border-color 0.2s, background 0.2s;
+            letter-spacing: 0.2px;
+        }
+
+        .social-link:hover {
+            color: var(--text);
+            border-color: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.04);
+        }
+
+        .contact-email {
+            display: inline-block;
+            font-size: 14px;
+            color: var(--subtext);
+            text-decoration: none;
             transition: color 0.2s;
         }
 
-        .contact-link:hover { color: var(--z5); }
+        .contact-email:hover { color: var(--text); }
 
         /* ── FOOTER ── */
         footer {
@@ -520,10 +544,15 @@
 
     <!-- CONTACT -->
     <section id="contact">
-        <p class="section-label">Get in touch</p>
-        <h2 class="section-title fade-in">Title 4</h2>
-        <p class="section-desc fade-in">Placeholder. An open invitation to reach out, whether it's about a project, a collaboration, or just to say hi.</p>
-        <a href="mailto:info@oliveprojects.eu" class="contact-link fade-in">info@oliveprojects.eu</a>
+        <p class="section-label">Connect</p>
+        <h2 class="section-title fade-in">Find me online.</h2>
+        <p class="section-desc fade-in">Follow the projects, the builds and the occasional drone crash.</p>
+        <div class="social-links fade-in">
+            <a href="https://www.instagram.com/kiteaeroview" target="_blank" class="social-link">Instagram</a>
+            <a href="https://x.com/K__Olivero" target="_blank" class="social-link">X</a>
+            <a href="https://www.linkedin.com/in/k-olivero" target="_blank" class="social-link">LinkedIn</a>
+        </div>
+        <a href="mailto:info@oliveprojects.eu" class="contact-email fade-in">info@oliveprojects.eu</a>
     </section>
 
     <!-- FOOTER -->
