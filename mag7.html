@@ -476,8 +476,8 @@
                                     <thead>
                                         <tr style={{ background:"var(--surface)" }}>
                                             <th style={{ padding:"10px 16px", textAlign:"left", fontFamily:"monospace", fontSize:10, color:"var(--faint)", letterSpacing:"0.08em", borderBottom:"1px solid var(--border-sm)", whiteSpace:"nowrap" }}>BOLAG</th>
+                                            <th onClick={() => handleSort("totalRank")} style={{...thBase, color:thColor("totalRank",null)}}>{"RANK"+arr("totalRank")}</th>
                                             <th onClick={() => handleSort("price")} style={{...thBase, color:thColor("price",null)}}>{"KURS"+arr("price")}</th>
-                                            <th style={{...thBase, color:"var(--th-dim)", cursor:"default"}}>P/E</th>
                                             <th onClick={() => handleSort("peg")} style={{...thBase, color:thColor("peg","peg")}}><Tooltip info={COL_INFO.peg}><span>{"PEG"+arr("peg")}</span></Tooltip></th>
                                             <th onClick={() => handleSort("upside")} style={{...thBase, color:thColor("upside","upside")}}><Tooltip info={COL_INFO.upside}><span>{"UPPSIDA"+arr("upside")}</span></Tooltip></th>
                                             <th style={{ padding:"10px 10px", textAlign:"left", fontFamily:"monospace", fontSize:10, color:"var(--faint)", borderBottom:"1px solid var(--border-sm)", whiteSpace:"nowrap" }}>ANALYTIKER</th>
@@ -488,7 +488,7 @@
                                             <th onClick={() => handleSort("revenueGrowth")} style={{...thBase, color:thColor("revenueGrowth","revenueGrowth")}}><Tooltip info={COL_INFO.revenueGrowth}><span>{"REV.TILLVÄXT"+arr("revenueGrowth")}</span></Tooltip></th>
                                             <th onClick={() => handleSort("rsi")} style={{...thBase, color:thColor("rsi","rsi")}}><Tooltip info={COL_INFO.rsi}><span>{"RSI"+arr("rsi")}</span></Tooltip></th>
                                             <th onClick={() => handleSort("beta")} style={{...thBase, color:thColor("beta","beta")}}><Tooltip info={COL_INFO.beta}><span>{"BETA"+arr("beta")}</span></Tooltip></th>
-                                            <th onClick={() => handleSort("totalRank")} style={{...thBase, color:thColor("totalRank",null)}}>{"TOTALRANK"+arr("totalRank")}</th>
+                                            <th style={{...thBase, color:"var(--th-dim)", cursor:"default"}}>P/E</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -501,6 +501,7 @@
                                                     onMouseLeave={() => setHovered(null)}
                                                     style={{ background: hovered===r.ticker?"var(--row-hover)":i%2===0?"var(--row-alt)":"transparent", borderBottom:"1px solid var(--border-sm)", animation:`fadeUp 0.4s ease ${i*0.05}s both` }}>
 
+                                                    {/* 1. Bolag */}
                                                     <td style={{ padding:"13px 16px", whiteSpace:"nowrap" }}>
                                                         <div style={{ display:"flex", alignItems:"center", gap:10 }}>
                                                             <div style={{ width:3, height:30, borderRadius:2, background:ACCENT[r.ticker], flexShrink:0 }} />
@@ -511,14 +512,19 @@
                                                         </div>
                                                     </td>
 
+                                                    {/* 2. Totalrank */}
+                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap" }}>
+                                                        <div style={{ display:"inline-flex", alignItems:"center", justifyContent:"center", minWidth:46, height:38, borderRadius:8, padding:"0 8px", background:`${tc}18`, border:`1px solid ${tc}44`, fontFamily:"monospace", fontSize:14, fontWeight:700, color:tc }}>
+                                                            {r.totalRank.toFixed(1)}
+                                                        </div>
+                                                    </td>
+
+                                                    {/* 3. Kurs */}
                                                     <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap" }}>
                                                         <span style={{ fontFamily:"monospace", fontSize:13, fontWeight:600 }}>${r.price != null ? r.price.toFixed(2) : "–"}</span>
                                                     </td>
 
-                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:0.35 }}>
-                                                        <span style={{ fontFamily:"monospace", fontSize:13 }}>{r.pe != null ? r.pe.toFixed(1) : "–"}</span>
-                                                    </td>
-
+                                                    {/* 4. PEG */}
                                                     <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.peg===0?0.3:1 }}>
                                                         <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
                                                             <span style={{ fontFamily:"monospace", fontSize:13, color: r.peg!=null ? cl.peg(r.peg) : "var(--ghost)" }}>
@@ -528,6 +534,7 @@
                                                         </div>
                                                     </td>
 
+                                                    {/* 5. Uppsida */}
                                                     <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.upside===0?0.3:1 }}>
                                                         <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
                                                             <span style={{ fontFamily:"monospace", fontSize:13, color:r.upside!=null?(r.upside>0?cl.pos:cl.sell):"var(--ghost)" }}>
@@ -537,10 +544,12 @@
                                                         </div>
                                                     </td>
 
+                                                    {/* 6. Analytiker */}
                                                     <td style={{ padding:"13px 10px" }}>
                                                         <AnalystBar buyPct={r.buyPct} holdPct={r.holdPct} sellPct={r.sellPct} />
                                                     </td>
 
+                                                    {/* 7. Köp% */}
                                                     <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.buyPct===0?0.3:1 }}>
                                                         <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
                                                             <span style={{ fontFamily:"monospace", fontSize:13, color:cl.buy }}>{r.buyPct}%</span>
@@ -548,6 +557,7 @@
                                                         </div>
                                                     </td>
 
+                                                    {/* 8. Konsensus */}
                                                     <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.scoreDeviation===0?0.3:1 }}>
                                                         <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
                                                             <div style={{ textAlign:"right" }}>
@@ -558,6 +568,7 @@
                                                         </div>
                                                     </td>
 
+                                                    {/* 9. ROE */}
                                                     <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.roe===0?0.3:1 }}>
                                                         <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
                                                             <span style={{ fontFamily:"monospace", fontSize:13 }}>{r.roe != null ? r.roe.toFixed(1)+"%" : "–"}</span>
@@ -565,6 +576,7 @@
                                                         </div>
                                                     </td>
 
+                                                    {/* 10. Bruttomarg */}
                                                     <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.grossMargin===0?0.3:1 }}>
                                                         <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
                                                             <span style={{ fontFamily:"monospace", fontSize:13 }}>{r.grossMargin != null ? r.grossMargin.toFixed(1)+"%" : "–"}</span>
@@ -572,6 +584,7 @@
                                                         </div>
                                                     </td>
 
+                                                    {/* 11. Rev.tillväxt */}
                                                     <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.revenueGrowth===0?0.3:1 }}>
                                                         <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
                                                             <span style={{ fontFamily:"monospace", fontSize:13, color:r.revenueGrowth!=null?cl.rev(r.revenueGrowth):"var(--ghost)" }}>
@@ -581,6 +594,7 @@
                                                         </div>
                                                     </td>
 
+                                                    {/* 12. RSI */}
                                                     <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.rsi===0?0.3:1 }}>
                                                         <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
                                                             <div style={{ textAlign:"right" }}>
@@ -591,6 +605,7 @@
                                                         </div>
                                                     </td>
 
+                                                    {/* 13. Beta */}
                                                     <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.beta===0?0.3:1 }}>
                                                         <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
                                                             <span style={{ fontFamily:"monospace", fontSize:13, color:cl.beta(r.beta) }}>{r.beta.toFixed(2)}</span>
@@ -598,10 +613,9 @@
                                                         </div>
                                                     </td>
 
-                                                    <td style={{ padding:"13px 16px", textAlign:"right", whiteSpace:"nowrap" }}>
-                                                        <div style={{ display:"inline-flex", alignItems:"center", justifyContent:"center", minWidth:46, height:38, borderRadius:8, padding:"0 8px", background:`${tc}18`, border:`1px solid ${tc}44`, fontFamily:"monospace", fontSize:14, fontWeight:700, color:tc }}>
-                                                            {r.totalRank.toFixed(1)}
-                                                        </div>
+                                                    {/* 14. P/E — referens, alltid dimmad, längst till höger */}
+                                                    <td style={{ padding:"13px 16px", textAlign:"right", whiteSpace:"nowrap", opacity:0.35 }}>
+                                                        <span style={{ fontFamily:"monospace", fontSize:13 }}>{r.pe != null ? r.pe.toFixed(1) : "–"}</span>
                                                     </td>
                                                 </tr>
                                             );
