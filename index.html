@@ -356,9 +356,22 @@
             border-radius: 14px;
             padding: 24px;
             transition: border-color 0.2s;
+            position: relative;
+            overflow: hidden;
         }
 
         .stat-card:hover { border-color: var(--stat-border); }
+
+        .stat-accent {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+        }
+
+        .stat-1 .stat-accent { background: linear-gradient(90deg, transparent, var(--z5), transparent); }
+        .stat-2 .stat-accent { background: linear-gradient(90deg, transparent, var(--z3), transparent); }
+        .stat-3 .stat-accent { background: linear-gradient(90deg, transparent, var(--z2), transparent); }
+        .stat-4 .stat-accent { background: linear-gradient(90deg, transparent, var(--z1), transparent); }
 
         .stat-number {
             font-size: 40px;
@@ -544,19 +557,23 @@
                 </div>
             </div>
             <div class="about-stats fade-in">
-                <div class="stat-card">
+                <div class="stat-card stat-1">
+                    <div class="stat-accent"></div>
                     <div id="stat-inspector" class="stat-number" style="color:var(--z5)"></div>
                     <div class="stat-label">Years as an inspector</div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card stat-2">
+                    <div class="stat-accent"></div>
                     <div id="stat-investor" class="stat-number" style="color:var(--z3)"></div>
                     <div class="stat-label">Years in the market</div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card stat-3">
+                    <div class="stat-accent"></div>
                     <div id="stat-pilot" class="stat-number" style="color:var(--z2)"></div>
                     <div class="stat-label">Years as a drone pilot</div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card stat-4">
+                    <div class="stat-accent"></div>
                     <div id="stat-vibe" class="stat-number" style="color:var(--z1)"></div>
                     <div class="stat-label">Of vibe coding</div>
                 </div>
