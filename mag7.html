@@ -182,15 +182,15 @@
 
         const FAQ_ITEMS = [
             { q:"Hur rankas varje bolag?", a:"Varje bolag tilldelas en placering 1–7 per parameter (1 = bäst i klassen). Placeringen multipliceras med parameterns vikt för det valda läget och summeras till ett totalvärde. Lägst totalvärde = bäst ranking. Bolagen rankas alltså mot varandra, inte mot ett absolut mål." },
-            { q:"Är det olika vikt på olika parametrar?", a:"Ja — vikterna bestäms av det rankingläge du valt. I 'Köpvärde' väger alla parametrar lika (x1). I 'Lägst risk' väger Beta x3 och konsensus/ROE/bruttomarginal x2 var. I 'Bäst risk/reward' väger Uppsida x3, och tillväxt/konsensus x2. Parametrar med vikt 0 ignoreras helt." },
+            { q:"Är det olika vikt på olika parametrar?", a:"Ja, vikterna bestäms av det rankingläge du valt. I 'Köpvärde' väger alla parametrar lika (x1). I 'Lägst risk' väger Beta x3 och konsensus/ROE/bruttomarginal x2 var. I 'Bäst risk/reward' väger Uppsida x3, och tillväxt/konsensus x2. Parametrar med vikt 0 ignoreras helt." },
             { q:"Varför viktas vissa parametrar x2 och x3 när jag byter filter?", a:"Varje filter representerar en investeringsstrategi med olika prioriteringar. En riskfokuserad investerare bryr sig mer om stabilitet (beta, konsensus) än om uppsida. En tillväxtinriktad investerare prioriterar tvärtom. Höga vikter förstärker de parametrar som är mest avgörande för just den strategin." },
-            { q:"Vad menas med PEG?", a:"PEG = P/E delat med EPS-tillväxt i procent. P/E säger hur mycket du betalar per vinstkrona, men ignorerar hur snabbt vinsten växer. PEG löser det — ett bolag med P/E 50 och 50% vinsttillväxt har PEG 1.0 (rimligt värderat). Under 1.0 anses potentiellt undervärderat. NVDA med PEG ~1.5 är 'billigare' än vad P/E 56 antyder." },
+            { q:"Vad menas med PEG?", a:"PEG = P/E delat med EPS-tillväxt i procent. P/E säger hur mycket du betalar per vinstkrona, men ignorerar hur snabbt vinsten växer. PEG löser det. Ett bolag med P/E 50 och 50% vinsttillväxt har PEG 1.0 (rimligt värderat). Under 1.0 anses potentiellt undervärderat. NVDA med PEG ~1.5 är 'billigare' än vad P/E 56 antyder." },
             { q:"Vad menas med Uppsida?", a:"Analytikernas genomsnittliga riktkurs minus dagens kurs, uttryckt i procent. +30% innebär att analytikerkollektivet tror aktien stiger 30% det kommande året. Viktigt: analytiker tenderar att vara systematiskt optimistiska, så reell uppsida är ofta lägre." },
             { q:"Vad är Konsensus-avvikelse?", a:"Analytikernas rekommendationer omvandlas till poäng: Köp=5, Behåll=3, Sälj=1. Vi beräknar viktat genomsnitt och visar avvikelsen från maxpoäng (5.0 = alla säger köp). 0.00 = total enighet om köp. Lägre avvikelse = starkare konsensus." },
             { q:"Vad är RSI och hur beräknas den?", a:"RSI (Relative Strength Index) mäter momentum. Över 70 = aktien kan vara överköpt. Under 30 = översåld. Närmast 50 = neutralt momentum. RSI beräknas från 30 dagars stängningskurser via Yahoo Finance med Wilders utjämningsmetod (14 perioder). En RSI nära 50 ger bäst ranking." },
-            { q:"Vad är Beta?", a:"Beta mäter hur mycket en aktie rör sig relativt marknaden (S&P 500). Beta 1.0 = rör sig i takt med index. Tesla på 2.31 = svänger mer än dubbelt så mycket — uppåt och nedåt. Microsoft på 0.90 är stabilare än marknaden." },
-            { q:"Varför visas P/E men ingår inte i rankningen?", a:"P/E är välkänt men missvisande för tillväxtbolag — NVDA på P/E 56 ser dyrt ut tills du vet att vinsten växer 100%+. PEG tar hänsyn till tillväxttakten och ger en rättvisare bild. P/E visas som referens för de som är vana vid måttet." },
-            { q:"Vad är ROE och varför är det viktigt?", a:"Return on Equity visar hur effektivt bolaget skapar vinst på ägarnas kapital. Warren Buffett söker konsekvent ROE över 15% som tecken på ett genuint kvalitetsbolag. Apples ROE på 160%+ beror delvis på massiva aktieåterköp som krymper eget kapital — men det ändrar inte att bolaget är extremt lönsamt." },
+            { q:"Vad är Beta?", a:"Beta mäter hur mycket en aktie rör sig relativt marknaden (S&P 500). Beta 1.0 = rör sig i takt med index. Tesla på 2.31 = svänger mer än dubbelt så mycket, uppåt och nedåt. Microsoft på 0.90 är stabilare än marknaden." },
+            { q:"Varför visas P/E men ingår inte i rankningen?", a:"P/E är välkänt men missvisande för tillväxtbolag. NVDA på P/E 56 ser dyrt ut tills du vet att vinsten växer 100%+. PEG tar hänsyn till tillväxttakten och ger en rättvisare bild. P/E visas som referens för de som är vana vid måttet." },
+            { q:"Vad är ROE och varför är det viktigt?", a:"Return on Equity visar hur effektivt bolaget skapar vinst på ägarnas kapital. Warren Buffett söker konsekvent ROE över 15% som tecken på ett genuint kvalitetsbolag. Apples ROE på 160%+ beror delvis på massiva aktieåterköp som krymper eget kapital, men det ändrar inte att bolaget är extremt lönsamt." },
             { q:"Hur ofta uppdateras datan?", a:"Kurser och RSI uppdateras var 15:e minut under marknadstid (måndag–fredag, ca 15:00–23:00 svensk tid). PEG, ROE, marginaler, tillväxt, analytikerkonsensus och riktkurser uppdateras en gång per timme automatiskt via FMP och Yahoo Finance." },
         ];
 
@@ -633,9 +633,9 @@
                                 <span>● Data uppdateras var 15:e minut under marknadstid</span>
                                 <span>● Rankingbadge: <span style={{color:cl.pos}}>1=bäst</span> → <span style={{color:cl.sell}}>7=sämst</span></span>
                                 <span>● Kurser + RSI: Yahoo Finance · PEG, ROE, marginaler, tillväxt: FMP</span>
-                                <span>● P/E visas för referens men ingår ej i ranking — PEG används</span>
+                                <span>● P/E visas för referens men ingår ej i ranking. PEG används</span>
                                 <span>● Analytikerkonsensus, riktkurser och köp/behåll/sälj: Yahoo Finance (automatisk, senast <strong>{analystDate}</strong>)</span>
-                                <span>● Uppsida = (riktkurs − live-kurs) / live-kurs — riktkurs uppdateras automatiskt timvis</span>
+                                <span>● Uppsida = (riktkurs − live-kurs) / live-kurs. Riktkurs uppdateras automatiskt timvis</span>
                             </div>
 
                             {/* Hint bar — under tabellen */}
