@@ -97,6 +97,9 @@
 
         const ThemeCtx = createContext("dark");
 
+        /* Date when analyst targets + buy/hold/sell counts were last manually updated */
+        const ANALYST_UPDATED = "4 jun 2026";
+
         function initTheme() {
             const saved = localStorage.getItem("mag7-theme");
             if (saved === "dark" || saved === "light") return saved;
@@ -152,9 +155,9 @@
 
         const COL_INFO = {
             peg:           { label:"PEG – Pris/Tillväxt",          short:"P/E justerat för vinsttillväxt",          long:"PEG = P/E delat med EPS-tillväxt. PEG 1.0 = rimligt värderad, under 1.0 = potentiellt undervärderad. Löser P/E's problem med tillväxtbolag – NVDA med PEG 1.5 är billigare än vad P/E 56 antyder." },
-            upside:        { label:"Uppsida",                       short:"Analytikernas förväntade kursuppgång",    long:"Riktkurs minus nuvarande kurs i procent. +30% = analytikerna tror aktien stiger 30% kommande år. Analytiker tenderar att vara optimistiska." },
-            scoreDeviation:{ label:"Konsensus-avvikelse",           short:"Hur nära perfekt analytikerkonsensus",   long:"Vi viktar rekommendationerna till 1–5 (5=alla säger köp) och visar avvikelsen från max. 0.00 = total enighet om köp. Lägre = starkare konsensus." },
-            buyPct:        { label:"Köp%",                          short:"Andel analytiker som säger köp",          long:"Hur stor andel av analytikerna som aktivt rekommenderar köp. Amazon har 100% – ingen analytiker säger sälj." },
+            upside:        { label:"Uppsida",                       short:"Riktkurs vs live-kurs (semi-dynamisk)",   long:`Beräknas som (riktkurs − live-kurs) / live-kurs. Live-kursen uppdateras var 15:e minut — men riktkursen är analytikernas konsensus och uppdateras manuellt (senast ${ANALYST_UPDATED}). Uppsidan rör sig alltså med kursen men riktkursen är fast tills nästa manuella uppdatering.` },
+            scoreDeviation:{ label:"Konsensus-avvikelse",           short:`Analytikerkonsensus (uppdaterad ${ANALYST_UPDATED})`, long:`Analytikernas rekommendationer (köp/behåll/sälj) viktas till 1–5 (5=alla säger köp) och avvikelsen från max visas. 0.00 = total enighet om köp. Lägre = starkare konsensus. Senast manuellt uppdaterad: ${ANALYST_UPDATED}.` },
+            buyPct:        { label:"Köp%",                          short:`Andel analytiker som säger köp (${ANALYST_UPDATED})`, long:`Hur stor andel av analytikerna som aktivt rekommenderar köp. Baseras på manuellt insamlad konsensusdata, senast uppdaterad ${ANALYST_UPDATED}. Amazon har 100% — ingen analytiker säger sälj.` },
             roe:           { label:"ROE – Avkastning på kapital",   short:"Buffetts kvalitetsmått",                  long:"Return on Equity visar hur effektivt bolaget skapar vinst med ägarnas pengar. Warren Buffett söker konsekvent ROE över 15%." },
             grossMargin:   { label:"Bruttomarginal",                short:"Mungers pricing power-mått",              long:"Andelen av intäkterna som blir kvar efter direkta kostnader. Hög marginal = stark marknadsposition. Meta 81% vs Tesla 18% är en enorm skillnad." },
             revenueGrowth: { label:"Omsättningstillväxt",           short:"Intäktstillväxt senaste räkenskapsåret",  long:"Hur snabbt bolaget växer sin omsättning. Tillväxt driver framtida vinster och motiverar höga P/E-tal. NVDA:s 120%+ visar varför PEG är ett bättre mått än P/E för tillväxtbolag." },
@@ -630,7 +633,8 @@
                                 <span>● Rankingbadge: <span style={{color:cl.pos}}>1=bäst</span> → <span style={{color:cl.sell}}>7=sämst</span></span>
                                 <span>● Kurser + RSI: Yahoo Finance · PEG, ROE, marginaler, tillväxt: FMP</span>
                                 <span>● P/E visas för referens men ingår ej i ranking — PEG används</span>
-                                <span>● Analytikerkonsensus: manuellt uppdaterad</span>
+                                <span>● Analytikerkonsensus, riktkurser och köp/behåll/sälj: manuellt uppdaterad <strong style={{color:"var(--dim)"}}>{ANALYST_UPDATED}</strong></span>
+                                <span>● Uppsida = (riktkurs − live-kurs) / live-kurs — rörlig med kursen, riktkurs fast till nästa uppdatering</span>
                             </div>
 
                             {/* FAQ */}
