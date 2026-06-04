@@ -146,6 +146,71 @@
 
         const rankColor = r => r<=1?"#00e676":r<=2?"#69f0ae":r<=4?"#fff176":r<=6?"#ff8a65":"#ff5252";
 
+        const FAQ_ITEMS = [
+          {
+            q: "Hur rankas varje bolag?",
+            a: "Varje bolag tilldelas en placering 1–7 per parameter (1 = bäst i klassen). Placeringen multipliceras med parameterns vikt för det valda läget och summeras till ett totalvärde. Lägst totalvärde = bäst ranking. Bolagen rankas alltså mot varandra, inte mot ett absolut mål.",
+          },
+          {
+            q: "Är det olika vikt på olika parametrar?",
+            a: "Ja — vikterna bestäms av det rankingläge du valt. I 'Köpvärde' väger alla parametrar lika (x1). I 'Lägst risk' väger Beta x3 och konsensus/ROE/bruttomarginal x2 var. I 'Bäst risk/reward' väger Uppsida x3, och tillväxt/konsensus x2. Parametrar med vikt 0 ignoreras helt i beräkningen.",
+          },
+          {
+            q: "Varför viktas vissa parametrar x2 och x3 när jag byter filter?",
+            a: "Varje filter representerar en investeringsstrategi med olika prioriteringar. En riskfokuserad investerare bryr sig mer om stabilitet (beta, konsensus) än om uppsida. En tillväxtinriktad investerare prioriterar tvärtom. Höga vikter förstärker de parametrar som är mest avgörande för just den strategin.",
+          },
+          {
+            q: "Vad menas med PEG?",
+            a: "PEG = P/E delat med EPS-tillväxt i procent. P/E säger hur mycket du betalar per vinstkrona, men ignorerar hur snabbt vinsten växer. PEG löser det — ett bolag med P/E 50 och 50% vinsttillväxt har PEG 1.0 (rimligt värderat). Under 1.0 anses potentiellt undervärderat. NVDA med PEG ~1.5 är 'billigare' än vad P/E 56 antyder.",
+          },
+          {
+            q: "Vad menas med Uppsida?",
+            a: "Analytikernas genomsnittliga riktkurs minus dagens kurs, uttryckt i procent. +30% innebär att analytikerkollektivet tror aktien stiger 30% det kommande året. Viktigt att notera: analytiker tenderar att vara systematiskt optimistiska, så reell uppsida är ofta lägre.",
+          },
+          {
+            q: "Vad är Konsensus-avvikelse?",
+            a: "Analytikernas rekommendationer omvandlas till poäng: Köp=5, Behåll=3, Sälj=1. Vi beräknar viktat genomsnitt och visar avvikelsen från maxpoäng (5.0 = alla säger köp). 0.00 = total enighet om köp. Lägre avvikelse = starkare konsensus.",
+          },
+          {
+            q: "Vad är RSI och hur beräknas den?",
+            a: "RSI (Relative Strength Index) mäter momentum. Över 70 = aktien kan vara överköpt. Under 30 = översåld. Närmast 50 = neutralt momentum. RSI beräknas från 30 dagars stängningskurser via Yahoo Finance med Wilders utjämningsmetod (14 perioder). En RSI nära 50 ger bäst ranking — varken överköpt eller översåld.",
+          },
+          {
+            q: "Vad är Beta?",
+            a: "Beta mäter hur mycket en aktie rör sig relativt marknaden (S&P 500). Beta 1.0 = rör sig i takt med index. Tesla på 2.31 = svänger mer än dubbelt så mycket — uppåt och nedåt. Microsoft på 0.90 är stabilare än marknaden. Avgörande för den som vill sova gott om natten.",
+          },
+          {
+            q: "Varför visas P/E men ingår inte i rankningen?",
+            a: "P/E är välkänt men missvisande för tillväxtbolag — NVDA på P/E 56 ser dyrt ut tills du vet att vinsten växer 100%+. PEG tar hänsyn till tillväxttakten och ger en rättvisare bild. P/E visas som referens för de som är vana vid måttet.",
+          },
+          {
+            q: "Vad är ROE och varför är det viktigt?",
+            a: "Return on Equity visar hur effektivt bolaget skapar vinst på ägarnas kapital. Warren Buffett söker konsekvent ROE över 15% som tecken på ett genuint kvalitetsbolag. Apples ROE på 160%+ beror delvis på massiva aktieåterköp som krymper eget kapital — men det ändrar inte att bolaget är extremt lönsamt.",
+          },
+          {
+            q: "Hur ofta uppdateras datan?",
+            a: "Kurser och RSI uppdateras var 15:e minut under marknadstid (måndag–fredag, ca 15:00–23:00 svensk tid). PEG, ROE, marginaler och tillväxt uppdateras en gång per timme. Analytikerkonsensus och riktkurser uppdateras manuellt vid behov.",
+          },
+        ];
+
+        function FAQItem({ q, a }) {
+          const [open, setOpen] = useState(false);
+          return (
+            <div style={{ borderBottom:"1px solid rgba(255,255,255,0.06)" }}>
+              <button onClick={() => setOpen(o => !o)} style={{
+                width:"100%", textAlign:"left", background:"none", border:"none", cursor:"pointer",
+                padding:"14px 0", display:"flex", alignItems:"center", justifyContent:"space-between", gap:16,
+              }}>
+                <span style={{ fontFamily:"'Sora',sans-serif", fontSize:13, fontWeight:600, color: open ? "#00a3e0" : "#eef0f3", transition:"color 0.2s" }}>{q}</span>
+                <span style={{ fontFamily:"monospace", fontSize:16, color: open ? "#00a3e0" : "rgba(255,255,255,0.3)", flexShrink:0, transition:"all 0.2s", transform: open ? "rotate(45deg)" : "none" }}>+</span>
+              </button>
+              {open && (
+                <div style={{ fontFamily:"sans-serif", fontSize:13, color:"rgba(255,255,255,0.55)", lineHeight:1.7, paddingBottom:16, paddingRight:32 }}>{a}</div>
+              )}
+            </div>
+          );
+        }
+
         function Tooltip({ info, children }) {
           const [pos, setPos] = useState(null);
           const ref = React.useRef();
@@ -470,6 +535,15 @@
                   <span>● P/E visas för referens men ingår ej i ranking — PEG används</span>
                   <span>● Analytikerkonsensus: manuellt uppdaterad</span>
                 </div>
+
+                {/* FAQ */}
+                <div style={{ marginTop:48 }}>
+                  <div style={{ fontFamily:"monospace", fontSize:10, color:"rgba(255,255,255,0.25)", letterSpacing:"0.2em", marginBottom:20 }}>VANLIGA FRÅGOR</div>
+                  <div style={{ maxWidth:780, borderTop:"1px solid rgba(255,255,255,0.06)" }}>
+                    {FAQ_ITEMS.map((item, i) => <FAQItem key={i} q={item.q} a={item.a} />)}
+                  </div>
+                </div>
+
               </div>
             </div>
           );
