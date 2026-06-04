@@ -97,9 +97,6 @@
 
         const ThemeCtx = createContext("dark");
 
-        /* Date when analyst targets + buy/hold/sell counts were last manually updated */
-        const ANALYST_UPDATED = "4 jun 2026";
-
         /* Random brand-color accent — a different company "hosts" the page each visit */
         const BRAND_COLORS = ["#00a3e0","#c0c0c0","#76b900","#ff9900","#4285f4","#0082fb","#e31937"];
         const SESSION_ACCENT = BRAND_COLORS[Math.floor(Math.random() * BRAND_COLORS.length)];
@@ -154,31 +151,9 @@
             },
         };
 
-        const ANALYST = {
-            MSFT:  { buy:59, hold:3,  sell:0,  target:559.96 },
-            AAPL:  { buy:33, hold:15, sell:3,  target:316.07 },
-            NVDA:  { buy:66, hold:4,  sell:1,  target:309.01 },
-            AMZN:  { buy:68, hold:3,  sell:0,  target:317.41 },
-            GOOGL: { buy:62, hold:10, sell:0,  target:433.46 },
-            META:  { buy:64, hold:6,  sell:0,  target:822.34 },
-            TSLA:  { buy:23, hold:22, sell:8,  target:395.20 },
-        };
-
         const ACCENT = {
             MSFT:"#00a3e0", AAPL:"#c0c0c0", NVDA:"#76b900",
             AMZN:"#ff9900", GOOGL:"#4285f4", META:"#0082fb", TSLA:"#e31937",
-        };
-
-        const COL_INFO = {
-            peg:           { label:"PEG – Pris/Tillväxt",          short:"P/E justerat för vinsttillväxt",          long:"PEG = P/E delat med EPS-tillväxt. PEG 1.0 = rimligt värderad, under 1.0 = potentiellt undervärderad. Löser P/E's problem med tillväxtbolag – NVDA med PEG 1.5 är billigare än vad P/E 56 antyder." },
-            upside:        { label:"Uppsida",                       short:"Riktkurs vs live-kurs (semi-dynamisk)",   long:`Beräknas som (riktkurs − live-kurs) / live-kurs. Live-kursen uppdateras var 15:e minut — men riktkursen är analytikernas konsensus och uppdateras manuellt (senast ${ANALYST_UPDATED}). Uppsidan rör sig alltså med kursen men riktkursen är fast tills nästa manuella uppdatering.` },
-            scoreDeviation:{ label:"Konsensus-avvikelse",           short:`Analytikerkonsensus (uppdaterad ${ANALYST_UPDATED})`, long:`Analytikernas rekommendationer (köp/behåll/sälj) viktas till 1–5 (5=alla säger köp) och avvikelsen från max visas. 0.00 = total enighet om köp. Lägre = starkare konsensus. Senast manuellt uppdaterad: ${ANALYST_UPDATED}.` },
-            buyPct:        { label:"Köp%",                          short:`Andel analytiker som säger köp (${ANALYST_UPDATED})`, long:`Hur stor andel av analytikerna som aktivt rekommenderar köp. Baseras på manuellt insamlad konsensusdata, senast uppdaterad ${ANALYST_UPDATED}. Amazon har 100% — ingen analytiker säger sälj.` },
-            roe:           { label:"ROE – Avkastning på kapital",   short:"Buffetts kvalitetsmått",                  long:"Return on Equity visar hur effektivt bolaget skapar vinst med ägarnas pengar. Warren Buffett söker konsekvent ROE över 15%." },
-            grossMargin:   { label:"Bruttomarginal",                short:"Mungers pricing power-mått",              long:"Andelen av intäkterna som blir kvar efter direkta kostnader. Hög marginal = stark marknadsposition. Meta 81% vs Tesla 18% är en enorm skillnad." },
-            revenueGrowth: { label:"Omsättningstillväxt",           short:"Intäktstillväxt senaste räkenskapsåret",  long:"Hur snabbt bolaget växer sin omsättning. Tillväxt driver framtida vinster och motiverar höga P/E-tal. NVDA:s 120%+ visar varför PEG är ett bättre mått än P/E för tillväxtbolag." },
-            rsi:           { label:"RSI – Relativ styrka",          short:"Teknisk ingångssignal (beräknad live)",   long:"Beräknad från 30 dagars stängningskurser via Wilders metod (14 perioder). Mäter om aktien är överköpt (>70) eller översåld (<30). Närmast 50 = neutralt momentum." },
-            beta:          { label:"Beta – Volatilitet",            short:"Hur mycket aktien svänger",               long:"Beta 1.0 = rör sig i takt med marknaden. Tesla 2.31 = svänger mer än dubbelt så mycket. Under 1.0 = stabilare än index." },
         };
 
         const MODES = {
@@ -216,17 +191,16 @@
             { q:"Vad är Beta?", a:"Beta mäter hur mycket en aktie rör sig relativt marknaden (S&P 500). Beta 1.0 = rör sig i takt med index. Tesla på 2.31 = svänger mer än dubbelt så mycket — uppåt och nedåt. Microsoft på 0.90 är stabilare än marknaden." },
             { q:"Varför visas P/E men ingår inte i rankningen?", a:"P/E är välkänt men missvisande för tillväxtbolag — NVDA på P/E 56 ser dyrt ut tills du vet att vinsten växer 100%+. PEG tar hänsyn till tillväxttakten och ger en rättvisare bild. P/E visas som referens för de som är vana vid måttet." },
             { q:"Vad är ROE och varför är det viktigt?", a:"Return on Equity visar hur effektivt bolaget skapar vinst på ägarnas kapital. Warren Buffett söker konsekvent ROE över 15% som tecken på ett genuint kvalitetsbolag. Apples ROE på 160%+ beror delvis på massiva aktieåterköp som krymper eget kapital — men det ändrar inte att bolaget är extremt lönsamt." },
-            { q:"Hur ofta uppdateras datan?", a:"Kurser och RSI uppdateras var 15:e minut under marknadstid (måndag–fredag, ca 15:00–23:00 svensk tid). PEG, ROE, marginaler och tillväxt uppdateras en gång per timme. Analytikerkonsensus och riktkurser uppdateras manuellt vid behov." },
+            { q:"Hur ofta uppdateras datan?", a:"Kurser och RSI uppdateras var 15:e minut under marknadstid (måndag–fredag, ca 15:00–23:00 svensk tid). PEG, ROE, marginaler, tillväxt, analytikerkonsensus och riktkurser uppdateras en gång per timme automatiskt via FMP och Yahoo Finance." },
         ];
 
         function enrich(stocks) {
             return stocks.map(s => {
-                const a     = ANALYST[s.ticker] || s;
-                const buy   = a.buy  || s.buy;
-                const hold  = a.hold || s.hold;
-                const sell  = a.sell || s.sell;
-                const target = a.target || s.target;
-                const total = buy + hold + sell;
+                const buy    = s.buy   || 0;
+                const hold   = s.hold  || 0;
+                const sell   = s.sell  || 0;
+                const target = s.target;
+                const total  = (buy + hold + sell) || 1;
                 const buyPct  = Math.round((buy  / total) * 100);
                 const holdPct = Math.round((hold / total) * 100);
                 const sellPct = 100 - buyPct - holdPct;
@@ -399,6 +373,22 @@
             const rankOrder   = [...ranked].sort((a, b) => a.totalRank - b.totalRank);
             const positionMap = Object.fromEntries(rankOrder.map((r, i) => [r.ticker, i + 1]));
             const sorted      = [...ranked].sort((a, b) => sortDir * ((a[sortCol] ?? 9999) - (b[sortCol] ?? 9999)));
+
+            const analystDate = data.lastAnalystUpdate
+                ? new Date(data.lastAnalystUpdate).toLocaleDateString("sv-SE", { day:"numeric", month:"short", year:"numeric" })
+                : "–";
+
+            const COL_INFO = {
+                peg:           { label:"PEG – Pris/Tillväxt",          short:"P/E justerat för vinsttillväxt",                long:"PEG = P/E delat med EPS-tillväxt. PEG 1.0 = rimligt värderad, under 1.0 = potentiellt undervärderad. Löser P/E's problem med tillväxtbolag – NVDA med PEG 1.5 är billigare än vad P/E 56 antyder." },
+                upside:        { label:"Uppsida",                       short:"Riktkurs vs live-kurs (timvis)",                long:`Beräknas som (riktkurs − live-kurs) / live-kurs. Live-kursen uppdateras var 15:e minut. Riktkursen är analytikerkonsensus från Yahoo Finance och uppdateras automatiskt (senast ${analystDate}). Uppsidan rör sig alltså med både kursen och uppdaterade riktkurser.` },
+                scoreDeviation:{ label:"Konsensus-avvikelse",           short:`Analytikerkonsensus (${analystDate})`,          long:`Analytikernas rekommendationer (köp/behåll/sälj) viktas till 1–5 (5=alla säger köp) och avvikelsen från max visas. 0.00 = total enighet om köp. Lägre = starkare konsensus. Uppdateras automatiskt via Yahoo Finance (senast ${analystDate}).` },
+                buyPct:        { label:"Köp%",                          short:`Andel analytiker som säger köp (${analystDate})`, long:`Hur stor andel av analytikerna som aktivt rekommenderar köp. Data hämtas automatiskt från Yahoo Finance (senast ${analystDate}).` },
+                roe:           { label:"ROE – Avkastning på kapital",   short:"Buffetts kvalitetsmått",                        long:"Return on Equity visar hur effektivt bolaget skapar vinst med ägarnas pengar. Warren Buffett söker konsekvent ROE över 15%." },
+                grossMargin:   { label:"Bruttomarginal",                short:"Mungers pricing power-mått",                    long:"Andelen av intäkterna som blir kvar efter direkta kostnader. Hög marginal = stark marknadsposition. Meta 81% vs Tesla 18% är en enorm skillnad." },
+                revenueGrowth: { label:"Omsättningstillväxt",           short:"Intäktstillväxt senaste räkenskapsåret",         long:"Hur snabbt bolaget växer sin omsättning. Tillväxt driver framtida vinster och motiverar höga P/E-tal. NVDA:s 120%+ visar varför PEG är ett bättre mått än P/E för tillväxtbolag." },
+                rsi:           { label:"RSI – Relativ styrka",          short:"Teknisk ingångssignal (beräknad live)",          long:"Beräknad från 30 dagars stängningskurser via Wilders metod (14 perioder). Mäter om aktien är överköpt (>70) eller översåld (<30). Närmast 50 = neutralt momentum." },
+                beta:          { label:"Beta – Volatilitet",            short:"Hur mycket aktien svänger",                     long:"Beta 1.0 = rör sig i takt med marknaden. Tesla 2.31 = svänger mer än dubbelt så mycket. Under 1.0 = stabilare än index." },
+            };
 
             const handleSort = col => {
                 if (sortCol === col) setSortDir(d => -d);
@@ -644,8 +634,8 @@
                                 <span>● Rankingbadge: <span style={{color:cl.pos}}>1=bäst</span> → <span style={{color:cl.sell}}>7=sämst</span></span>
                                 <span>● Kurser + RSI: Yahoo Finance · PEG, ROE, marginaler, tillväxt: FMP</span>
                                 <span>● P/E visas för referens men ingår ej i ranking — PEG används</span>
-                                <span>● Analytikerkonsensus, riktkurser och köp/behåll/sälj: manuellt uppdaterad <strong>{ANALYST_UPDATED}</strong></span>
-                                <span>● Uppsida = (riktkurs − live-kurs) / live-kurs — riktkurs är fast till nästa manuella uppdatering</span>
+                                <span>● Analytikerkonsensus, riktkurser och köp/behåll/sälj: Yahoo Finance (automatisk, senast <strong>{analystDate}</strong>)</span>
+                                <span>● Uppsida = (riktkurs − live-kurs) / live-kurs — riktkurs uppdateras automatiskt timvis</span>
                             </div>
 
                             {/* Hint bar — under tabellen */}
