@@ -465,31 +465,17 @@
 
         /* ── VIEW COUNTER ── */
         .view-counter {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
             display: flex;
             align-items: center;
-            gap: 7px;
-            padding: 8px 16px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 100px;
-            font-size: 13px;
+            gap: 5px;
             color: var(--subtext);
+            font-size: 13px;
             cursor: default;
             user-select: none;
-            z-index: 50;
-            transition: color 0.2s, border-color 0.2s, box-shadow 0.2s;
+            transition: color 0.2s;
         }
 
-        .view-counter:hover {
-            color: var(--text);
-            border-color: var(--stat-border);
-            box-shadow: 0 4px 24px rgba(0,0,0,0.2);
-        }
-
-        .view-eye { font-size: 14px; line-height: 1; }
+        .view-counter:hover { color: var(--text); }
 
         /* ── FOOTER ── */
         footer {
@@ -665,17 +651,12 @@
         <a href="mailto:hello@oliveprojects.eu" class="contact-email fade-in">hello@oliveprojects.eu</a>
     </section>
 
-    <!-- VIEW COUNTER -->
-    <div class="view-counter" id="view-counter">
-        <span class="view-eye">👁</span>
-        <span id="view-count">–</span>
-    </div>
-
     <!-- FOOTER -->
     <footer>
         <span>© 2026 Olive Projects</span>
         <div class="footer-links">
             <a href="https://github.com/OliveProjects" target="_blank">GitHub</a>
+            <div class="view-counter" id="view-counter"><span id="view-count">–</span> views</div>
         </div>
     </footer>
 
