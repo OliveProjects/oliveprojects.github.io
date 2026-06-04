@@ -46,86 +46,141 @@
         };
 
         const FALLBACK = [
-          { ticker:"MSFT", name:"Microsoft", price:507.16, pe:36.6, div:0.65, roe:37.9,  grossMargin:69.8, rsi:58, beta:0.90 },
-          { ticker:"AAPL", name:"Apple",     price:270.14, pe:36.2, div:0.38, roe:160.6, grossMargin:45.6, rsi:52, beta:1.24 },
-          { ticker:"NVDA", name:"NVIDIA",    price:195.21, pe:56.5, div:0.02, roe:123.8, grossMargin:74.6, rsi:61, beta:1.97 },
-          { ticker:"AMZN", name:"Amazon",    price:250.20, pe:35.2, div:null, roe:22.1,  grossMargin:48.9, rsi:55, beta:1.31 },
-          { ticker:"GOOGL", name:"Alphabet", price:284.31, pe:27.4, div:0.29, roe:32.4,  grossMargin:57.1, rsi:49, beta:1.05 },
-          { ticker:"META",  name:"Meta",     price:635.95, pe:27.7, div:0.33, roe:36.8,  grossMargin:81.5, rsi:63, beta:1.27 },
-          { ticker:"TSLA",  name:"Tesla",    price:462.07, pe:296.9,div:null, roe:10.7,  grossMargin:17.9, rsi:71, beta:2.31 },
+          { ticker:"MSFT",  name:"Microsoft", price:507.16, pe:36.6, peg:2.3,  div:0.65, roe:37.9,  grossMargin:69.8, revenueGrowth:14.9,  rsi:58, beta:0.90 },
+          { ticker:"AAPL",  name:"Apple",     price:270.14, pe:36.2, peg:2.8,  div:0.38, roe:160.6, grossMargin:45.6, revenueGrowth:4.0,   rsi:52, beta:1.24 },
+          { ticker:"NVDA",  name:"NVIDIA",    price:195.21, pe:56.5, peg:1.5,  div:0.02, roe:123.8, grossMargin:74.6, revenueGrowth:122.4, rsi:61, beta:1.97 },
+          { ticker:"AMZN",  name:"Amazon",    price:250.20, pe:35.2, peg:1.8,  div:null, roe:22.1,  grossMargin:48.9, revenueGrowth:11.0,  rsi:55, beta:1.31 },
+          { ticker:"GOOGL", name:"Alphabet",  price:284.31, pe:27.4, peg:1.4,  div:0.29, roe:32.4,  grossMargin:57.1, revenueGrowth:14.0,  rsi:49, beta:1.05 },
+          { ticker:"META",  name:"Meta",      price:635.95, pe:27.7, peg:1.1,  div:0.33, roe:36.8,  grossMargin:81.5, revenueGrowth:19.0,  rsi:63, beta:1.27 },
+          { ticker:"TSLA",  name:"Tesla",     price:462.07, pe:296.9,peg:8.5,  div:null, roe:10.7,  grossMargin:17.9, revenueGrowth:-1.0,  rsi:71, beta:2.31 },
         ];
 
         const ACCENT = { MSFT:"#00a3e0",AAPL:"#c0c0c0",NVDA:"#76b900",AMZN:"#ff9900",GOOGL:"#4285f4",META:"#0082fb",TSLA:"#e31937" };
 
         const COL_INFO = {
-          pe:            { label:"P/E – Pris/Vinst",           short:"Hur mycket du betalar per vinstkrona",      long:"P/E 27 innebär att du betalar 27x bolagets årsvinst. Lägre är billigare. Benjamin Graham föredrog P/E under 15, men för teknikbolag är 25–40 normalt idag." },
-          upside:        { label:"Uppsida",                     short:"Analytikernas förväntade kursuppgång",      long:"Riktkurs minus nuvarande kurs i procent. +30% = analytikerna tror aktien stiger 30% kommande år. Analytiker tenderar att vara optimistiska." },
-          scoreDeviation:{ label:"Konsensus-avvikelse",         short:"Hur nära perfekt analytikerkonsensus",     long:"Vi viktar rekommendationerna till 1–5 (5=alla säger köp) och visar avvikelsen från max. 0.00 = total enighet om köp. Lägre = starkare konsensus." },
-          buyPct:        { label:"Köp%",                        short:"Andel analytiker som säger köp",            long:"Hur stor andel av analytikerna som aktivt rekommenderar köp. Amazon har 100% – ingen analytiker säger sälj." },
-          roe:           { label:"ROE – Avkastning på kapital", short:"Buffetts kvalitetsmått",                   long:"Return on Equity visar hur effektivt bolaget skapar vinst med ägarnas pengar. Warren Buffett söker konsekvent ROE över 15%." },
-          grossMargin:   { label:"Bruttomarginal",               short:"Mungers pricing power-mått",               long:"Andelen av intäkterna som blir kvar efter direkta kostnader. Hög marginal = stark marknadsposition. Meta 81% vs Tesla 18% är en enorm skillnad." },
-          rsi:           { label:"RSI – Relativ styrka",         short:"Teknisk ingångssignal",                    long:"Mäter om aktien är överköpt (>70) eller översåld (<30). Närmast 50 = neutralt momentum och tekniskt bäst ingångspunkt." },
-          beta:          { label:"Beta – Volatilitet",           short:"Hur mycket aktien svänger",                long:"Beta 1.0 = rör sig i takt med marknaden. Tesla 2.31 = svänger mer än dubbelt så mycket. Under 1.0 = stabilare än index." },
+          peg:          { label:"PEG – Pris/Tillväxt",          short:"P/E justerat för vinsttillväxt",           long:"PEG = P/E delat med EPS-tillväxt. PEG 1.0 = rimligt värderad, under 1.0 = potentiellt undervärderad. Löser P/E's problem med tillväxtbolag – NVDA med PEG 1.5 är billigare än vad P/E 56 antyder." },
+          upside:       { label:"Uppsida",                       short:"Analytikernas förväntade kursuppgång",     long:"Riktkurs minus nuvarande kurs i procent. +30% = analytikerna tror aktien stiger 30% kommande år. Analytiker tenderar att vara optimistiska." },
+          scoreDeviation:{ label:"Konsensus-avvikelse",          short:"Hur nära perfekt analytikerkonsensus",    long:"Vi viktar rekommendationerna till 1–5 (5=alla säger köp) och visar avvikelsen från max. 0.00 = total enighet om köp. Lägre = starkare konsensus." },
+          buyPct:       { label:"Köp%",                          short:"Andel analytiker som säger köp",           long:"Hur stor andel av analytikerna som aktivt rekommenderar köp. Amazon har 100% – ingen analytiker säger sälj." },
+          roe:          { label:"ROE – Avkastning på kapital",   short:"Buffetts kvalitetsmått",                   long:"Return on Equity visar hur effektivt bolaget skapar vinst med ägarnas pengar. Warren Buffett söker konsekvent ROE över 15%." },
+          grossMargin:  { label:"Bruttomarginal",                short:"Mungers pricing power-mått",               long:"Andelen av intäkterna som blir kvar efter direkta kostnader. Hög marginal = stark marknadsposition. Meta 81% vs Tesla 18% är en enorm skillnad." },
+          revenueGrowth:{ label:"Omsättningstillväxt",           short:"Intäktstillväxt senaste räkenskapsåret",   long:"Hur snabbt bolaget växer sin omsättning. Tillväxt driver framtida vinster och motiverar höga P/E-tal. NVDA:s 120%+ visar varför PEG är ett bättre mått än P/E för tillväxtbolag." },
+          rsi:          { label:"RSI – Relativ styrka",          short:"Teknisk ingångssignal (beräknad live)",    long:"Beräknad från 30 dagars stängningskurser via Wilders metod (14 perioder). Mäter om aktien är överköpt (>70) eller översåld (<30). Närmast 50 = neutralt momentum." },
+          beta:         { label:"Beta – Volatilitet",            short:"Hur mycket aktien svänger",                long:"Beta 1.0 = rör sig i takt med marknaden. Tesla 2.31 = svänger mer än dubbelt så mycket. Under 1.0 = stabilare än index." },
         };
 
         const MODES = {
           value: {
             label:"Köpvärde", icon:"⚖️",
             headline:"Du söker bästa totala köpvärde",
-            desc:"Alla mått vägs lika. Identifierar bolag som kombinerar rimlig värdering, stark analytikerkonsensus och god fundamental kvalitet.",
+            desc:"Alla mått vägs lika. Identifierar bolag som kombinerar rimlig värdering (PEG), stark analytikerkonsensus och god fundamental kvalitet.",
             ignores:null,
-            weights:{ pe:1,upside:1,scoreDeviation:1,buyPct:1,roe:1,grossMargin:1,rsi:1,beta:0 },
+            weights:{ peg:1, upside:1, scoreDeviation:1, buyPct:1, roe:1, grossMargin:1, revenueGrowth:1, rsi:1, beta:0 },
           },
           lowrisk: {
             label:"Lägst risk", icon:"🛡️",
             headline:"Du prioriterar stabilitet och trygghet",
             desc:"Beta och konsensus väger tyngst. Bolag som svänger lite, har starkt analytikerstöd och bevisad lönsamhet rankas upp.",
-            ignores:"Uppsida ignoreras – potential utan stabilitet räknas inte här.",
-            weights:{ pe:1,upside:0,scoreDeviation:2,buyPct:2,roe:2,grossMargin:2,rsi:1,beta:3 },
+            ignores:"Uppsida och tillväxt ignoreras – potential utan stabilitet räknas inte här.",
+            weights:{ peg:1, upside:0, scoreDeviation:2, buyPct:2, roe:2, grossMargin:2, revenueGrowth:0, rsi:1, beta:3 },
           },
           riskreward: {
             label:"Bäst risk/reward", icon:"🎯",
             headline:"Du söker bäst möjlig avkastning för risken",
-            desc:"Uppsida och konsensus väger tyngst. RSI används för att hitta bra teknisk ingångspunkt.",
+            desc:"Uppsida, tillväxt och konsensus väger tyngst. RSI används för att hitta bra teknisk ingångspunkt.",
             ignores:null,
-            weights:{ pe:1,upside:3,scoreDeviation:2,buyPct:2,roe:1,grossMargin:1,rsi:2,beta:1 },
+            weights:{ peg:1, upside:3, scoreDeviation:2, buyPct:2, roe:1, grossMargin:1, revenueGrowth:2, rsi:2, beta:1 },
           },
         };
 
+        // Wilder's RSI from daily closing prices
+        function calcRSI(closes, period = 14) {
+          const clean = (closes || []).filter(c => c != null);
+          if (clean.length < period + 1) return null;
+          const changes = clean.slice(1).map((c, i) => c - clean[i]);
+          const gains  = changes.map(c => Math.max(c,  0));
+          const losses = changes.map(c => Math.max(-c, 0));
+          let avgGain = gains.slice(0, period).reduce((a, b) => a + b, 0) / period;
+          let avgLoss = losses.slice(0, period).reduce((a, b) => a + b, 0) / period;
+          for (let i = period; i < changes.length; i++) {
+            avgGain = (avgGain * (period - 1) + gains[i]) / period;
+            avgLoss = (avgLoss * (period - 1) + losses[i]) / period;
+          }
+          if (avgLoss === 0) return 100;
+          return Math.round(100 - (100 / (1 + avgGain / avgLoss)));
+        }
+
         async function fetchLiveData() {
-          const tickers = TICKERS.join(",");
-          const [quoteRes, ratioRes, ...rsiResults] = await Promise.all([
-            fetch(`https://financialmodelingprep.com/api/v3/quote/${tickers}?apikey=${API_KEY}`).then(r => r.json()),
-            fetch(`https://financialmodelingprep.com/api/v3/ratios-ttm/${tickers}?apikey=${API_KEY}`).then(r => r.json()),
-            ...TICKERS.map(t =>
-              fetch(`https://financialmodelingprep.com/api/v3/technical_indicator/daily/${t}?period=14&type=rsi&apikey=${API_KEY}`)
-                .then(r => r.json()).then(d => ({ ticker:t, rsi: d[0]?.rsi ?? null }))
-            ),
+          const tickerStr = TICKERS.join(",");
+
+          const [quoteRes, ...rest] = await Promise.all([
+            // Batch quote for price + basic fields
+            fetch(`https://financialmodelingprep.com/stable/quote?symbol=${tickerStr}&apikey=${API_KEY}`)
+              .then(r => r.json()).catch(() => []),
+
+            // Per-ticker: ratios, key-metrics, financial-growth, Yahoo history — all 28 in parallel
+            ...TICKERS.flatMap(t => [
+              fetch(`https://financialmodelingprep.com/stable/ratios?symbol=${t}&apikey=${API_KEY}`)
+                .then(r => r.json())
+                .then(d => ({ type:"ratios", ticker:t, data: Array.isArray(d) ? d[0] || {} : {} }))
+                .catch(() => ({ type:"ratios", ticker:t, data:{} })),
+
+              fetch(`https://financialmodelingprep.com/stable/key-metrics?symbol=${t}&apikey=${API_KEY}`)
+                .then(r => r.json())
+                .then(d => ({ type:"metrics", ticker:t, data: Array.isArray(d) ? d[0] || {} : {} }))
+                .catch(() => ({ type:"metrics", ticker:t, data:{} })),
+
+              fetch(`https://financialmodelingprep.com/stable/financial-growth?symbol=${t}&apikey=${API_KEY}`)
+                .then(r => r.json())
+                .then(d => ({ type:"growth", ticker:t, data: Array.isArray(d) ? d[0] || {} : {} }))
+                .catch(() => ({ type:"growth", ticker:t, data:{} })),
+
+              // Yahoo Finance for price history → RSI calculation
+              fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${t}?interval=1d&range=1mo`)
+                .then(r => r.json())
+                .then(d => {
+                  const closes = d?.chart?.result?.[0]?.indicators?.quote?.[0]?.close || [];
+                  return { type:"yahoo", ticker:t, rsi: calcRSI(closes) };
+                })
+                .catch(() => ({ type:"yahoo", ticker:t, rsi:null })),
+            ]),
           ]);
 
+          // Index results by ticker and type
+          const byTicker = {};
+          TICKERS.forEach(t => { byTicker[t] = { ratios:{}, metrics:{}, growth:{}, rsi:null }; });
+          rest.forEach(r => {
+            if (r.type === "yahoo") byTicker[r.ticker].rsi = r.rsi;
+            else byTicker[r.ticker][r.type] = r.data;
+          });
+
           return FALLBACK.map(stock => {
-            const q = Array.isArray(quoteRes) ? quoteRes.find(x => x.symbol === stock.ticker) || {} : {};
-            const r = Array.isArray(ratioRes) ? ratioRes.find(x => x.symbol === stock.ticker) || {} : {};
-            const rsiObj = rsiResults.find(x => x.ticker === stock.ticker) || {};
+            const q       = Array.isArray(quoteRes) ? quoteRes.find(x => x.symbol === stock.ticker) || {} : {};
+            const ratios  = byTicker[stock.ticker]?.ratios  || {};
+            const metrics = byTicker[stock.ticker]?.metrics || {};
+            const growth  = byTicker[stock.ticker]?.growth  || {};
+            const rsi     = byTicker[stock.ticker]?.rsi;
             const analyst = ANALYST[stock.ticker];
             return {
               ...stock,
               ...analyst,
-              price:       q.price        ?? stock.price,
-              pe:          q.pe           ?? stock.pe,
-              div:         q.dividendYield != null ? q.dividendYield * 100 : stock.div,
-              target:      analyst.target,
-              roe:         r.returnOnEquityTTM != null ? r.returnOnEquityTTM * 100 : stock.roe,
-              grossMargin: r.grossProfitMarginTTM != null ? r.grossProfitMarginTTM * 100 : stock.grossMargin,
-              rsi:         rsiObj.rsi ?? stock.rsi,
-              beta:        q.beta ?? stock.beta,
+              price:         q.price ?? stock.price,
+              pe:            ratios.priceToEarningsRatio ?? stock.pe,
+              peg:           ratios.priceToEarningsGrowthRatio ?? stock.peg,
+              div:           q.dividendYield != null ? q.dividendYield * 100 : stock.div,
+              target:        analyst.target,
+              roe:           metrics.returnOnEquity != null ? metrics.returnOnEquity * 100 : stock.roe,
+              grossMargin:   ratios.grossProfitMargin != null ? ratios.grossProfitMargin * 100 : stock.grossMargin,
+              revenueGrowth: growth.revenueGrowth != null ? growth.revenueGrowth * 100 : stock.revenueGrowth,
+              rsi:           rsi ?? stock.rsi,
+              beta:          stock.beta,
             };
           });
         }
 
         function enrich(rows) {
           return rows.map(r => {
-            const total = r.buy + r.hold + r.sell;
+            const total   = r.buy + r.hold + r.sell;
             const buyPct  = Math.round((r.buy  / total) * 100);
             const holdPct = Math.round((r.hold / total) * 100);
             const sellPct = 100 - buyPct - holdPct;
@@ -146,32 +201,34 @@
         }
 
         function addRanks(rows, mode) {
-          const w = MODES[mode].weights;
-          const rPE   = rankArr(rows, "pe",            true);
-          const rUp   = rankArr(rows, "upside",         false);
-          const rSc   = rankArr(rows, "scoreDeviation", true);
-          const rBuy  = rankArr(rows, "buyPct",         false);
-          const rROE  = rankArr(rows, "roe",            false);
-          const rGM   = rankArr(rows, "grossMargin",    false);
-          const rBeta = rankArr(rows, "beta",           true);
-          const rsiS  = [...rows].sort((a, b) => Math.abs(a.rsi - 50) - Math.abs(b.rsi - 50));
-          const rRSI  = Object.fromEntries(rsiS.map((r, i) => [r.ticker, i + 1]));
+          const w    = MODES[mode].weights;
+          const rPEG = rankArr(rows, "peg",           true);
+          const rUp  = rankArr(rows, "upside",         false);
+          const rSc  = rankArr(rows, "scoreDeviation", true);
+          const rBuy = rankArr(rows, "buyPct",         false);
+          const rROE = rankArr(rows, "roe",            false);
+          const rGM  = rankArr(rows, "grossMargin",    false);
+          const rRG  = rankArr(rows, "revenueGrowth",  false);
+          const rBeta= rankArr(rows, "beta",           true);
+          const rsiS = [...rows].sort((a, b) => Math.abs(a.rsi - 50) - Math.abs(b.rsi - 50));
+          const rRSI = Object.fromEntries(rsiS.map((r, i) => [r.ticker, i + 1]));
 
           return rows.map(r => {
             const ind = {
-              rankPE:rPE[r.ticker], rankUpside:rUp[r.ticker], rankScore:rSc[r.ticker],
+              rankPEG:rPEG[r.ticker], rankUpside:rUp[r.ticker], rankScore:rSc[r.ticker],
               rankBuyPct:rBuy[r.ticker], rankROE:rROE[r.ticker], rankGM:rGM[r.ticker],
-              rankRSI:rRSI[r.ticker], rankBeta:rBeta[r.ticker],
+              rankRG:rRG[r.ticker], rankRSI:rRSI[r.ticker], rankBeta:rBeta[r.ticker],
             };
             const total = parseFloat((
-              (w.pe            ? ind.rankPE      * w.pe            : 0) +
-              (w.upside        ? ind.rankUpside  * w.upside        : 0) +
-              (w.scoreDeviation? r.scoreDeviation* w.scoreDeviation: 0) +
-              (w.buyPct        ? ind.rankBuyPct  * w.buyPct        : 0) +
-              (w.roe           ? ind.rankROE     * w.roe           : 0) +
-              (w.grossMargin   ? ind.rankGM      * w.grossMargin   : 0) +
-              (w.rsi           ? ind.rankRSI     * w.rsi           : 0) +
-              (w.beta          ? ind.rankBeta    * w.beta          : 0)
+              (w.peg           ? ind.rankPEG    * w.peg           : 0) +
+              (w.upside        ? ind.rankUpside * w.upside        : 0) +
+              (w.scoreDeviation? r.scoreDeviation*w.scoreDeviation: 0) +
+              (w.buyPct        ? ind.rankBuyPct * w.buyPct        : 0) +
+              (w.roe           ? ind.rankROE    * w.roe           : 0) +
+              (w.grossMargin   ? ind.rankGM     * w.grossMargin   : 0) +
+              (w.revenueGrowth ? ind.rankRG     * w.revenueGrowth : 0) +
+              (w.rsi           ? ind.rankRSI    * w.rsi           : 0) +
+              (w.beta          ? ind.rankBeta   * w.beta          : 0)
             ).toFixed(1));
             return { ...r, ...ind, totalRank: total };
           });
@@ -221,32 +278,33 @@
         }
 
         function Mag7Table() {
-          const [rawData,  setRawData]  = useState(FALLBACK.map(r => ({ ...r, ...ANALYST[r.ticker] })));
-          const [status,   setStatus]   = useState("Hämtar live-data...");
-          const [mode,     setMode]     = useState("value");
-          const [sortCol,  setSortCol]  = useState("totalRank");
-          const [sortDir,  setSortDir]  = useState(1);
-          const [hovered,  setHovered]  = useState(null);
+          const [rawData, setRawData] = useState(FALLBACK.map(r => ({ ...r, ...ANALYST[r.ticker] })));
+          const [status,  setStatus]  = useState("Hämtar live-data...");
+          const [mode,    setMode]    = useState("value");
+          const [sortCol, setSortCol] = useState("totalRank");
+          const [sortDir, setSortDir] = useState(1);
+          const [hovered, setHovered] = useState(null);
 
           useEffect(() => {
             fetchLiveData()
-              .then(d => { setRawData(d); setStatus(`Live · ${new Date().toLocaleTimeString("sv-SE")}`); })
+              .then(d => { setRawData(d); setStatus(`Live · RSI beräknad · ${new Date().toLocaleTimeString("sv-SE")}`); })
               .catch(() => setStatus("Kunde inte hämta live-data · visar senast kända värden"));
           }, []);
 
-          const data   = addRanks(enrich(rawData), mode);
-          const w      = MODES[mode].weights;
-          const rankOrder   = [...data].sort((a,b) => a.totalRank - b.totalRank);
-          const positionMap = Object.fromEntries(rankOrder.map((r,i) => [r.ticker, i+1]));
-          const sorted = [...data].sort((a, b) => sortDir * ((a[sortCol] ?? 9999) - (b[sortCol] ?? 9999)));
+          const data        = addRanks(enrich(rawData), mode);
+          const w           = MODES[mode].weights;
+          const rankOrder   = [...data].sort((a, b) => a.totalRank - b.totalRank);
+          const positionMap = Object.fromEntries(rankOrder.map((r, i) => [r.ticker, i + 1]));
+          const sorted      = [...data].sort((a, b) => sortDir * ((a[sortCol] ?? 9999) - (b[sortCol] ?? 9999)));
 
           const handleSort = col => {
             if (sortCol === col) setSortDir(d => -d);
             else { setSortCol(col); setSortDir(1); }
           };
 
-          const thBase = { padding:"10px 10px", textAlign:"right", cursor:"pointer", whiteSpace:"nowrap", fontFamily:"monospace", fontSize:10, letterSpacing:"0.07em", userSelect:"none", borderBottom:"1px solid rgba(255,255,255,0.06)", transition:"color 0.2s" };
+          const thBase  = { padding:"10px 10px", textAlign:"right", cursor:"pointer", whiteSpace:"nowrap", fontFamily:"monospace", fontSize:10, letterSpacing:"0.07em", userSelect:"none", borderBottom:"1px solid rgba(255,255,255,0.06)", transition:"color 0.2s" };
           const thColor = (col, colKey) => colKey && w[colKey] === 0 ? "rgba(255,255,255,0.15)" : sortCol === col ? "#00a3e0" : "rgba(255,255,255,0.32)";
+          const arrow   = col => sortCol === col ? (sortDir === 1 ? " ↑" : " ↓") : "";
 
           return (
             <div style={{ minHeight:"100vh", background:"#08090d", color:"#eef0f3", padding:"60px 12px 36px",
@@ -258,8 +316,9 @@
                 ::-webkit-scrollbar{height:4px;} ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px;}
               `}</style>
 
-              <div style={{ maxWidth:1340, margin:"0 auto" }}>
+              <div style={{ maxWidth:1440, margin:"0 auto" }}>
 
+                {/* Header */}
                 <div style={{ marginBottom:24, animation:"fadeUp 0.4s ease both" }}>
                   <div style={{ fontFamily:"monospace", fontSize:10, color:"rgba(255,255,255,0.25)", letterSpacing:"0.2em", marginBottom:8 }}>MAGNIFICENT SEVEN · ANALYST TRACKER</div>
                   <h1 style={{ fontFamily:"'Sora',sans-serif", fontSize:"clamp(24px,4vw,38px)", fontWeight:700, letterSpacing:"-0.03em" }}>
@@ -270,6 +329,7 @@
                   </div>
                 </div>
 
+                {/* Mode toggles */}
                 <div style={{ marginBottom:16 }}>
                   <div style={{ fontFamily:"monospace", fontSize:10, color:"rgba(255,255,255,0.28)", letterSpacing:"0.12em", marginBottom:10 }}>VÄLJ RANKINGLÄGE</div>
                   <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:12 }}>
@@ -279,8 +339,8 @@
                         <button key={key} onClick={() => { setMode(key); setSortCol("totalRank"); setSortDir(1); }} style={{
                           padding:"11px 18px", borderRadius:12, cursor:"pointer",
                           background: active ? "rgba(0,163,224,0.15)" : "rgba(255,255,255,0.04)",
-                          border: active ? "1px solid rgba(0,163,224,0.5)" : "1px solid rgba(255,255,255,0.08)",
-                          color: active ? "#00a3e0" : "rgba(255,255,255,0.5)",
+                          border:     active ? "1px solid rgba(0,163,224,0.5)" : "1px solid rgba(255,255,255,0.08)",
+                          color:      active ? "#00a3e0" : "rgba(255,255,255,0.5)",
                           fontFamily:"'Sora',sans-serif", fontWeight: active ? 700 : 400, fontSize:13, transition:"all 0.2s",
                         }}>
                           {m.icon} {m.label}
@@ -303,8 +363,8 @@
                         <div key={k} style={{
                           padding:"3px 10px", borderRadius:20, fontFamily:"monospace", fontSize:10,
                           background: wv===0?"rgba(255,255,255,0.03)":wv>=3?"rgba(0,230,118,0.1)":wv>=2?"rgba(255,235,59,0.08)":"rgba(255,255,255,0.05)",
-                          border: wv===0?"1px solid rgba(255,255,255,0.05)":wv>=3?"1px solid rgba(0,230,118,0.25)":wv>=2?"1px solid rgba(255,235,59,0.2)":"1px solid rgba(255,255,255,0.08)",
-                          color: wv===0?"rgba(255,255,255,0.18)":wv>=3?"#00e676":wv>=2?"#fff176":"rgba(255,255,255,0.45)",
+                          border:     wv===0?"1px solid rgba(255,255,255,0.05)":wv>=3?"1px solid rgba(0,230,118,0.25)":wv>=2?"1px solid rgba(255,235,59,0.2)":"1px solid rgba(255,255,255,0.08)",
+                          color:      wv===0?"rgba(255,255,255,0.18)":wv>=3?"#00e676":wv>=2?"#fff176":"rgba(255,255,255,0.45)",
                         }}>
                           {info.label.split("–")[0].trim()} {wv===0?"av":"×"+wv}
                         </div>
@@ -313,22 +373,25 @@
                   </div>
                 </div>
 
+                {/* Table */}
                 <div style={{ overflowX:"auto", borderRadius:14, border:"1px solid rgba(255,255,255,0.07)" }}>
                   <table style={{ width:"100%", borderCollapse:"collapse", fontFamily:"'Sora',sans-serif" }}>
                     <thead>
                       <tr style={{ background:"rgba(255,255,255,0.025)" }}>
                         <th style={{ padding:"10px 16px", textAlign:"left", fontFamily:"monospace", fontSize:10, color:"rgba(255,255,255,0.32)", letterSpacing:"0.08em", borderBottom:"1px solid rgba(255,255,255,0.06)", whiteSpace:"nowrap" }}>BOLAG</th>
-                        <th onClick={() => handleSort("price")} style={{...thBase,color:thColor("price",null)}}>{`KURS${sortCol==="price"?(sortDir===1?" ↑":" ↓"):""}`}</th>
-                        <th onClick={() => handleSort("pe")} style={{...thBase,color:thColor("pe","pe")}}><Tooltip info={COL_INFO.pe}><span>{`P/E${sortCol==="pe"?(sortDir===1?" ↑":" ↓"):""}`}</span></Tooltip></th>
-                        <th onClick={() => handleSort("upside")} style={{...thBase,color:thColor("upside","upside")}}><Tooltip info={COL_INFO.upside}><span>{`UPPSIDA${sortCol==="upside"?(sortDir===1?" ↑":" ↓"):""}`}</span></Tooltip></th>
+                        <th onClick={() => handleSort("price")} style={{...thBase,color:thColor("price",null)}}>{"KURS"+arrow("price")}</th>
+                        <th style={{...thBase,color:"rgba(255,255,255,0.2)",cursor:"default"}}>P/E</th>
+                        <th onClick={() => handleSort("peg")} style={{...thBase,color:thColor("peg","peg")}}><Tooltip info={COL_INFO.peg}><span>{"PEG"+arrow("peg")}</span></Tooltip></th>
+                        <th onClick={() => handleSort("upside")} style={{...thBase,color:thColor("upside","upside")}}><Tooltip info={COL_INFO.upside}><span>{"UPPSIDA"+arrow("upside")}</span></Tooltip></th>
                         <th style={{ padding:"10px 10px", textAlign:"left", fontFamily:"monospace", fontSize:10, color:"rgba(255,255,255,0.32)", borderBottom:"1px solid rgba(255,255,255,0.06)", whiteSpace:"nowrap" }}>ANALYTIKER</th>
-                        <th onClick={() => handleSort("buyPct")} style={{...thBase,color:thColor("buyPct","buyPct")}}><Tooltip info={COL_INFO.buyPct}><span>{`KÖP%${sortCol==="buyPct"?(sortDir===1?" ↑":" ↓"):""}`}</span></Tooltip></th>
-                        <th onClick={() => handleSort("scoreDeviation")} style={{...thBase,color:thColor("scoreDeviation","scoreDeviation")}}><Tooltip info={COL_INFO.scoreDeviation}><span>{`KONSENSUS${sortCol==="scoreDeviation"?(sortDir===1?" ↑":" ↓"):""}`}</span></Tooltip></th>
-                        <th onClick={() => handleSort("roe")} style={{...thBase,color:thColor("roe","roe")}}><Tooltip info={COL_INFO.roe}><span>{`ROE%${sortCol==="roe"?(sortDir===1?" ↑":" ↓"):""}`}</span></Tooltip></th>
-                        <th onClick={() => handleSort("grossMargin")} style={{...thBase,color:thColor("grossMargin","grossMargin")}}><Tooltip info={COL_INFO.grossMargin}><span>{`BRUTTOMARG.${sortCol==="grossMargin"?(sortDir===1?" ↑":" ↓"):""}`}</span></Tooltip></th>
-                        <th onClick={() => handleSort("rsi")} style={{...thBase,color:thColor("rsi","rsi")}}><Tooltip info={COL_INFO.rsi}><span>{`RSI${sortCol==="rsi"?(sortDir===1?" ↑":" ↓"):""}`}</span></Tooltip></th>
-                        <th onClick={() => handleSort("beta")} style={{...thBase,color:thColor("beta","beta")}}><Tooltip info={COL_INFO.beta}><span>{`BETA${sortCol==="beta"?(sortDir===1?" ↑":" ↓"):""}`}</span></Tooltip></th>
-                        <th onClick={() => handleSort("totalRank")} style={{...thBase,color:thColor("totalRank",null)}}>{`TOTALRANK${sortCol==="totalRank"?(sortDir===1?" ↑":" ↓"):""}`}</th>
+                        <th onClick={() => handleSort("buyPct")} style={{...thBase,color:thColor("buyPct","buyPct")}}><Tooltip info={COL_INFO.buyPct}><span>{"KÖP%"+arrow("buyPct")}</span></Tooltip></th>
+                        <th onClick={() => handleSort("scoreDeviation")} style={{...thBase,color:thColor("scoreDeviation","scoreDeviation")}}><Tooltip info={COL_INFO.scoreDeviation}><span>{"KONSENSUS"+arrow("scoreDeviation")}</span></Tooltip></th>
+                        <th onClick={() => handleSort("roe")} style={{...thBase,color:thColor("roe","roe")}}><Tooltip info={COL_INFO.roe}><span>{"ROE%"+arrow("roe")}</span></Tooltip></th>
+                        <th onClick={() => handleSort("grossMargin")} style={{...thBase,color:thColor("grossMargin","grossMargin")}}><Tooltip info={COL_INFO.grossMargin}><span>{"BRUTTOMARG."+arrow("grossMargin")}</span></Tooltip></th>
+                        <th onClick={() => handleSort("revenueGrowth")} style={{...thBase,color:thColor("revenueGrowth","revenueGrowth")}}><Tooltip info={COL_INFO.revenueGrowth}><span>{"REV.TILLVÄXT"+arrow("revenueGrowth")}</span></Tooltip></th>
+                        <th onClick={() => handleSort("rsi")} style={{...thBase,color:thColor("rsi","rsi")}}><Tooltip info={COL_INFO.rsi}><span>{"RSI"+arrow("rsi")}</span></Tooltip></th>
+                        <th onClick={() => handleSort("beta")} style={{...thBase,color:thColor("beta","beta")}}><Tooltip info={COL_INFO.beta}><span>{"BETA"+arrow("beta")}</span></Tooltip></th>
+                        <th onClick={() => handleSort("totalRank")} style={{...thBase,color:thColor("totalRank",null)}}>{"TOTALRANK"+arrow("totalRank")}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -340,6 +403,8 @@
                             onMouseEnter={() => setHovered(r.ticker)}
                             onMouseLeave={() => setHovered(null)}
                             style={{ background: hovered===r.ticker?"rgba(255,255,255,0.04)":i%2===0?"rgba(255,255,255,0.012)":"transparent", borderBottom:"1px solid rgba(255,255,255,0.04)", animation:`fadeUp 0.4s ease ${i*0.05}s both` }}>
+
+                            {/* Company */}
                             <td style={{ padding:"13px 16px", whiteSpace:"nowrap" }}>
                               <div style={{ display:"flex", alignItems:"center", gap:10 }}>
                                 <div style={{ width:3, height:30, borderRadius:2, background:ACCENT[r.ticker], flexShrink:0 }} />
@@ -349,15 +414,28 @@
                                 </div>
                               </div>
                             </td>
+
+                            {/* Price */}
                             <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap" }}>
                               <span style={{ fontFamily:"monospace", fontSize:13, fontWeight:600 }}>${r.price.toFixed(2)}</span>
                             </td>
-                            <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.pe===0?0.25:1 }}>
+
+                            {/* P/E — display only, no rank badge */}
+                            <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:0.4 }}>
+                              <span style={{ fontFamily:"monospace", fontSize:13 }}>{r.pe != null ? r.pe.toFixed(1) : "–"}</span>
+                            </td>
+
+                            {/* PEG */}
+                            <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.peg===0?0.25:1 }}>
                               <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
-                                <span style={{ fontFamily:"monospace", fontSize:13 }}>{r.pe.toFixed(1)}</span>
-                                <RankBadge r={r.rankPE} />
+                                <span style={{ fontFamily:"monospace", fontSize:13, color: r.peg != null ? (r.peg < 1 ? "#00e676" : r.peg < 2 ? "#fff176" : r.peg < 3 ? "#ff8a65" : "#ff5252") : "rgba(255,255,255,0.2)" }}>
+                                  {r.peg != null ? r.peg.toFixed(2) : "–"}
+                                </span>
+                                <RankBadge r={r.rankPEG} />
                               </div>
                             </td>
+
+                            {/* Upside */}
                             <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.upside===0?0.25:1 }}>
                               <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
                                 <span style={{ fontFamily:"monospace", fontSize:13, color:r.upside!=null?(r.upside>0?"#00e676":"#ff5252"):"rgba(255,255,255,0.2)" }}>
@@ -366,15 +444,21 @@
                                 <RankBadge r={r.rankUpside} />
                               </div>
                             </td>
+
+                            {/* Analyst bar */}
                             <td style={{ padding:"13px 10px" }}>
                               <AnalystBar buyPct={r.buyPct} holdPct={r.holdPct} sellPct={r.sellPct} />
                             </td>
+
+                            {/* Buy% */}
                             <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.buyPct===0?0.25:1 }}>
                               <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
                                 <span style={{ fontFamily:"monospace", fontSize:13, color:"#00e676" }}>{r.buyPct}%</span>
                                 <RankBadge r={r.rankBuyPct} />
                               </div>
                             </td>
+
+                            {/* Consensus */}
                             <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.scoreDeviation===0?0.25:1 }}>
                               <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
                                 <div style={{ textAlign:"right" }}>
@@ -384,33 +468,53 @@
                                 <RankBadge r={r.rankScore} />
                               </div>
                             </td>
+
+                            {/* ROE */}
                             <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.roe===0?0.25:1 }}>
                               <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
                                 <span style={{ fontFamily:"monospace", fontSize:13 }}>{r.roe.toFixed(1)}%</span>
                                 <RankBadge r={r.rankROE} />
                               </div>
                             </td>
+
+                            {/* Gross margin */}
                             <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.grossMargin===0?0.25:1 }}>
                               <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
                                 <span style={{ fontFamily:"monospace", fontSize:13 }}>{r.grossMargin.toFixed(1)}%</span>
                                 <RankBadge r={r.rankGM} />
                               </div>
                             </td>
+
+                            {/* Revenue growth */}
+                            <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.revenueGrowth===0?0.25:1 }}>
+                              <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
+                                <span style={{ fontFamily:"monospace", fontSize:13, color: r.revenueGrowth > 20 ? "#00e676" : r.revenueGrowth > 5 ? "#fff176" : r.revenueGrowth >= 0 ? "#ff8a65" : "#ff5252" }}>
+                                  {r.revenueGrowth != null ? (r.revenueGrowth > 0 ? "+" : "") + r.revenueGrowth.toFixed(1) + "%" : "–"}
+                                </span>
+                                <RankBadge r={r.rankRG} />
+                              </div>
+                            </td>
+
+                            {/* RSI */}
                             <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.rsi===0?0.25:1 }}>
                               <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
                                 <div style={{ textAlign:"right" }}>
-                                  <div style={{ fontFamily:"monospace", fontSize:13, color:r.rsi>70?"#ff5252":r.rsi<30?"#00e676":r.rsi>60?"#ff8a65":"#fff176" }}>{r.rsi}</div>
-                                  <div style={{ fontFamily:"monospace", fontSize:10, color:"rgba(255,255,255,0.3)" }}>{r.rsi>70?"Överköpt":r.rsi<30?"Översåld":"Neutral"}</div>
+                                  <div style={{ fontFamily:"monospace", fontSize:13, color:r.rsi>70?"#ff5252":r.rsi<30?"#00e676":r.rsi>60?"#ff8a65":"#fff176" }}>{r.rsi ?? "–"}</div>
+                                  <div style={{ fontFamily:"monospace", fontSize:10, color:"rgba(255,255,255,0.3)" }}>{r.rsi > 70 ? "Överköpt" : r.rsi < 30 ? "Översåld" : "Neutral"}</div>
                                 </div>
                                 <RankBadge r={r.rankRSI} />
                               </div>
                             </td>
+
+                            {/* Beta */}
                             <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.beta===0?0.25:1 }}>
                               <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
                                 <span style={{ fontFamily:"monospace", fontSize:13, color:r.beta<1?"#00e676":r.beta<1.5?"#fff176":r.beta<2?"#ff8a65":"#ff5252" }}>{r.beta.toFixed(2)}</span>
                                 <RankBadge r={r.rankBeta} />
                               </div>
                             </td>
+
+                            {/* Total rank */}
                             <td style={{ padding:"13px 16px", textAlign:"right", whiteSpace:"nowrap" }}>
                               <div style={{ display:"inline-flex", alignItems:"center", justifyContent:"center", minWidth:46, height:38, borderRadius:8, padding:"0 8px", background:`${tc}18`, border:`1px solid ${tc}44`, fontFamily:"monospace", fontSize:14, fontWeight:700, color:tc }}>
                                 {r.totalRank.toFixed(1)}
@@ -426,8 +530,10 @@
                 <div style={{ marginTop:16, display:"flex", flexWrap:"wrap", gap:"6px 20px", fontFamily:"monospace", fontSize:10, color:"rgba(255,255,255,0.18)" }}>
                   <span>● Rankingbadge: <span style={{color:"#00e676"}}>1=bäst</span> → <span style={{color:"#ff5252"}}>7=sämst</span></span>
                   <span>● Totalrank-färg baserad på relativ position</span>
-                  <span>● Kurser, P/E, ROE, marginal, RSI: live via FMP</span>
+                  <span>● Kurser, P/E, PEG, ROE, marginal, tillväxt: live via FMP</span>
+                  <span>● RSI: beräknad live från Yahoo Finance stängningskurser</span>
                   <span>● Analytikerkonsensus: manuellt uppdaterad</span>
+                  <span>● P/E visas för referens men ingår ej i ranking (PEG används)</span>
                 </div>
               </div>
             </div>
