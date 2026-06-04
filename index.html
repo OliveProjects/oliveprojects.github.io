@@ -463,6 +463,34 @@
 
         .contact-email:hover { color: var(--text); }
 
+        /* ── VIEW COUNTER ── */
+        .view-counter {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 16px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 13px;
+            color: var(--subtext);
+            cursor: default;
+            user-select: none;
+            z-index: 50;
+            transition: color 0.2s, border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .view-counter:hover {
+            color: var(--text);
+            border-color: var(--stat-border);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+        }
+
+        .view-eye { font-size: 14px; line-height: 1; }
+
         /* ── FOOTER ── */
         footer {
             border-top: 1px solid var(--border);
@@ -637,6 +665,12 @@
         <a href="mailto:hello@oliveprojects.eu" class="contact-email fade-in">hello@oliveprojects.eu</a>
     </section>
 
+    <!-- VIEW COUNTER -->
+    <div class="view-counter" id="view-counter">
+        <span class="view-eye">👁</span>
+        <span id="view-count">–</span>
+    </div>
+
     <!-- FOOTER -->
     <footer>
         <span>© 2026 Olive Projects</span>
@@ -679,6 +713,63 @@
             if (years < 1) return `${months}<span style="font-size:0.5em;letter-spacing:0;font-weight:600"> mo</span>`;
             return `${years}`;
         }
+
+        // View counter
+        (async () => {
+            try {
+                const r = await fetch('https://api.counterapi.dev/v1/oliveprojects-github-io/visits/up');
+                const d = await r.json();
+                document.getElementById('view-count').textContent = d.count.toLocaleString('sv-SE');
+            } catch {
+                document.getElementById('view-count').textContent = '–';
+            }
+        })();
+
+        // Particle burst on hover
+        const counterEl = document.getElementById('view-counter');
+        const burstColors = ['#00E676', '#FDD835', '#FF7043', '#E53935', '#ffffff'];
+        let burstCooldown = false;
+
+        counterEl.addEventListener('mouseenter', () => {
+            if (burstCooldown) return;
+            burstCooldown = true;
+            setTimeout(() => burstCooldown = false, 700);
+
+            const rect = counterEl.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+
+            for (let i = 0; i < 14; i++) {
+                const p = document.createElement('div');
+                const color = burstColors[Math.floor(Math.random() * burstColors.length)];
+                const angle = (Math.PI * 2 * i) / 14 + (Math.random() - 0.5) * 0.4;
+                const dist = 36 + Math.random() * 32;
+                const size = 4 + Math.random() * 5;
+
+                Object.assign(p.style, {
+                    position: 'fixed',
+                    left: cx + 'px',
+                    top: cy + 'px',
+                    width: size + 'px',
+                    height: size + 'px',
+                    borderRadius: '50%',
+                    background: color,
+                    pointerEvents: 'none',
+                    zIndex: '9999',
+                    transform: 'translate(-50%, -50%)',
+                    transition: 'transform 0.55s ease-out, opacity 0.55s ease-out',
+                    opacity: '1',
+                });
+                document.body.appendChild(p);
+
+                requestAnimationFrame(() => requestAnimationFrame(() => {
+                    p.style.transform = `translate(calc(-50% + ${Math.cos(angle) * dist}px), calc(-50% + ${Math.sin(angle) * dist}px))`;
+                    p.style.opacity = '0';
+                }));
+
+                setTimeout(() => p.remove(), 600);
+            }
+        });
 
         document.getElementById('stat-inspector').innerHTML = timeSince('2014-04-01');
         document.getElementById('stat-investor').innerHTML  = timeSince('2017-10-01');
