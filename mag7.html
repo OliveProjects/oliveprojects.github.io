@@ -265,13 +265,12 @@
 
                 {/* Header */}
                 <div style={{ marginBottom:24, animation:"fadeUp 0.4s ease both" }}>
-                  <div style={{ fontFamily:"monospace", fontSize:10, color:"rgba(255,255,255,0.25)", letterSpacing:"0.2em", marginBottom:8 }}>MAGNIFICENT SEVEN · ANALYST TRACKER</div>
+                  <div style={{ fontFamily:"monospace", fontSize:10, color:"rgba(255,255,255,0.25)", letterSpacing:"0.2em", marginBottom:8 }}>
+                    MAGNIFICENT SEVEN · ANALYST TRACKER{status && status !== "Laddar data..." ? <span style={{ color:"rgba(255,255,255,0.35)", letterSpacing:"0.1em" }}> · {status}</span> : ""}
+                  </div>
                   <h1 style={{ fontFamily:"'Sora',sans-serif", fontSize:"clamp(24px,4vw,38px)", fontWeight:700, letterSpacing:"-0.03em" }}>
                     Mag<span style={{ color:"#00a3e0" }}>7</span> <span style={{ fontWeight:300, color:"rgba(255,255,255,0.4)" }}>Index</span>
                   </h1>
-                  <div style={{ fontFamily:"monospace", fontSize:10, color:"rgba(255,255,255,0.3)", marginTop:8 }}>
-                    {status} · Håll över <span style={{ color:"rgba(255,255,255,0.5)" }}>?</span> för förklaring · Klicka kolumn för sortering
-                  </div>
                 </div>
 
                 {/* Mode toggles */}
