@@ -622,7 +622,7 @@
             </div>
             <div class="project-card card-2 fade-in">
                 <div class="card-accent"></div>
-                <a href="/mag7.html"><img src="assets/mag7-screenshot.png" alt="Mag7 Index tool" class="card-img" style="object-position:top;"></a>
+                <a href="/mag7.html"><img id="mag7-img" src="assets/mag7-dark.png" alt="Mag7 Index tool" class="card-img" style="object-position:top;"></a>
                 <span class="card-tag">Tool · Finance</span>
                 <h3 class="card-title">Mag7 Index</h3>
                 <p class="card-desc">A live analyst tracker for the Magnificent Seven tech stocks. Ranks Microsoft, Apple, NVIDIA, Amazon, Alphabet, Meta, and Tesla by value, risk, and risk/reward, with real-time market data and analyst consensus.</p>
@@ -732,11 +732,14 @@
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         let theme = savedTheme || (prefersDark ? 'dark' : 'light');
 
+        const mag7Img = document.getElementById('mag7-img');
+
         function applyTheme(t) {
             theme = t;
             root.dataset.theme = t;
             btn.textContent = t === 'dark' ? '☀' : '🌙';
             localStorage.setItem('op-theme', t);
+            mag7Img.src = t === 'dark' ? 'assets/mag7-dark.png' : 'assets/mag7-light.png';
         }
 
         applyTheme(theme);
