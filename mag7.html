@@ -87,6 +87,15 @@
         }
         .theme-toggle:hover { color: var(--text); border-color: var(--faint); }
 
+        .lang-select {
+            position: fixed; top: 16px; right: 64px; z-index: 9999;
+            background: var(--btn-bg); border: 1px solid var(--btn-border);
+            border-radius: 8px; padding: 5px 9px; cursor: pointer;
+            font-size: 12px; font-family: monospace; color: var(--dim);
+            transition: all 0.2s; outline: none; appearance: none;
+        }
+        .lang-select:hover { color: var(--text); border-color: var(--faint); }
+
         .view-counter {
             position: fixed;
             bottom: 20px;
@@ -111,6 +120,7 @@
         const { useState, useEffect, useContext, createContext, useRef } = React;
 
         const ThemeCtx = createContext("dark");
+        const LangCtx  = createContext("sv");
 
         /* Random brand-color accent — a different company "hosts" the page each visit */
         const BRAND_COLORS = ["#00a3e0","#c0c0c0","#76b900","#ff9900","#4285f4","#0082fb","#e31937"];
@@ -132,6 +142,12 @@
             const saved = localStorage.getItem("mag7-theme");
             if (saved === "dark" || saved === "light") return saved;
             return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        }
+
+        function initLang() {
+            const saved = localStorage.getItem("mag7-lang");
+            if (saved === "sv" || saved === "en") return saved;
+            return navigator.language.startsWith("sv") ? "sv" : "en";
         }
 
         /* Semantic indicator colors per theme */
@@ -171,43 +187,140 @@
             AMZN:"#ff9900", GOOGL:"#4285f4", META:"#0082fb", TSLA:"#e31937",
         };
 
-        const MODES = {
-            lowrisk: {
-                label:"Lägst risk", icon:"🛡️",
-                headline:"Du prioriterar stabilitet och trygghet",
-                desc:"Beta och konsensus väger tyngst. Bolag som svänger lite, har starkt analytikerstöd och bevisad lönsamhet rankas upp.",
-                ignores:"Uppsida och tillväxt ignoreras – potential utan stabilitet räknas inte här.",
-                weights:{ peg:1, upside:0, scoreDeviation:2, buyPct:2, roe:2, grossMargin:2, revenueGrowth:0, rsi:1, beta:3 },
+        const LANG = {
+            sv: {
+                status_loading: "Laddar data...",
+                status_updated: t => `Uppdaterad ${t}`,
+                status_error:   "Kunde inte ladda data",
+                date_locale:    "sv-SE",
+                col_select_label: "VÄLJ RANKINGLÄGE",
+                mode_subtitles: { value:"Balanserad", lowrisk:"Stabilitet", riskreward:"Potential" },
+                th_company:  "BOLAG",
+                th_rank:     "RANK",
+                th_price:    "KURS",
+                th_upside:   "UPPSIDA",
+                th_analyst:  "ANALYTIKER",
+                th_buy_pct:  "KÖP%",
+                th_consensus:"KONSENSUS",
+                buy: "köp", hold: "behåll", sell: "sälj",
+                rsi_overbought: "Överköpt", rsi_oversold: "Översåld", rsi_neutral: "Neutral",
+                hint: "Håll muspekaren över ? bredvid en kolumnrubrik för att se förklaring · Klicka på rubrik för att sortera",
+                faq_label: "VANLIGA FRÅGOR",
+                modes: {
+                    lowrisk: {
+                        label:"Lägst risk", icon:"🛡️",
+                        headline:"Du prioriterar stabilitet och trygghet",
+                        desc:"Beta och konsensus väger tyngst. Bolag som svänger lite, har starkt analytikerstöd och bevisad lönsamhet rankas upp.",
+                        ignores:"Uppsida och tillväxt ignoreras – potential utan stabilitet räknas inte här.",
+                        weights:{ peg:1, upside:0, scoreDeviation:2, buyPct:2, roe:2, grossMargin:2, revenueGrowth:0, rsi:1, beta:3 },
+                    },
+                    value: {
+                        label:"Köpvärde", icon:"⚖️",
+                        headline:"Du söker bästa totala köpvärde",
+                        desc:"Alla mått vägs lika. Identifierar bolag som kombinerar rimlig värdering (PEG), stark analytikerkonsensus och god fundamental kvalitet.",
+                        ignores:null,
+                        weights:{ peg:1, upside:1, scoreDeviation:1, buyPct:1, roe:1, grossMargin:1, revenueGrowth:1, rsi:1, beta:0 },
+                    },
+                    riskreward: {
+                        label:"Bäst risk/reward", icon:"🎯",
+                        headline:"Du söker bäst möjlig avkastning för risken",
+                        desc:"Uppsida, tillväxt och konsensus väger tyngst. RSI används för att hitta bra teknisk ingångspunkt.",
+                        ignores:null,
+                        weights:{ peg:1, upside:3, scoreDeviation:2, buyPct:2, roe:1, grossMargin:1, revenueGrowth:2, rsi:2, beta:1 },
+                    },
+                },
+                col_info: (analystDate) => ({
+                    peg:           { label:"PEG – Pris/Tillväxt",          short:"P/E justerat för vinsttillväxt",                  long:"PEG = P/E delat med EPS-tillväxt. PEG 1.0 = rimligt värderad, under 1.0 = potentiellt undervärderad. Löser P/E's problem med tillväxtbolag – NVDA med PEG 1.5 är billigare än vad P/E 56 antyder." },
+                    upside:        { label:"Uppsida",                       short:"Riktkurs vs live-kurs (timvis)",                   long:`Beräknas som (riktkurs − live-kurs) / live-kurs. Live-kursen uppdateras var 15:e minut. Riktkursen är analytikerkonsensus från Yahoo Finance och uppdateras automatiskt (senast ${analystDate}). Uppsidan rör sig alltså med både kursen och uppdaterade riktkurser.` },
+                    scoreDeviation:{ label:"Konsensus-avvikelse",           short:`Analytikerkonsensus (${analystDate})`,             long:`Analytikernas rekommendationer (köp/behåll/sälj) viktas till 1–5 (5=alla säger köp) och avvikelsen från max visas. 0.00 = total enighet om köp. Lägre = starkare konsensus. Uppdateras automatiskt via Yahoo Finance (senast ${analystDate}).` },
+                    buyPct:        { label:"Köp%",                          short:`Andel analytiker som säger köp (${analystDate})`,  long:`Hur stor andel av analytikerna som aktivt rekommenderar köp. Data hämtas automatiskt från Yahoo Finance (senast ${analystDate}).` },
+                    roe:           { label:"ROE – Avkastning på kapital",   short:"Buffetts kvalitetsmått",                           long:"Return on Equity visar hur effektivt bolaget skapar vinst med ägarnas pengar. Warren Buffett söker konsekvent ROE över 15%." },
+                    grossMargin:   { label:"Bruttomarginal",                short:"Mungers pricing power-mått",                       long:"Andelen av intäkterna som blir kvar efter direkta kostnader. Hög marginal = stark marknadsposition. Meta 81% vs Tesla 18% är en enorm skillnad." },
+                    revenueGrowth: { label:"Omsättningstillväxt",           short:"Intäktstillväxt senaste räkenskapsåret",            long:"Hur snabbt bolaget växer sin omsättning. Tillväxt driver framtida vinster och motiverar höga P/E-tal. NVDA:s 120%+ visar varför PEG är ett bättre mått än P/E för tillväxtbolag." },
+                    rsi:           { label:"RSI – Relativ styrka",          short:"Teknisk ingångssignal (beräknad live)",            long:"Beräknad från 30 dagars stängningskurser via Wilders metod (14 perioder). Mäter om aktien är överköpt (>70) eller översåld (<30). Närmast 50 = neutralt momentum." },
+                    beta:          { label:"Beta – Volatilitet",            short:"Hur mycket aktien svänger",                        long:"Beta 1.0 = rör sig i takt med marknaden. Tesla 2.31 = svänger mer än dubbelt så mycket. Under 1.0 = stabilare än index." },
+                }),
+                faq_items: [
+                    { q:"Hur rankas varje bolag?", a:"Varje bolag tilldelas en placering 1–7 per parameter (1 = bäst i klassen). Placeringen multipliceras med parameterns vikt för det valda läget och summeras till ett totalvärde. Lägst totalvärde = bäst ranking. Bolagen rankas alltså mot varandra, inte mot ett absolut mål." },
+                    { q:"Är det olika vikt på olika parametrar?", a:"Ja, vikterna bestäms av det rankingläge du valt. I 'Köpvärde' väger alla parametrar lika (x1). I 'Lägst risk' väger Beta x3 och konsensus/ROE/bruttomarginal x2 var. I 'Bäst risk/reward' väger Uppsida x3, och tillväxt/konsensus x2. Parametrar med vikt 0 ignoreras helt." },
+                    { q:"Varför viktas vissa parametrar x2 och x3 när jag byter filter?", a:"Varje filter representerar en investeringsstrategi med olika prioriteringar. En riskfokuserad investerare bryr sig mer om stabilitet (beta, konsensus) än om uppsida. En tillväxtinriktad investerare prioriterar tvärtom. Höga vikter förstärker de parametrar som är mest avgörande för just den strategin." },
+                    { q:"Vad menas med PEG?", a:"PEG = P/E delat med EPS-tillväxt i procent. P/E säger hur mycket du betalar per vinstkrona, men ignorerar hur snabbt vinsten växer. PEG löser det. Ett bolag med P/E 50 och 50% vinsttillväxt har PEG 1.0 (rimligt värderat). Under 1.0 anses potentiellt undervärderat. NVDA med PEG ~1.5 är 'billigare' än vad P/E 56 antyder." },
+                    { q:"Vad menas med Uppsida?", a:"Analytikernas genomsnittliga riktkurs minus dagens kurs, uttryckt i procent. +30% innebär att analytikerkollektivet tror aktien stiger 30% det kommande året. Viktigt: analytiker tenderar att vara systematiskt optimistiska, så reell uppsida är ofta lägre." },
+                    { q:"Vad är Konsensus-avvikelse?", a:"Analytikernas rekommendationer omvandlas till poäng: Köp=5, Behåll=3, Sälj=1. Vi beräknar viktat genomsnitt och visar avvikelsen från maxpoäng (5.0 = alla säger köp). 0.00 = total enighet om köp. Lägre avvikelse = starkare konsensus." },
+                    { q:"Vad är RSI och hur beräknas den?", a:"RSI (Relative Strength Index) mäter momentum. Över 70 = aktien kan vara överköpt. Under 30 = översåld. Närmast 50 = neutralt momentum. RSI beräknas från 30 dagars stängningskurser via Yahoo Finance med Wilders utjämningsmetod (14 perioder). En RSI nära 50 ger bäst ranking." },
+                    { q:"Vad är Beta?", a:"Beta mäter hur mycket en aktie rör sig relativt marknaden (S&P 500). Beta 1.0 = rör sig i takt med index. Tesla på 2.31 = svänger mer än dubbelt så mycket, uppåt och nedåt. Microsoft på 0.90 är stabilare än marknaden." },
+                    { q:"Varför visas P/E men ingår inte i rankningen?", a:"P/E är välkänt men missvisande för tillväxtbolag. NVDA på P/E 56 ser dyrt ut tills du vet att vinsten växer 100%+. PEG tar hänsyn till tillväxttakten och ger en rättvisare bild. P/E visas som referens för de som är vana vid måttet." },
+                    { q:"Vad är ROE och varför är det viktigt?", a:"Return on Equity visar hur effektivt bolaget skapar vinst på ägarnas kapital. Warren Buffett söker konsekvent ROE över 15% som tecken på ett genuint kvalitetsbolag. Apples ROE på 160%+ beror delvis på massiva aktieåterköp som krymper eget kapital, men det ändrar inte att bolaget är extremt lönsamt." },
+                    { q:"Hur ofta uppdateras datan?", a:"Kurser och RSI uppdateras var 15:e minut under marknadstid (måndag–fredag, ca 15:00–23:00 svensk tid). PEG, ROE, marginaler, tillväxt, analytikerkonsensus och riktkurser uppdateras en gång per timme automatiskt via FMP och Yahoo Finance." },
+                ],
             },
-            value: {
-                label:"Köpvärde", icon:"⚖️",
-                headline:"Du söker bästa totala köpvärde",
-                desc:"Alla mått vägs lika. Identifierar bolag som kombinerar rimlig värdering (PEG), stark analytikerkonsensus och god fundamental kvalitet.",
-                ignores:null,
-                weights:{ peg:1, upside:1, scoreDeviation:1, buyPct:1, roe:1, grossMargin:1, revenueGrowth:1, rsi:1, beta:0 },
-            },
-            riskreward: {
-                label:"Bäst risk/reward", icon:"🎯",
-                headline:"Du söker bäst möjlig avkastning för risken",
-                desc:"Uppsida, tillväxt och konsensus väger tyngst. RSI används för att hitta bra teknisk ingångspunkt.",
-                ignores:null,
-                weights:{ peg:1, upside:3, scoreDeviation:2, buyPct:2, roe:1, grossMargin:1, revenueGrowth:2, rsi:2, beta:1 },
+            en: {
+                status_loading: "Loading data...",
+                status_updated: t => `Updated ${t}`,
+                status_error:   "Could not load data",
+                date_locale:    "en-US",
+                col_select_label: "SELECT RANKING MODE",
+                mode_subtitles: { value:"Balanced", lowrisk:"Stability", riskreward:"Potential" },
+                th_company:  "COMPANY",
+                th_rank:     "RANK",
+                th_price:    "PRICE",
+                th_upside:   "UPSIDE",
+                th_analyst:  "ANALYSTS",
+                th_buy_pct:  "BUY%",
+                th_consensus:"CONSENSUS",
+                buy: "buy", hold: "hold", sell: "sell",
+                rsi_overbought: "Overbought", rsi_oversold: "Oversold", rsi_neutral: "Neutral",
+                hint: "Hover over ? next to a column header for an explanation · Click a header to sort",
+                faq_label: "FREQUENTLY ASKED QUESTIONS",
+                modes: {
+                    lowrisk: {
+                        label:"Lowest risk", icon:"🛡️",
+                        headline:"You prioritize stability and safety",
+                        desc:"Beta and consensus weigh most. Companies with low volatility, strong analyst support and proven profitability are ranked higher.",
+                        ignores:"Upside and growth are ignored — potential without stability doesn't count here.",
+                        weights:{ peg:1, upside:0, scoreDeviation:2, buyPct:2, roe:2, grossMargin:2, revenueGrowth:0, rsi:1, beta:3 },
+                    },
+                    value: {
+                        label:"Best value", icon:"⚖️",
+                        headline:"You're looking for the best overall value",
+                        desc:"All metrics are weighted equally. Identifies companies that combine reasonable valuation (PEG), strong analyst consensus and solid fundamental quality.",
+                        ignores:null,
+                        weights:{ peg:1, upside:1, scoreDeviation:1, buyPct:1, roe:1, grossMargin:1, revenueGrowth:1, rsi:1, beta:0 },
+                    },
+                    riskreward: {
+                        label:"Best risk/reward", icon:"🎯",
+                        headline:"You're looking for the best possible return for the risk",
+                        desc:"Upside, growth and consensus weigh most. RSI is used to find a good technical entry point.",
+                        ignores:null,
+                        weights:{ peg:1, upside:3, scoreDeviation:2, buyPct:2, roe:1, grossMargin:1, revenueGrowth:2, rsi:2, beta:1 },
+                    },
+                },
+                col_info: (analystDate) => ({
+                    peg:           { label:"PEG – Price/Growth",            short:"P/E adjusted for earnings growth",                long:"PEG = P/E divided by EPS growth. PEG 1.0 = fairly valued, below 1.0 = potentially undervalued. Solves P/E's problem with growth companies — NVDA with PEG 1.5 is cheaper than P/E 56 suggests." },
+                    upside:        { label:"Upside",                         short:"Price target vs live price (hourly)",             long:`Calculated as (price target − live price) / live price. The live price updates every 15 minutes. The price target is analyst consensus from Yahoo Finance, updated automatically (last updated ${analystDate}). Upside therefore moves with both the price and updated targets.` },
+                    scoreDeviation:{ label:"Consensus deviation",            short:`Analyst consensus (${analystDate})`,              long:`Analyst recommendations (buy/hold/sell) are weighted 1–5 (5 = all say buy) and the deviation from max is shown. 0.00 = total agreement on buy. Lower = stronger consensus. Updated automatically via Yahoo Finance (last updated ${analystDate}).` },
+                    buyPct:        { label:"Buy%",                           short:`Share of analysts recommending buy (${analystDate})`, long:`How large a share of analysts actively recommend buying. Data fetched automatically from Yahoo Finance (last updated ${analystDate}).` },
+                    roe:           { label:"ROE – Return on equity",         short:"Buffett's quality metric",                        long:"Return on Equity shows how efficiently a company generates profit with shareholders' money. Warren Buffett consistently seeks ROE above 15%." },
+                    grossMargin:   { label:"Gross margin",                   short:"Munger's pricing power metric",                   long:"The share of revenue remaining after direct costs. High margin = strong market position. Meta at 81% vs Tesla at 18% is an enormous difference." },
+                    revenueGrowth: { label:"Revenue growth",                 short:"Revenue growth last fiscal year",                 long:"How fast the company is growing its revenue. Growth drives future earnings and justifies high P/E ratios. NVDA's 120%+ growth shows why PEG is a better metric than P/E for growth companies." },
+                    rsi:           { label:"RSI – Relative strength",        short:"Technical entry signal (calculated live)",        long:"Calculated from 30 days of closing prices using Wilder's method (14 periods). Measures whether the stock is overbought (>70) or oversold (<30). Closest to 50 = neutral momentum." },
+                    beta:          { label:"Beta – Volatility",              short:"How much the stock swings",                       long:"Beta 1.0 = moves in line with the market. Tesla at 2.31 swings more than twice as much. Below 1.0 = more stable than the index." },
+                }),
+                faq_items: [
+                    { q:"How is each company ranked?", a:"Each company is assigned a rank of 1–7 per parameter (1 = best in class). The rank is multiplied by the parameter's weight for the selected mode and summed into a total score. Lowest total = best ranking. Companies are ranked against each other, not against an absolute target." },
+                    { q:"Do different parameters have different weights?", a:"Yes, weights are determined by the selected ranking mode. In 'Best value' all parameters are weighted equally (×1). In 'Lowest risk', Beta is weighted ×3 and consensus/ROE/gross margin ×2 each. In 'Best risk/reward', Upside is ×3 and growth/consensus ×2. Parameters with weight 0 are ignored entirely." },
+                    { q:"Why are some parameters weighted ×2 and ×3 when I switch mode?", a:"Each mode represents an investment strategy with different priorities. A risk-focused investor cares more about stability (beta, consensus) than upside. A growth-focused investor prioritizes the opposite. Higher weights amplify the parameters most critical to that particular strategy." },
+                    { q:"What is PEG?", a:"PEG = P/E divided by EPS growth in percent. P/E tells you how much you pay per dollar of earnings, but ignores how fast earnings are growing. PEG solves that. A company with P/E 50 and 50% earnings growth has PEG 1.0 (fairly valued). Below 1.0 is considered potentially undervalued. NVDA with PEG ~1.5 is 'cheaper' than P/E 56 suggests." },
+                    { q:"What is Upside?", a:"The average analyst price target minus the current price, expressed as a percentage. +30% means analyst consensus expects the stock to rise 30% over the coming year. Important: analysts tend to be systematically optimistic, so real upside is often lower." },
+                    { q:"What is Consensus deviation?", a:"Analyst recommendations are converted to scores: Buy=5, Hold=3, Sell=1. We calculate the weighted average and show the deviation from the maximum score (5.0 = everyone says buy). 0.00 = total agreement on buy. Lower deviation = stronger consensus." },
+                    { q:"What is RSI and how is it calculated?", a:"RSI (Relative Strength Index) measures momentum. Above 70 = the stock may be overbought. Below 30 = oversold. Closest to 50 = neutral momentum. RSI is calculated from 30 days of closing prices via Yahoo Finance using Wilder's smoothing method (14 periods). An RSI close to 50 receives the best ranking." },
+                    { q:"What is Beta?", a:"Beta measures how much a stock moves relative to the market (S&P 500). Beta 1.0 = moves in line with the index. Tesla at 2.31 swings more than twice as much, up and down. Microsoft at 0.90 is more stable than the market." },
+                    { q:"Why is P/E shown but not included in the ranking?", a:"P/E is well-known but misleading for growth companies. NVDA at P/E 56 looks expensive until you know earnings are growing 100%+. PEG accounts for the growth rate and gives a fairer picture. P/E is shown as a reference for those familiar with the metric." },
+                    { q:"What is ROE and why does it matter?", a:"Return on Equity shows how efficiently a company generates profit from shareholders' capital. Warren Buffett consistently seeks ROE above 15% as a sign of a genuinely high-quality business. Apple's ROE of 160%+ is partly due to massive buybacks shrinking equity, but that doesn't change the fact that the company is extremely profitable." },
+                    { q:"How often is data updated?", a:"Prices and RSI update every 15 minutes during market hours (Monday–Friday, approximately 9:00 AM–5:00 PM ET). PEG, ROE, margins, growth, analyst consensus and price targets update once per hour automatically via FMP and Yahoo Finance." },
+                ],
             },
         };
-
-        const FAQ_ITEMS = [
-            { q:"Hur rankas varje bolag?", a:"Varje bolag tilldelas en placering 1–7 per parameter (1 = bäst i klassen). Placeringen multipliceras med parameterns vikt för det valda läget och summeras till ett totalvärde. Lägst totalvärde = bäst ranking. Bolagen rankas alltså mot varandra, inte mot ett absolut mål." },
-            { q:"Är det olika vikt på olika parametrar?", a:"Ja, vikterna bestäms av det rankingläge du valt. I 'Köpvärde' väger alla parametrar lika (x1). I 'Lägst risk' väger Beta x3 och konsensus/ROE/bruttomarginal x2 var. I 'Bäst risk/reward' väger Uppsida x3, och tillväxt/konsensus x2. Parametrar med vikt 0 ignoreras helt." },
-            { q:"Varför viktas vissa parametrar x2 och x3 när jag byter filter?", a:"Varje filter representerar en investeringsstrategi med olika prioriteringar. En riskfokuserad investerare bryr sig mer om stabilitet (beta, konsensus) än om uppsida. En tillväxtinriktad investerare prioriterar tvärtom. Höga vikter förstärker de parametrar som är mest avgörande för just den strategin." },
-            { q:"Vad menas med PEG?", a:"PEG = P/E delat med EPS-tillväxt i procent. P/E säger hur mycket du betalar per vinstkrona, men ignorerar hur snabbt vinsten växer. PEG löser det. Ett bolag med P/E 50 och 50% vinsttillväxt har PEG 1.0 (rimligt värderat). Under 1.0 anses potentiellt undervärderat. NVDA med PEG ~1.5 är 'billigare' än vad P/E 56 antyder." },
-            { q:"Vad menas med Uppsida?", a:"Analytikernas genomsnittliga riktkurs minus dagens kurs, uttryckt i procent. +30% innebär att analytikerkollektivet tror aktien stiger 30% det kommande året. Viktigt: analytiker tenderar att vara systematiskt optimistiska, så reell uppsida är ofta lägre." },
-            { q:"Vad är Konsensus-avvikelse?", a:"Analytikernas rekommendationer omvandlas till poäng: Köp=5, Behåll=3, Sälj=1. Vi beräknar viktat genomsnitt och visar avvikelsen från maxpoäng (5.0 = alla säger köp). 0.00 = total enighet om köp. Lägre avvikelse = starkare konsensus." },
-            { q:"Vad är RSI och hur beräknas den?", a:"RSI (Relative Strength Index) mäter momentum. Över 70 = aktien kan vara överköpt. Under 30 = översåld. Närmast 50 = neutralt momentum. RSI beräknas från 30 dagars stängningskurser via Yahoo Finance med Wilders utjämningsmetod (14 perioder). En RSI nära 50 ger bäst ranking." },
-            { q:"Vad är Beta?", a:"Beta mäter hur mycket en aktie rör sig relativt marknaden (S&P 500). Beta 1.0 = rör sig i takt med index. Tesla på 2.31 = svänger mer än dubbelt så mycket, uppåt och nedåt. Microsoft på 0.90 är stabilare än marknaden." },
-            { q:"Varför visas P/E men ingår inte i rankningen?", a:"P/E är välkänt men missvisande för tillväxtbolag. NVDA på P/E 56 ser dyrt ut tills du vet att vinsten växer 100%+. PEG tar hänsyn till tillväxttakten och ger en rättvisare bild. P/E visas som referens för de som är vana vid måttet." },
-            { q:"Vad är ROE och varför är det viktigt?", a:"Return on Equity visar hur effektivt bolaget skapar vinst på ägarnas kapital. Warren Buffett söker konsekvent ROE över 15% som tecken på ett genuint kvalitetsbolag. Apples ROE på 160%+ beror delvis på massiva aktieåterköp som krymper eget kapital, men det ändrar inte att bolaget är extremt lönsamt." },
-            { q:"Hur ofta uppdateras datan?", a:"Kurser och RSI uppdateras var 15:e minut under marknadstid (måndag–fredag, ca 15:00–23:00 svensk tid). PEG, ROE, marginaler, tillväxt, analytikerkonsensus och riktkurser uppdateras en gång per timme automatiskt via FMP och Yahoo Finance." },
-        ];
 
         function enrich(stocks) {
             return stocks.map(s => {
@@ -235,7 +348,7 @@
             return Object.fromEntries(sorted.map((r, i) => [r.ticker, i + 1]));
         }
 
-        function addRanks(rows, mode) {
+        function addRanks(rows, mode, MODES) {
             const w    = MODES[mode].weights;
             const rPEG = rankArr(rows, "peg",           true);
             const rUp  = rankArr(rows, "upside",         false);
@@ -266,12 +379,6 @@
                 ).toFixed(1));
                 return { ...r, ...ind, totalRank: total };
             });
-        }
-
-        function formatTime(iso) {
-            if (!iso) return null;
-            try { return new Date(iso).toLocaleTimeString("sv-SE", { hour:"2-digit", minute:"2-digit" }); }
-            catch { return null; }
         }
 
         function Tooltip({ info, children }) {
@@ -315,7 +422,9 @@
 
         function AnalystBar({ buyPct, holdPct, sellPct }) {
             const theme = useContext(ThemeCtx);
+            const lang  = useContext(LangCtx);
             const cl = C[theme];
+            const T  = LANG[lang];
             return (
                 <div style={{ display:"flex", flexDirection:"column", gap:4, minWidth:100 }}>
                     <div style={{ display:"flex", height:5, borderRadius:3, overflow:"hidden", gap:1 }}>
@@ -324,9 +433,9 @@
                         <div style={{ width:`${sellPct}%`, background:cl.sell }} />
                     </div>
                     <div style={{ display:"flex", gap:6, fontFamily:"monospace", fontSize:10 }}>
-                        <span style={{ color:cl.buy }}>{buyPct}% köp</span>
-                        <span style={{ color:cl.hold }}>{holdPct}% behåll</span>
-                        <span style={{ color:cl.sell }}>{sellPct}% sälj</span>
+                        <span style={{ color:cl.buy }}>{buyPct}% {T.buy}</span>
+                        <span style={{ color:cl.hold }}>{holdPct}% {T.hold}</span>
+                        <span style={{ color:cl.sell }}>{sellPct}% {T.sell}</span>
                     </div>
                 </div>
             );
@@ -346,13 +455,14 @@
         }
 
         function Mag7Table() {
-            const [theme,   setTheme]   = useState(initTheme);
-            const [data,    setData]    = useState(null);
-            const [status,  setStatus]  = useState("Laddar data...");
-            const [mode,    setMode]    = useState("value");
-            const [sortCol, setSortCol] = useState("totalRank");
-            const [sortDir, setSortDir] = useState(1);
-            const [hovered, setHovered] = useState(null);
+            const [theme,     setTheme]     = useState(initTheme);
+            const [lang,      setLang]      = useState(initLang);
+            const [data,      setData]      = useState(null);
+            const [loadState, setLoadState] = useState({ type:"loading", iso:null });
+            const [mode,      setMode]      = useState("value");
+            const [sortCol,   setSortCol]   = useState("totalRank");
+            const [sortDir,   setSortDir]   = useState(1);
+            const [hovered,   setHovered]   = useState(null);
 
             useEffect(() => {
                 document.documentElement.dataset.theme = theme;
@@ -361,49 +471,59 @@
             }, [theme]);
 
             useEffect(() => {
+                localStorage.setItem("mag7-lang", lang);
+            }, [lang]);
+
+            useEffect(() => {
                 const bust = Math.floor(Date.now() / (15 * 60 * 1000));
                 fetch(`https://oliveprojects.github.io/mag7/data/mag7.json?v=${bust}`)
                     .then(r => r.json())
                     .then(json => {
                         setData(json);
-                        const t = formatTime(json.lastYahooUpdate);
-                        setStatus(t ? `Uppdaterad ${t}` : "Data laddad");
+                        setLoadState({ type:"updated", iso:json.lastYahooUpdate });
                     })
-                    .catch(() => setStatus("Kunde inte ladda data"));
+                    .catch(() => setLoadState({ type:"error", iso:null }));
             }, []);
+
+            const T = LANG[lang];
+            const MODES = T.modes;
+
+            const statusText = loadState.type === "loading"
+                ? T.status_loading
+                : loadState.type === "error"
+                ? T.status_error
+                : loadState.iso
+                ? T.status_updated(new Date(loadState.iso).toLocaleTimeString(T.date_locale, { hour:"2-digit", minute:"2-digit" }))
+                : "";
 
             if (!data) return (
                 <ThemeCtx.Provider value={theme}>
-                    <button className="theme-toggle" onClick={() => setTheme(t => t==="dark"?"light":"dark")}>{theme==="dark"?"☀":"🌙"}</button>
-                    <div style={{ minHeight:"100vh", background:"var(--bg)", display:"flex", alignItems:"center", justifyContent:"center" }}>
-                        <div style={{ fontFamily:"monospace", fontSize:13, color:"var(--faint)" }}>{status}</div>
-                    </div>
+                    <LangCtx.Provider value={lang}>
+                        <button className="theme-toggle" onClick={() => setTheme(t => t==="dark"?"light":"dark")}>{theme==="dark"?"☀":"🌙"}</button>
+                        <select className="lang-select" value={lang} onChange={e => setLang(e.target.value)}>
+                            <option value="sv">🇸🇪 SV</option>
+                            <option value="en">🇬🇧 EN</option>
+                        </select>
+                        <div style={{ minHeight:"100vh", background:"var(--bg)", display:"flex", alignItems:"center", justifyContent:"center" }}>
+                            <div style={{ fontFamily:"monospace", fontSize:13, color:"var(--faint)" }}>{statusText}</div>
+                        </div>
+                    </LangCtx.Provider>
                 </ThemeCtx.Provider>
             );
 
             const cl          = C[theme];
             const enriched    = enrich(data.stocks);
-            const ranked      = addRanks(enriched, mode);
+            const ranked      = addRanks(enriched, mode, MODES);
             const w           = MODES[mode].weights;
             const rankOrder   = [...ranked].sort((a, b) => a.totalRank - b.totalRank);
             const positionMap = Object.fromEntries(rankOrder.map((r, i) => [r.ticker, i + 1]));
             const sorted      = [...ranked].sort((a, b) => sortDir * ((a[sortCol] ?? 9999) - (b[sortCol] ?? 9999)));
 
             const analystDate = data.lastAnalystUpdate
-                ? new Date(data.lastAnalystUpdate).toLocaleDateString("sv-SE", { day:"numeric", month:"short", year:"numeric" })
+                ? new Date(data.lastAnalystUpdate).toLocaleDateString(T.date_locale, { day:"numeric", month:"short", year:"numeric" })
                 : "–";
 
-            const COL_INFO = {
-                peg:           { label:"PEG – Pris/Tillväxt",          short:"P/E justerat för vinsttillväxt",                long:"PEG = P/E delat med EPS-tillväxt. PEG 1.0 = rimligt värderad, under 1.0 = potentiellt undervärderad. Löser P/E's problem med tillväxtbolag – NVDA med PEG 1.5 är billigare än vad P/E 56 antyder." },
-                upside:        { label:"Uppsida",                       short:"Riktkurs vs live-kurs (timvis)",                long:`Beräknas som (riktkurs − live-kurs) / live-kurs. Live-kursen uppdateras var 15:e minut. Riktkursen är analytikerkonsensus från Yahoo Finance och uppdateras automatiskt (senast ${analystDate}). Uppsidan rör sig alltså med både kursen och uppdaterade riktkurser.` },
-                scoreDeviation:{ label:"Konsensus-avvikelse",           short:`Analytikerkonsensus (${analystDate})`,          long:`Analytikernas rekommendationer (köp/behåll/sälj) viktas till 1–5 (5=alla säger köp) och avvikelsen från max visas. 0.00 = total enighet om köp. Lägre = starkare konsensus. Uppdateras automatiskt via Yahoo Finance (senast ${analystDate}).` },
-                buyPct:        { label:"Köp%",                          short:`Andel analytiker som säger köp (${analystDate})`, long:`Hur stor andel av analytikerna som aktivt rekommenderar köp. Data hämtas automatiskt från Yahoo Finance (senast ${analystDate}).` },
-                roe:           { label:"ROE – Avkastning på kapital",   short:"Buffetts kvalitetsmått",                        long:"Return on Equity visar hur effektivt bolaget skapar vinst med ägarnas pengar. Warren Buffett söker konsekvent ROE över 15%." },
-                grossMargin:   { label:"Bruttomarginal",                short:"Mungers pricing power-mått",                    long:"Andelen av intäkterna som blir kvar efter direkta kostnader. Hög marginal = stark marknadsposition. Meta 81% vs Tesla 18% är en enorm skillnad." },
-                revenueGrowth: { label:"Omsättningstillväxt",           short:"Intäktstillväxt senaste räkenskapsåret",         long:"Hur snabbt bolaget växer sin omsättning. Tillväxt driver framtida vinster och motiverar höga P/E-tal. NVDA:s 120%+ visar varför PEG är ett bättre mått än P/E för tillväxtbolag." },
-                rsi:           { label:"RSI – Relativ styrka",          short:"Teknisk ingångssignal (beräknad live)",          long:"Beräknad från 30 dagars stängningskurser via Wilders metod (14 perioder). Mäter om aktien är överköpt (>70) eller översåld (<30). Närmast 50 = neutralt momentum." },
-                beta:          { label:"Beta – Volatilitet",            short:"Hur mycket aktien svänger",                     long:"Beta 1.0 = rör sig i takt med marknaden. Tesla 2.31 = svänger mer än dubbelt så mycket. Under 1.0 = stabilare än index." },
-            };
+            const COL_INFO = T.col_info(analystDate);
 
             const handleSort = col => {
                 if (sortCol === col) setSortDir(d => -d);
@@ -427,247 +547,262 @@
 
             return (
                 <ThemeCtx.Provider value={theme}>
-                    <button className="theme-toggle" onClick={() => setTheme(t => t==="dark"?"light":"dark")}>{theme==="dark"?"☀":"🌙"}</button>
+                    <LangCtx.Provider value={lang}>
+                        <button className="theme-toggle" onClick={() => setTheme(t => t==="dark"?"light":"dark")}>{theme==="dark"?"☀":"🌙"}</button>
+                        <select className="lang-select" value={lang} onChange={e => setLang(e.target.value)}>
+                            <option value="sv">🇸🇪 SV</option>
+                            <option value="en">🇬🇧 EN</option>
+                        </select>
 
-                    <div style={{ minHeight:"100vh", background:"var(--bg)", color:"var(--text)", padding:"60px 12px 48px", backgroundImage:grad }}>
-                        <style>{`
-                            @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&display=swap');
-                            @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-                            .trow{transition:background 0.12s;}.trow:hover{background:var(--row-hover)!important;}
-                            ::-webkit-scrollbar{height:4px;}::-webkit-scrollbar-thumb{background:var(--scroll-thumb);border-radius:2px;}
-                        `}</style>
+                        <div style={{ minHeight:"100vh", background:"var(--bg)", color:"var(--text)", padding:"60px 12px 48px", backgroundImage:grad }}>
+                            <style>{`
+                                @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&display=swap');
+                                @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+                                .trow{transition:background 0.12s;}.trow:hover{background:var(--row-hover)!important;}
+                                ::-webkit-scrollbar{height:4px;}::-webkit-scrollbar-thumb{background:var(--scroll-thumb);border-radius:2px;}
+                            `}</style>
 
-                        <div style={{ maxWidth:1440, margin:"0 auto" }}>
+                            <div style={{ maxWidth:1440, margin:"0 auto" }}>
 
-                            {/* Header */}
-                            <div style={{ marginBottom:24, animation:"fadeUp 0.4s ease both" }}>
-                                <div style={{ fontFamily:"monospace", fontSize:10, color:"var(--ghost)", letterSpacing:"0.2em", marginBottom:8 }}>
-                                    MAGNIFICENT SEVEN · ANALYST TRACKER{status && status !== "Laddar data..." ? <span style={{ color:"var(--dim)", letterSpacing:"0.1em" }}> · {status}</span> : ""}
+                                {/* Header */}
+                                <div style={{ marginBottom:24, animation:"fadeUp 0.4s ease both" }}>
+                                    <div style={{ fontFamily:"monospace", fontSize:10, color:"var(--ghost)", letterSpacing:"0.2em", marginBottom:8 }}>
+                                        MAGNIFICENT SEVEN · ANALYST TRACKER{loadState.type !== "loading" && statusText ? <span style={{ color:"var(--dim)", letterSpacing:"0.1em" }}> · {statusText}</span> : ""}
+                                    </div>
+                                    <h1 style={{ fontFamily:"'Sora',sans-serif", fontSize:"clamp(24px,4vw,38px)", fontWeight:700, letterSpacing:"-0.03em" }}>
+                                        Mag<span style={{ color:"var(--accent)" }}>7</span> <span style={{ fontWeight:300, color:"var(--faint)" }}>Index</span>
+                                    </h1>
                                 </div>
-                                <h1 style={{ fontFamily:"'Sora',sans-serif", fontSize:"clamp(24px,4vw,38px)", fontWeight:700, letterSpacing:"-0.03em" }}>
-                                    Mag<span style={{ color:"var(--accent)" }}>7</span> <span style={{ fontWeight:300, color:"var(--faint)" }}>Index</span>
-                                </h1>
-                            </div>
 
-                            {/* Mode toggles */}
-                            <div style={{ marginBottom:16 }}>
-                                <div style={{ fontFamily:"monospace", fontSize:10, color:"var(--faint)", letterSpacing:"0.12em", marginBottom:10 }}>VÄLJ RANKINGLÄGE</div>
-                                <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:12 }}>
-                                    {Object.entries(MODES).map(([key, m]) => {
-                                        const active = mode === key;
-                                        return (
-                                            <button key={key} onClick={() => { setMode(key); setSortCol("totalRank"); setSortDir(1); }} style={{
-                                                padding:"11px 18px", borderRadius:12, cursor:"pointer",
-                                                background: active ? "rgba(0,163,224,0.15)" : "var(--btn-bg)",
-                                                border:     active ? "1px solid rgba(0,163,224,0.5)" : "1px solid var(--btn-border)",
-                                                color:      active ? "var(--accent)" : "var(--dim)",
-                                                fontFamily:"'Sora',sans-serif", fontWeight: active ? 700 : 400, fontSize:13, transition:"all 0.2s",
-                                            }}>
-                                                {m.icon} {m.label}
-                                                <div style={{ fontFamily:"monospace", fontSize:9, marginTop:3, opacity:0.6, fontWeight:400 }}>
-                                                    {key==="value"?"Balanserad":key==="lowrisk"?"Stabilitet":"Potential"}
-                                                </div>
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                                <div style={{ padding:"12px 16px", background:"var(--mode-box)", borderLeft:"3px solid var(--accent)", borderRadius:"0 8px 8px 0", marginBottom:10 }}>
-                                    <div style={{ fontFamily:"'Sora',sans-serif", fontSize:13, fontWeight:600, color:"var(--text)", marginBottom:4 }}>{MODES[mode].headline}</div>
-                                    <div style={{ fontFamily:"sans-serif", fontSize:12, color:"var(--muted)", lineHeight:1.5 }}>{MODES[mode].desc}</div>
-                                    {MODES[mode].ignores && <div style={{ fontFamily:"monospace", fontSize:10, color:"#ff8a65", marginTop:6 }}>⚠ {MODES[mode].ignores}</div>}
-                                </div>
-                                <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
-                                    {Object.entries(COL_INFO).map(([k, info]) => {
-                                        const wv = w[k] ?? 0;
-                                        const ps = pillStyle(wv);
-                                        return (
-                                            <div key={k} style={{ padding:"3px 10px", borderRadius:20, fontFamily:"monospace", fontSize:10, background:ps.bg, border:`1px solid ${ps.border}`, color:ps.color }}>
-                                                {info.label.split("–")[0].trim()} {wv===0?"av":"×"+wv}
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-
-                            {/* Table */}
-                            <div style={{ overflowX:"auto", borderRadius:14, border:"1px solid var(--border)" }}>
-                                <table style={{ width:"100%", borderCollapse:"collapse", fontFamily:"'Sora',sans-serif" }}>
-                                    <thead>
-                                        <tr style={{ background:"var(--surface)" }}>
-                                            <th style={{ padding:"10px 16px", textAlign:"left", fontFamily:"monospace", fontSize:10, color:"var(--faint)", letterSpacing:"0.08em", borderBottom:"1px solid var(--border-sm)", whiteSpace:"nowrap" }}>BOLAG</th>
-                                            <th onClick={() => handleSort("totalRank")} style={{...thBase, color:thColor("totalRank",null)}}>{"RANK"+arr("totalRank")}</th>
-                                            <th onClick={() => handleSort("price")} style={{...thBase, color:thColor("price",null)}}>{"KURS"+arr("price")}</th>
-                                            <th onClick={() => handleSort("peg")} style={{...thBase, color:thColor("peg","peg")}}><Tooltip info={COL_INFO.peg}><span>{"PEG"+arr("peg")}</span></Tooltip></th>
-                                            <th onClick={() => handleSort("upside")} style={{...thBase, color:thColor("upside","upside")}}><Tooltip info={COL_INFO.upside}><span>{"UPPSIDA"+arr("upside")}</span></Tooltip></th>
-                                            <th style={{ padding:"10px 10px", textAlign:"left", fontFamily:"monospace", fontSize:10, color:"var(--faint)", borderBottom:"1px solid var(--border-sm)", whiteSpace:"nowrap" }}>ANALYTIKER</th>
-                                            <th onClick={() => handleSort("buyPct")} style={{...thBase, color:thColor("buyPct","buyPct")}}><Tooltip info={COL_INFO.buyPct}><span>{"KÖP%"+arr("buyPct")}</span></Tooltip></th>
-                                            <th onClick={() => handleSort("scoreDeviation")} style={{...thBase, color:thColor("scoreDeviation","scoreDeviation")}}><Tooltip info={COL_INFO.scoreDeviation}><span>{"KONSENSUS"+arr("scoreDeviation")}</span></Tooltip></th>
-                                            <th onClick={() => handleSort("roe")} style={{...thBase, color:thColor("roe","roe")}}><Tooltip info={COL_INFO.roe}><span>{"ROE%"+arr("roe")}</span></Tooltip></th>
-                                            <th onClick={() => handleSort("grossMargin")} style={{...thBase, color:thColor("grossMargin","grossMargin")}}><Tooltip info={COL_INFO.grossMargin}><span>{"BRUTTOMARG."+arr("grossMargin")}</span></Tooltip></th>
-                                            <th onClick={() => handleSort("revenueGrowth")} style={{...thBase, color:thColor("revenueGrowth","revenueGrowth")}}><Tooltip info={COL_INFO.revenueGrowth}><span>{"REV.TILLVÄXT"+arr("revenueGrowth")}</span></Tooltip></th>
-                                            <th onClick={() => handleSort("rsi")} style={{...thBase, color:thColor("rsi","rsi")}}><Tooltip info={COL_INFO.rsi}><span>{"RSI"+arr("rsi")}</span></Tooltip></th>
-                                            <th onClick={() => handleSort("beta")} style={{...thBase, color:thColor("beta","beta")}}><Tooltip info={COL_INFO.beta}><span>{"BETA"+arr("beta")}</span></Tooltip></th>
-                                            <th style={{...thBase, color:"var(--th-dim)", cursor:"default"}}>P/E</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {sorted.map((r, i) => {
-                                            const pos = positionMap[r.ticker];
-                                            const tc  = cl.rank(pos);
+                                {/* Mode toggles */}
+                                <div style={{ marginBottom:16 }}>
+                                    <div style={{ fontFamily:"monospace", fontSize:10, color:"var(--faint)", letterSpacing:"0.12em", marginBottom:10 }}>{T.col_select_label}</div>
+                                    <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:12 }}>
+                                        {Object.entries(MODES).map(([key, m]) => {
+                                            const active = mode === key;
                                             return (
-                                                <tr key={r.ticker} className="trow"
-                                                    onMouseEnter={() => setHovered(r.ticker)}
-                                                    onMouseLeave={() => setHovered(null)}
-                                                    style={{ background: hovered===r.ticker?"var(--row-hover)":i%2===0?"var(--row-alt)":"transparent", borderBottom:"1px solid var(--border-sm)", animation:`fadeUp 0.4s ease ${i*0.05}s both` }}>
-
-                                                    {/* 1. Bolag */}
-                                                    <td style={{ padding:"13px 16px", whiteSpace:"nowrap" }}>
-                                                        <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-                                                            <div style={{ width:3, height:30, borderRadius:2, background:ACCENT[r.ticker], flexShrink:0 }} />
-                                                            <div>
-                                                                <div style={{ fontWeight:600, fontSize:13 }}>{r.name}</div>
-                                                                <div style={{ fontFamily:"monospace", fontSize:10, color:ACCENT[r.ticker], letterSpacing:"0.1em", marginTop:1 }}>{r.ticker}</div>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-
-                                                    {/* 2. Totalrank */}
-                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap" }}>
-                                                        <div style={{ display:"inline-flex", alignItems:"center", justifyContent:"center", minWidth:46, height:38, borderRadius:8, padding:"0 8px", background:`${tc}18`, border:`1px solid ${tc}44`, fontFamily:"monospace", fontSize:14, fontWeight:700, color:tc }}>
-                                                            {r.totalRank.toFixed(1)}
-                                                        </div>
-                                                    </td>
-
-                                                    {/* 3. Kurs */}
-                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap" }}>
-                                                        <span style={{ fontFamily:"monospace", fontSize:13, fontWeight:600 }}>${r.price != null ? r.price.toFixed(2) : "–"}</span>
-                                                    </td>
-
-                                                    {/* 4. PEG */}
-                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.peg===0?0.3:1 }}>
-                                                        <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
-                                                            <span style={{ fontFamily:"monospace", fontSize:13, color: r.peg!=null ? cl.peg(r.peg) : "var(--ghost)" }}>
-                                                                {r.peg != null ? r.peg.toFixed(2) : "–"}
-                                                            </span>
-                                                            <RankBadge r={r.rankPEG} />
-                                                        </div>
-                                                    </td>
-
-                                                    {/* 5. Uppsida */}
-                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.upside===0?0.3:1 }}>
-                                                        <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
-                                                            <span style={{ fontFamily:"monospace", fontSize:13, color:r.upside!=null?(r.upside>0?cl.pos:cl.sell):"var(--ghost)" }}>
-                                                                {r.upside!=null?(r.upside>0?"+":"")+r.upside.toFixed(1)+"%":"–"}
-                                                            </span>
-                                                            <RankBadge r={r.rankUpside} />
-                                                        </div>
-                                                    </td>
-
-                                                    {/* 6. Analytiker */}
-                                                    <td style={{ padding:"13px 10px" }}>
-                                                        <AnalystBar buyPct={r.buyPct} holdPct={r.holdPct} sellPct={r.sellPct} />
-                                                    </td>
-
-                                                    {/* 7. Köp% */}
-                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.buyPct===0?0.3:1 }}>
-                                                        <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
-                                                            <span style={{ fontFamily:"monospace", fontSize:13, color:cl.buy }}>{r.buyPct}%</span>
-                                                            <RankBadge r={r.rankBuyPct} />
-                                                        </div>
-                                                    </td>
-
-                                                    {/* 8. Konsensus */}
-                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.scoreDeviation===0?0.3:1 }}>
-                                                        <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
-                                                            <div style={{ textAlign:"right" }}>
-                                                                <div style={{ fontFamily:"monospace", fontSize:13 }}>{r.score.toFixed(2)}</div>
-                                                                <div style={{ fontFamily:"monospace", fontSize:10, color:cl.cons(5-r.score) }}>−{r.scoreDeviation.toFixed(2)}</div>
-                                                            </div>
-                                                            <RankBadge r={r.rankScore} />
-                                                        </div>
-                                                    </td>
-
-                                                    {/* 9. ROE */}
-                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.roe===0?0.3:1 }}>
-                                                        <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
-                                                            <span style={{ fontFamily:"monospace", fontSize:13 }}>{r.roe != null ? r.roe.toFixed(1)+"%" : "–"}</span>
-                                                            <RankBadge r={r.rankROE} />
-                                                        </div>
-                                                    </td>
-
-                                                    {/* 10. Bruttomarg */}
-                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.grossMargin===0?0.3:1 }}>
-                                                        <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
-                                                            <span style={{ fontFamily:"monospace", fontSize:13 }}>{r.grossMargin != null ? r.grossMargin.toFixed(1)+"%" : "–"}</span>
-                                                            <RankBadge r={r.rankGM} />
-                                                        </div>
-                                                    </td>
-
-                                                    {/* 11. Rev.tillväxt */}
-                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.revenueGrowth===0?0.3:1 }}>
-                                                        <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
-                                                            <span style={{ fontFamily:"monospace", fontSize:13, color:r.revenueGrowth!=null?cl.rev(r.revenueGrowth):"var(--ghost)" }}>
-                                                                {r.revenueGrowth!=null?(r.revenueGrowth>0?"+":"")+r.revenueGrowth.toFixed(1)+"%":"–"}
-                                                            </span>
-                                                            <RankBadge r={r.rankRG} />
-                                                        </div>
-                                                    </td>
-
-                                                    {/* 12. RSI */}
-                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.rsi===0?0.3:1 }}>
-                                                        <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
-                                                            <div style={{ textAlign:"right" }}>
-                                                                <div style={{ fontFamily:"monospace", fontSize:13, color:r.rsi!=null?cl.rsi(r.rsi):"var(--ghost)" }}>{r.rsi ?? "–"}</div>
-                                                                <div style={{ fontFamily:"monospace", fontSize:10, color:"var(--ghost)" }}>{r.rsi>70?"Överköpt":r.rsi<30?"Översåld":"Neutral"}</div>
-                                                            </div>
-                                                            <RankBadge r={r.rankRSI} />
-                                                        </div>
-                                                    </td>
-
-                                                    {/* 13. Beta */}
-                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.beta===0?0.3:1 }}>
-                                                        <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
-                                                            <span style={{ fontFamily:"monospace", fontSize:13, color:cl.beta(r.beta) }}>{r.beta.toFixed(2)}</span>
-                                                            <RankBadge r={r.rankBeta} />
-                                                        </div>
-                                                    </td>
-
-                                                    {/* 14. P/E — referens, alltid dimmad, längst till höger */}
-                                                    <td style={{ padding:"13px 16px", textAlign:"right", whiteSpace:"nowrap", opacity:0.35 }}>
-                                                        <span style={{ fontFamily:"monospace", fontSize:13 }}>{r.pe != null ? r.pe.toFixed(1) : "–"}</span>
-                                                    </td>
-                                                </tr>
+                                                <button key={key} onClick={() => { setMode(key); setSortCol("totalRank"); setSortDir(1); }} style={{
+                                                    padding:"11px 18px", borderRadius:12, cursor:"pointer",
+                                                    background: active ? "rgba(0,163,224,0.15)" : "var(--btn-bg)",
+                                                    border:     active ? "1px solid rgba(0,163,224,0.5)" : "1px solid var(--btn-border)",
+                                                    color:      active ? "var(--accent)" : "var(--dim)",
+                                                    fontFamily:"'Sora',sans-serif", fontWeight: active ? 700 : 400, fontSize:13, transition:"all 0.2s",
+                                                }}>
+                                                    {m.icon} {m.label}
+                                                    <div style={{ fontFamily:"monospace", fontSize:9, marginTop:3, opacity:0.6, fontWeight:400 }}>
+                                                        {T.mode_subtitles[key]}
+                                                    </div>
+                                                </button>
                                             );
                                         })}
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            {/* Footer notes */}
-                            <div style={{ marginTop:16, display:"flex", flexWrap:"wrap", gap:"6px 20px", fontFamily:"monospace", fontSize:10, color:"var(--muted)" }}>
-                                <span>● Data uppdateras var 15:e minut under marknadstid</span>
-                                <span>● Rankingbadge: <span style={{color:cl.pos}}>1=bäst</span> → <span style={{color:cl.sell}}>7=sämst</span></span>
-                                <span>● Kurser + RSI: Yahoo Finance · PEG, ROE, marginaler, tillväxt: FMP</span>
-                                <span>● P/E visas för referens men ingår ej i ranking. PEG används</span>
-                                <span>● Analytikerkonsensus, riktkurser och köp/behåll/sälj: Yahoo Finance (automatisk, senast <strong>{analystDate}</strong>)</span>
-                                <span>● Uppsida = (riktkurs − live-kurs) / live-kurs. Riktkurs uppdateras automatiskt timvis</span>
-                            </div>
-
-                            {/* Hint bar — under tabellen */}
-                            <div style={{ display:"flex", alignItems:"center", gap:8, marginTop:14, padding:"8px 14px", background:"var(--hint-bg)", border:"1px solid var(--hint-border)", borderRadius:8 }}>
-                                <span style={{ fontFamily:"monospace", fontSize:11, color:"var(--text)" }}>Håll muspekaren över <strong>?</strong> bredvid en kolumnrubrik för att se förklaring · Klicka på rubrik för att sortera</span>
-                            </div>
-
-                            {/* FAQ */}
-                            <div style={{ marginTop:48 }}>
-                                <div style={{ fontFamily:"monospace", fontSize:10, color:"var(--dim)", letterSpacing:"0.2em", marginBottom:20 }}>VANLIGA FRÅGOR</div>
-                                <div style={{ maxWidth:780, borderTop:"1px solid var(--border-sm)" }}>
-                                    {FAQ_ITEMS.map((item, i) => <FAQItem key={i} q={item.q} a={item.a} />)}
+                                    </div>
+                                    <div style={{ padding:"12px 16px", background:"var(--mode-box)", borderLeft:"3px solid var(--accent)", borderRadius:"0 8px 8px 0", marginBottom:10 }}>
+                                        <div style={{ fontFamily:"'Sora',sans-serif", fontSize:13, fontWeight:600, color:"var(--text)", marginBottom:4 }}>{MODES[mode].headline}</div>
+                                        <div style={{ fontFamily:"sans-serif", fontSize:12, color:"var(--muted)", lineHeight:1.5 }}>{MODES[mode].desc}</div>
+                                        {MODES[mode].ignores && <div style={{ fontFamily:"monospace", fontSize:10, color:"#ff8a65", marginTop:6 }}>⚠ {MODES[mode].ignores}</div>}
+                                    </div>
+                                    <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
+                                        {Object.entries(COL_INFO).map(([k, info]) => {
+                                            const wv = w[k] ?? 0;
+                                            const ps = pillStyle(wv);
+                                            return (
+                                                <div key={k} style={{ padding:"3px 10px", borderRadius:20, fontFamily:"monospace", fontSize:10, background:ps.bg, border:`1px solid ${ps.border}`, color:ps.color }}>
+                                                    {info.label.split("–")[0].trim()} {wv===0?(lang==="sv"?"av":"off"):"×"+wv}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
-                            </div>
 
+                                {/* Table */}
+                                <div style={{ overflowX:"auto", borderRadius:14, border:"1px solid var(--border)" }}>
+                                    <table style={{ width:"100%", borderCollapse:"collapse", fontFamily:"'Sora',sans-serif" }}>
+                                        <thead>
+                                            <tr style={{ background:"var(--surface)" }}>
+                                                <th style={{ padding:"10px 16px", textAlign:"left", fontFamily:"monospace", fontSize:10, color:"var(--faint)", letterSpacing:"0.08em", borderBottom:"1px solid var(--border-sm)", whiteSpace:"nowrap" }}>{T.th_company}</th>
+                                                <th onClick={() => handleSort("totalRank")} style={{...thBase, color:thColor("totalRank",null)}}>{T.th_rank+arr("totalRank")}</th>
+                                                <th onClick={() => handleSort("price")} style={{...thBase, color:thColor("price",null)}}>{T.th_price+arr("price")}</th>
+                                                <th onClick={() => handleSort("peg")} style={{...thBase, color:thColor("peg","peg")}}><Tooltip info={COL_INFO.peg}><span>{"PEG"+arr("peg")}</span></Tooltip></th>
+                                                <th onClick={() => handleSort("upside")} style={{...thBase, color:thColor("upside","upside")}}><Tooltip info={COL_INFO.upside}><span>{T.th_upside+arr("upside")}</span></Tooltip></th>
+                                                <th style={{ padding:"10px 10px", textAlign:"left", fontFamily:"monospace", fontSize:10, color:"var(--faint)", borderBottom:"1px solid var(--border-sm)", whiteSpace:"nowrap" }}>{T.th_analyst}</th>
+                                                <th onClick={() => handleSort("buyPct")} style={{...thBase, color:thColor("buyPct","buyPct")}}><Tooltip info={COL_INFO.buyPct}><span>{T.th_buy_pct+arr("buyPct")}</span></Tooltip></th>
+                                                <th onClick={() => handleSort("scoreDeviation")} style={{...thBase, color:thColor("scoreDeviation","scoreDeviation")}}><Tooltip info={COL_INFO.scoreDeviation}><span>{T.th_consensus+arr("scoreDeviation")}</span></Tooltip></th>
+                                                <th onClick={() => handleSort("roe")} style={{...thBase, color:thColor("roe","roe")}}><Tooltip info={COL_INFO.roe}><span>{"ROE%"+arr("roe")}</span></Tooltip></th>
+                                                <th onClick={() => handleSort("grossMargin")} style={{...thBase, color:thColor("grossMargin","grossMargin")}}><Tooltip info={COL_INFO.grossMargin}><span>{(lang==="sv"?"BRUTTOMARG.":"MARGIN.")+arr("grossMargin")}</span></Tooltip></th>
+                                                <th onClick={() => handleSort("revenueGrowth")} style={{...thBase, color:thColor("revenueGrowth","revenueGrowth")}}><Tooltip info={COL_INFO.revenueGrowth}><span>{(lang==="sv"?"REV.TILLVÄXT":"REV.GROWTH")+arr("revenueGrowth")}</span></Tooltip></th>
+                                                <th onClick={() => handleSort("rsi")} style={{...thBase, color:thColor("rsi","rsi")}}><Tooltip info={COL_INFO.rsi}><span>{"RSI"+arr("rsi")}</span></Tooltip></th>
+                                                <th onClick={() => handleSort("beta")} style={{...thBase, color:thColor("beta","beta")}}><Tooltip info={COL_INFO.beta}><span>{"BETA"+arr("beta")}</span></Tooltip></th>
+                                                <th style={{...thBase, color:"var(--th-dim)", cursor:"default"}}>P/E</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {sorted.map((r, i) => {
+                                                const pos = positionMap[r.ticker];
+                                                const tc  = cl.rank(pos);
+                                                return (
+                                                    <tr key={r.ticker} className="trow"
+                                                        onMouseEnter={() => setHovered(r.ticker)}
+                                                        onMouseLeave={() => setHovered(null)}
+                                                        style={{ background: hovered===r.ticker?"var(--row-hover)":i%2===0?"var(--row-alt)":"transparent", borderBottom:"1px solid var(--border-sm)", animation:`fadeUp 0.4s ease ${i*0.05}s both` }}>
+
+                                                        {/* Company */}
+                                                        <td style={{ padding:"13px 16px", whiteSpace:"nowrap" }}>
+                                                            <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+                                                                <div style={{ width:3, height:30, borderRadius:2, background:ACCENT[r.ticker], flexShrink:0 }} />
+                                                                <div>
+                                                                    <div style={{ fontWeight:600, fontSize:13 }}>{r.name}</div>
+                                                                    <div style={{ fontFamily:"monospace", fontSize:10, color:ACCENT[r.ticker], letterSpacing:"0.1em", marginTop:1 }}>{r.ticker}</div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+
+                                                        {/* Total rank */}
+                                                        <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap" }}>
+                                                            <div style={{ display:"inline-flex", alignItems:"center", justifyContent:"center", minWidth:46, height:38, borderRadius:8, padding:"0 8px", background:`${tc}18`, border:`1px solid ${tc}44`, fontFamily:"monospace", fontSize:14, fontWeight:700, color:tc }}>
+                                                                {r.totalRank.toFixed(1)}
+                                                            </div>
+                                                        </td>
+
+                                                        {/* Price */}
+                                                        <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap" }}>
+                                                            <span style={{ fontFamily:"monospace", fontSize:13, fontWeight:600 }}>${r.price != null ? r.price.toFixed(2) : "–"}</span>
+                                                        </td>
+
+                                                        {/* PEG */}
+                                                        <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.peg===0?0.3:1 }}>
+                                                            <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
+                                                                <span style={{ fontFamily:"monospace", fontSize:13, color: r.peg!=null ? cl.peg(r.peg) : "var(--ghost)" }}>
+                                                                    {r.peg != null ? r.peg.toFixed(2) : "–"}
+                                                                </span>
+                                                                <RankBadge r={r.rankPEG} />
+                                                            </div>
+                                                        </td>
+
+                                                        {/* Upside */}
+                                                        <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.upside===0?0.3:1 }}>
+                                                            <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
+                                                                <span style={{ fontFamily:"monospace", fontSize:13, color:r.upside!=null?(r.upside>0?cl.pos:cl.sell):"var(--ghost)" }}>
+                                                                    {r.upside!=null?(r.upside>0?"+":"")+r.upside.toFixed(1)+"%":"–"}
+                                                                </span>
+                                                                <RankBadge r={r.rankUpside} />
+                                                            </div>
+                                                        </td>
+
+                                                        {/* Analyst bar */}
+                                                        <td style={{ padding:"13px 10px" }}>
+                                                            <AnalystBar buyPct={r.buyPct} holdPct={r.holdPct} sellPct={r.sellPct} />
+                                                        </td>
+
+                                                        {/* Buy% */}
+                                                        <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.buyPct===0?0.3:1 }}>
+                                                            <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
+                                                                <span style={{ fontFamily:"monospace", fontSize:13, color:cl.buy }}>{r.buyPct}%</span>
+                                                                <RankBadge r={r.rankBuyPct} />
+                                                            </div>
+                                                        </td>
+
+                                                        {/* Consensus */}
+                                                        <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.scoreDeviation===0?0.3:1 }}>
+                                                            <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
+                                                                <div style={{ textAlign:"right" }}>
+                                                                    <div style={{ fontFamily:"monospace", fontSize:13 }}>{r.score.toFixed(2)}</div>
+                                                                    <div style={{ fontFamily:"monospace", fontSize:10, color:cl.cons(5-r.score) }}>−{r.scoreDeviation.toFixed(2)}</div>
+                                                                </div>
+                                                                <RankBadge r={r.rankScore} />
+                                                            </div>
+                                                        </td>
+
+                                                        {/* ROE */}
+                                                        <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.roe===0?0.3:1 }}>
+                                                            <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
+                                                                <span style={{ fontFamily:"monospace", fontSize:13 }}>{r.roe != null ? r.roe.toFixed(1)+"%" : "–"}</span>
+                                                                <RankBadge r={r.rankROE} />
+                                                            </div>
+                                                        </td>
+
+                                                        {/* Gross margin */}
+                                                        <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.grossMargin===0?0.3:1 }}>
+                                                            <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
+                                                                <span style={{ fontFamily:"monospace", fontSize:13 }}>{r.grossMargin != null ? r.grossMargin.toFixed(1)+"%" : "–"}</span>
+                                                                <RankBadge r={r.rankGM} />
+                                                            </div>
+                                                        </td>
+
+                                                        {/* Revenue growth */}
+                                                        <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.revenueGrowth===0?0.3:1 }}>
+                                                            <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
+                                                                <span style={{ fontFamily:"monospace", fontSize:13, color:r.revenueGrowth!=null?cl.rev(r.revenueGrowth):"var(--ghost)" }}>
+                                                                    {r.revenueGrowth!=null?(r.revenueGrowth>0?"+":"")+r.revenueGrowth.toFixed(1)+"%":"–"}
+                                                                </span>
+                                                                <RankBadge r={r.rankRG} />
+                                                            </div>
+                                                        </td>
+
+                                                        {/* RSI */}
+                                                        <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.rsi===0?0.3:1 }}>
+                                                            <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
+                                                                <div style={{ textAlign:"right" }}>
+                                                                    <div style={{ fontFamily:"monospace", fontSize:13, color:r.rsi!=null?cl.rsi(r.rsi):"var(--ghost)" }}>{r.rsi ?? "–"}</div>
+                                                                    <div style={{ fontFamily:"monospace", fontSize:10, color:"var(--ghost)" }}>{r.rsi>70?T.rsi_overbought:r.rsi<30?T.rsi_oversold:T.rsi_neutral}</div>
+                                                                </div>
+                                                                <RankBadge r={r.rankRSI} />
+                                                            </div>
+                                                        </td>
+
+                                                        {/* Beta */}
+                                                        <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.beta===0?0.3:1 }}>
+                                                            <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
+                                                                <span style={{ fontFamily:"monospace", fontSize:13, color:cl.beta(r.beta) }}>{r.beta.toFixed(2)}</span>
+                                                                <RankBadge r={r.rankBeta} />
+                                                            </div>
+                                                        </td>
+
+                                                        {/* P/E — reference only */}
+                                                        <td style={{ padding:"13px 16px", textAlign:"right", whiteSpace:"nowrap", opacity:0.35 }}>
+                                                            <span style={{ fontFamily:"monospace", fontSize:13 }}>{r.pe != null ? r.pe.toFixed(1) : "–"}</span>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                {/* Footer notes */}
+                                <div style={{ marginTop:16, display:"flex", flexWrap:"wrap", gap:"6px 20px", fontFamily:"monospace", fontSize:10, color:"var(--muted)" }}>
+                                    {lang === "sv" ? <>
+                                        <span>● Data uppdateras var 15:e minut under marknadstid</span>
+                                        <span>● Rankingbadge: <span style={{color:cl.pos}}>1=bäst</span> → <span style={{color:cl.sell}}>7=sämst</span></span>
+                                        <span>● Kurser + RSI: Yahoo Finance · PEG, ROE, marginaler, tillväxt: FMP</span>
+                                        <span>● P/E visas för referens men ingår ej i ranking. PEG används</span>
+                                        <span>● Analytikerkonsensus, riktkurser och köp/behåll/sälj: Yahoo Finance (automatisk, senast <strong>{analystDate}</strong>)</span>
+                                        <span>● Uppsida = (riktkurs − live-kurs) / live-kurs. Riktkurs uppdateras automatiskt timvis</span>
+                                    </> : <>
+                                        <span>● Data updates every 15 minutes during market hours</span>
+                                        <span>● Ranking badge: <span style={{color:cl.pos}}>1=best</span> → <span style={{color:cl.sell}}>7=worst</span></span>
+                                        <span>● Prices + RSI: Yahoo Finance · PEG, ROE, margins, growth: FMP</span>
+                                        <span>● P/E shown for reference only, not included in ranking. PEG is used instead</span>
+                                        <span>● Analyst consensus, price targets and buy/hold/sell: Yahoo Finance (automatic, last updated <strong>{analystDate}</strong>)</span>
+                                        <span>● Upside = (price target − live price) / live price. Price target updates automatically every hour</span>
+                                    </>}
+                                </div>
+
+                                {/* Hint bar */}
+                                <div style={{ display:"flex", alignItems:"center", gap:8, marginTop:14, padding:"8px 14px", background:"var(--hint-bg)", border:"1px solid var(--hint-border)", borderRadius:8 }}>
+                                    <span style={{ fontFamily:"monospace", fontSize:11, color:"var(--text)" }}>{T.hint}</span>
+                                </div>
+
+                                {/* FAQ */}
+                                <div style={{ marginTop:48 }}>
+                                    <div style={{ fontFamily:"monospace", fontSize:10, color:"var(--dim)", letterSpacing:"0.2em", marginBottom:20 }}>{T.faq_label}</div>
+                                    <div style={{ maxWidth:780, borderTop:"1px solid var(--border-sm)" }}>
+                                        {T.faq_items.map((item, i) => <FAQItem key={i} q={item.q} a={item.a} />)}
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
-                    </div>
+                    </LangCtx.Provider>
                 </ThemeCtx.Provider>
             );
         }
