@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy · Market Moood</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%2300E676'/></svg>">
+    <meta name="description" content="Privacy Policy for Market Moood — the Fear & Greed Index tracker for Android.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:       #0a0a0a;
+            --surface:  #141414;
+            --card:     #161616;
+            --border:   rgba(255,255,255,0.07);
+            --text:     #f0f0f0;
+            --subtext:  #777;
+            --nav-bg:   rgba(10,10,10,0.85);
+            --z5:       #00E676;
+        }
+
+        [data-theme="light"] {
+            --bg:       #f5f5f5;
+            --surface:  #ebebeb;
+            --card:     #ffffff;
+            --border:   rgba(0,0,0,0.08);
+            --text:     #0a0a0a;
+            --subtext:  #555;
+            --nav-bg:   rgba(245,245,245,0.85);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 34px; height: 34px;
+            cursor: pointer;
+            font-size: 15px;
+            color: var(--subtext);
+            transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .theme-toggle:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 48px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .nav-dot {
+            display: inline-block;
+            width: 6px; height: 6px;
+            background: var(--z5);
+            border-radius: 50%;
+            margin-left: 5px;
+            vertical-align: middle;
+            margin-bottom: 2px;
+        }
+
+        main {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 128px 48px 96px;
+        }
+
+        .eyebrow {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--z5);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: clamp(36px, 5vw, 56px);
+            font-weight: 800;
+            letter-spacing: -2.5px;
+            line-height: 1.05;
+            margin-bottom: 12px;
+        }
+
+        .updated {
+            font-size: 13px;
+            color: var(--subtext);
+            margin-bottom: 56px;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 40px 0;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 14px;
+            margin-top: 40px;
+        }
+
+        p {
+            font-size: 15px;
+            color: var(--subtext);
+            line-height: 1.85;
+            margin-bottom: 16px;
+            font-weight: 300;
+        }
+
+        ul {
+            margin: 0 0 16px 20px;
+        }
+
+        ul li {
+            font-size: 15px;
+            color: var(--subtext);
+            line-height: 1.85;
+            font-weight: 300;
+            margin-bottom: 6px;
+        }
+
+        a {
+            color: var(--z5);
+            text-decoration: none;
+        }
+
+        a:hover { text-decoration: underline; }
+
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 28px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--subtext);
+            font-size: 13px;
+        }
+
+        .footer-links { display: flex; gap: 28px; }
+        .footer-links a { color: var(--subtext); text-decoration: none; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--text); }
+
+        @media (max-width: 640px) {
+            nav { padding: 16px 24px; }
+            main { padding: 100px 24px 72px; }
+            footer { flex-direction: column; gap: 16px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="https://oliveprojects.eu" class="nav-logo">Olive Projects<span class="nav-dot"></span></a>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme"></button>
+    </nav>
+
+    <main>
+        <p class="eyebrow">Market Moood · Android</p>
+        <h1>Privacy Policy</h1>
+        <p class="updated">Last updated: June 2026</p>
+
+        <hr class="divider">
+
+        <p>Market Moood is built by Olive Projects EU. This page explains what data the app collects, how it is used, and your rights as a user.</p>
+
+        <h2>Data we collect</h2>
+        <p>Market Moood does not collect, store, or transmit any personally identifiable information. The app fetches publicly available market data from third-party APIs (CNN, Yahoo Finance, Alternative.me) and displays it locally on your device. No account is required.</p>
+
+        <h2>Advertising (AdMob)</h2>
+        <p>The app is currently ad-free during its beta period. Ads will be introduced in a future version via Google AdMob. When ads are enabled, Google AdMob may collect:</p>
+        <ul>
+            <li>Device identifiers (e.g. advertising ID)</li>
+            <li>General usage data and crash reports</li>
+            <li>Approximate location (country/region level)</li>
+        </ul>
+        <p>This data is collected by Google and governed by <a href="https://policies.google.com/privacy" target="_blank">Google's Privacy Policy</a>. You can opt out of personalised ads at any time in your device settings under <em>Google → Ads → Delete advertising ID</em>.</p>
+
+        <h2>Third-party data sources</h2>
+        <p>Market Moood displays data sourced from:</p>
+        <ul>
+            <li><strong>CNN Business</strong> — Fear &amp; Greed Index</li>
+            <li><strong>Yahoo Finance</strong> — Stock indices and commodity prices</li>
+            <li><strong>Alternative.me</strong> — Crypto Fear &amp; Greed Index</li>
+        </ul>
+        <p>These requests are made directly from your device. No data is routed through Olive Projects servers.</p>
+
+        <h2>Notifications</h2>
+        <p>If you enable alerts, the app schedules local notifications on your device. No notification data leaves your device or is stored externally.</p>
+
+        <h2>No analytics or tracking</h2>
+        <p>Market Moood does not use any analytics SDKs, crash reporting services, or user tracking tools beyond what Google Play Services provides at the OS level.</p>
+
+        <h2>Children's privacy</h2>
+        <p>Market Moood is not directed at children under 13. We do not knowingly collect data from anyone under 13.</p>
+
+        <h2>Changes to this policy</h2>
+        <p>We may update this policy when new features are added (such as when ads go live). The "last updated" date at the top of this page will reflect any changes.</p>
+
+        <h2>Contact</h2>
+        <p>Questions about this policy? Reach us at <a href="mailto:hello@oliveprojects.eu">hello@oliveprojects.eu</a>.</p>
+
+        <hr class="divider">
+
+        <p style="font-size:13px;">This policy applies to the Market Moood Android app. It does not constitute financial advice. Market Moood provides data for informational and educational purposes only.</p>
+    </main>
+
+    <footer>
+        <span>© 2026 Olive Projects</span>
+        <div class="footer-links">
+            <a href="https://oliveprojects.eu">Home</a>
+            <a href="https://github.com/OliveProjects" target="_blank">GitHub</a>
+        </div>
+    </footer>
+
+    <script>
+        const btn = document.getElementById('theme-toggle');
+        const root = document.documentElement;
+        const savedTheme = localStorage.getItem('op-theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        let theme = savedTheme || (prefersDark ? 'dark' : 'light');
+
+        function applyTheme(t) {
+            theme = t;
+            root.dataset.theme = t;
+            btn.textContent = t === 'dark' ? '☀' : '🌙';
+            localStorage.setItem('op-theme', t);
+        }
+
+        applyTheme(theme);
+        btn.addEventListener('click', () => applyTheme(theme === 'dark' ? 'light' : 'dark'));
+    </script>
+
+</body>
+</html>
