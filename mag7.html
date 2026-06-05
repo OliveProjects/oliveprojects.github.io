@@ -87,14 +87,24 @@
         }
         .theme-toggle:hover { color: var(--text); border-color: var(--faint); }
 
-        .lang-select {
+        .lang-toggle {
             position: fixed; top: 16px; right: 64px; z-index: 9999;
-            background: var(--btn-bg); border: 1px solid var(--btn-border);
-            border-radius: 8px; padding: 5px 9px; cursor: pointer;
-            font-size: 12px; font-family: monospace; color: var(--dim);
-            transition: all 0.2s; outline: none; appearance: none;
+            display: flex;
+            background: var(--btn-bg);
+            border: 1px solid var(--btn-border);
+            border-radius: 8px;
+            overflow: hidden;
         }
-        .lang-select:hover { color: var(--text); border-color: var(--faint); }
+        .lang-btn {
+            background: none; border: none; cursor: pointer;
+            padding: 5px 10px;
+            font-size: 12px; font-family: monospace;
+            color: var(--faint);
+            transition: all 0.2s;
+        }
+        .lang-btn:first-child { border-right: 1px solid var(--btn-border); }
+        .lang-btn:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+        .lang-btn.lang-active { color: var(--text); background: rgba(255,255,255,0.10); }
 
         .view-counter {
             position: fixed;
@@ -500,10 +510,10 @@
                 <ThemeCtx.Provider value={theme}>
                     <LangCtx.Provider value={lang}>
                         <button className="theme-toggle" onClick={() => setTheme(t => t==="dark"?"light":"dark")}>{theme==="dark"?"☀":"🌙"}</button>
-                        <select className="lang-select" value={lang} onChange={e => setLang(e.target.value)}>
-                            <option value="sv">🇸🇪 SV</option>
-                            <option value="en">🇬🇧 EN</option>
-                        </select>
+                        <div className="lang-toggle">
+                            <button className={`lang-btn${lang==="sv"?" lang-active":""}`} onClick={() => setLang("sv")}>SV</button>
+                            <button className={`lang-btn${lang==="en"?" lang-active":""}`} onClick={() => setLang("en")}>EN</button>
+                        </div>
                         <div style={{ minHeight:"100vh", background:"var(--bg)", display:"flex", alignItems:"center", justifyContent:"center" }}>
                             <div style={{ fontFamily:"monospace", fontSize:13, color:"var(--faint)" }}>{statusText}</div>
                         </div>
@@ -554,10 +564,10 @@
                 <ThemeCtx.Provider value={theme}>
                     <LangCtx.Provider value={lang}>
                         <button className="theme-toggle" onClick={() => setTheme(t => t==="dark"?"light":"dark")}>{theme==="dark"?"☀":"🌙"}</button>
-                        <select className="lang-select" value={lang} onChange={e => setLang(e.target.value)}>
-                            <option value="sv">🇸🇪 SV</option>
-                            <option value="en">🇬🇧 EN</option>
-                        </select>
+                        <div className="lang-toggle">
+                            <button className={`lang-btn${lang==="sv"?" lang-active":""}`} onClick={() => setLang("sv")}>SV</button>
+                            <button className={`lang-btn${lang==="en"?" lang-active":""}`} onClick={() => setLang("en")}>EN</button>
+                        </div>
 
                         <div style={{ minHeight:"100vh", background:"var(--bg)", color:"var(--text)", padding:"60px 12px 48px", backgroundImage:grad }}>
                             <style>{`
