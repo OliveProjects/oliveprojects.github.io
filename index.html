@@ -34,7 +34,7 @@
             --text:             #f0f0f0;
             --subtext:          #777;
             --nav-bg:           rgba(10,10,10,0.85);
-            --hero-gradient:    linear-gradient(155deg, #ffffff 20%, #FF7043 95%);
+            --hero-gradient:    linear-gradient(180deg, #ffffff 0%, #0a0a0a 100%);
             --btn-border-hover: rgba(255,255,255,0.2);
             --stat-border:      rgba(255,255,255,0.14);
             --z1: #E53935;
@@ -52,7 +52,7 @@
             --text:             #0a0a0a;
             --subtext:          #555;
             --nav-bg:           rgba(245,245,245,0.85);
-            --hero-gradient:    linear-gradient(155deg, #0a0a0a 20%, #c0390a 95%);
+            --hero-gradient:    linear-gradient(180deg, #0a0a0a 0%, #f5f5f5 100%);
             --btn-border-hover: rgba(0,0,0,0.2);
             --stat-border:      rgba(0,0,0,0.1);
         }
@@ -310,8 +310,8 @@
 
         /* Market Moood — Fear & Greed spectrum */
         .card-1 .card-accent { background: linear-gradient(90deg, transparent, #E53935 15%, #FF7043 30%, #FDD835 50%, #43A047 70%, #00E676 85%, transparent); }
-        /* Mag7 — 7-stock spectrum */
-        .card-2 .card-accent { background: linear-gradient(90deg, transparent, #E53935 10%, #FF7043 22%, #FDD835 38%, #43A047 52%, #00E676 66%, #29B6F6 80%, #AB47BC 92%, transparent); }
+        /* Mag7 — 7-stock spectrum (ingen lila) */
+        .card-2 .card-accent { background: linear-gradient(90deg, transparent, #E53935 10%, #FF7043 25%, #FDD835 40%, #43A047 55%, #00E676 70%, #29B6F6 88%, transparent); }
         /* Kite Aero View — Instagram gradient */
         .card-3 .card-accent { background: linear-gradient(90deg, transparent, #833ab4 15%, #c13584 30%, #e1306c 45%, #fd1d1d 60%, #f56040 75%, #fcb045 90%, transparent); }
         /* iOS In Progress — red */
@@ -470,14 +470,18 @@
             height: 1px;
         }
 
-        .cc-email .contact-card-accent      { background: linear-gradient(90deg, transparent, var(--z5), transparent); }
-        .cc-email:hover                      { box-shadow: 0 16px 48px rgba(0,230,118,0.08); }
-        .cc-instagram .contact-card-accent   { background: linear-gradient(90deg, transparent, var(--z2), transparent); }
-        .cc-instagram:hover                  { box-shadow: 0 16px 48px rgba(255,112,67,0.08); }
+        /* Email — Outlook blue */
+        .cc-email .contact-card-accent      { background: linear-gradient(90deg, transparent, #0078D4, transparent); }
+        .cc-email:hover                      { box-shadow: 0 16px 48px rgba(0,120,212,0.1); }
+        /* Instagram — brand gradient */
+        .cc-instagram .contact-card-accent   { background: linear-gradient(90deg, transparent, #833ab4 15%, #c13584 30%, #e1306c 50%, #fd1d1d 65%, #f56040 80%, #fcb045 92%, transparent); }
+        .cc-instagram:hover                  { box-shadow: 0 16px 48px rgba(225,48,108,0.08); }
+        /* X — neutral white */
         .cc-x .contact-card-accent           { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent); }
         .cc-x:hover                          { box-shadow: 0 16px 48px rgba(255,255,255,0.03); }
-        .cc-linkedin .contact-card-accent    { background: linear-gradient(90deg, transparent, var(--z3), transparent); }
-        .cc-linkedin:hover                   { box-shadow: 0 16px 48px rgba(253,216,53,0.08); }
+        /* LinkedIn — brand blue */
+        .cc-linkedin .contact-card-accent    { background: linear-gradient(90deg, transparent, #0A66C2, transparent); }
+        .cc-linkedin:hover                   { box-shadow: 0 16px 48px rgba(10,102,194,0.1); }
 
         .contact-platform {
             font-size: 11px;
@@ -486,10 +490,10 @@
             text-transform: uppercase;
             margin-bottom: 4px;
         }
-        .cc-email .contact-platform      { color: var(--z5); }
-        .cc-instagram .contact-platform  { color: var(--z2); }
+        .cc-email .contact-platform      { color: #0078D4; }
+        .cc-instagram .contact-platform  { color: #E1306C; }
         .cc-x .contact-platform          { color: var(--text); }
-        .cc-linkedin .contact-platform   { color: var(--z3); }
+        .cc-linkedin .contact-platform   { color: #0A66C2; }
 
         .contact-handle {
             font-size: 15px;
@@ -506,10 +510,10 @@
             align-self: flex-start;
             transition: transform 0.2s;
         }
-        .cc-email .contact-arrow      { color: var(--z5); }
-        .cc-instagram .contact-arrow  { color: var(--z2); }
+        .cc-email .contact-arrow      { color: #0078D4; }
+        .cc-instagram .contact-arrow  { color: #E1306C; }
         .cc-x .contact-arrow          { color: var(--text); opacity: 0.7; }
-        .cc-linkedin .contact-arrow   { color: var(--z3); }
+        .cc-linkedin .contact-arrow   { color: #0A66C2; }
 
         .contact-card:hover .contact-arrow { transform: translateX(5px); }
 
@@ -697,9 +701,15 @@
         <div class="contact-grid fade-in">
             <a href="mailto:hello@oliveprojects.eu" class="contact-card cc-email">
                 <div class="contact-card-accent"></div>
-                <div class="contact-platform">Email</div>
+                <div class="contact-platform">Email · Outlook</div>
                 <div class="contact-handle">hello@oliveprojects.eu</div>
                 <div class="contact-arrow">Send a message →</div>
+            </a>
+            <a href="https://www.linkedin.com/in/k-olivero" target="_blank" class="contact-card cc-linkedin">
+                <div class="contact-card-accent"></div>
+                <div class="contact-platform">LinkedIn</div>
+                <div class="contact-handle">Kristoffer Olivero</div>
+                <div class="contact-arrow">Connect →</div>
             </a>
             <a href="https://www.instagram.com/kiteaeroview" target="_blank" class="contact-card cc-instagram">
                 <div class="contact-card-accent"></div>
@@ -712,12 +722,6 @@
                 <div class="contact-platform">X</div>
                 <div class="contact-handle">@K__Olivero</div>
                 <div class="contact-arrow">Follow →</div>
-            </a>
-            <a href="https://www.linkedin.com/in/k-olivero" target="_blank" class="contact-card cc-linkedin">
-                <div class="contact-card-accent"></div>
-                <div class="contact-platform">LinkedIn</div>
-                <div class="contact-handle">Kristoffer Olivero</div>
-                <div class="contact-arrow">Connect →</div>
             </a>
         </div>
     </section>
