@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Konkurrentkartan Frankrike – Premium NFC-visitkort</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f4f4;
+    padding: 24px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 28px;
+  }
+  .flag { font-size: 18px; vertical-align: middle; margin-right: 6px; }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #555;
+    margin-bottom: 14px;
+    max-width: 1300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ALERT BOX */
+  .alert {
+    max-width: 1300px;
+    margin: 0 auto 28px;
+    background: #fff8f0;
+    border: 1.5px solid #f39c12;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: #7d5a00;
+    line-height: 1.6;
+  }
+  .alert strong { color: #c0800a; }
+
+  /* COMPARISON TABLE */
+  .table-wrap {
+    max-width: 1300px;
+    margin: 0 auto 32px;
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    font-size: 13px;
+  }
+  thead tr { background: #2d3436; color: #fff; }
+  thead th {
+    padding: 12px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    white-space: nowrap;
+  }
+  tbody tr:nth-child(even) { background: #f9f9f9; }
+  tbody tr:hover { background: #f0f7ff; }
+  tbody td {
+    padding: 11px 14px;
+    border-bottom: 1px solid #eee;
+    color: #222;
+    vertical-align: middle;
+    line-height: 1.4;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody td:first-child { font-weight: 600; color: #1a1a1a; }
+
+  .group-row td {
+    background: #f0f0f0;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #888;
+    padding: 7px 14px;
+    border-bottom: 1px solid #ddd;
+  }
+  .group-row:hover { background: #f0f0f0 !important; }
+
+  .us { background: #e8f5e9 !important; }
+  .us td:first-child { color: #27ae60; }
+
+  .check { color: #27ae60; font-size: 15px; }
+  .cross  { color: #d63031; font-size: 15px; }
+  .part   { color: #f39c12; font-size: 15px; }
+
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .badge-green  { background: #d4edda; color: #27ae60; }
+  .badge-blue   { background: #dbeeff; color: #0984e3; }
+  .badge-yellow { background: #fff3cd; color: #c7920a; }
+  .badge-red    { background: #fde8e8; color: #d63031; }
+  .badge-grey   { background: #eee;   color: #636e72; }
+  .badge-purple { background: #ede7ff; color: #6c5ce7; }
+  .badge-orange { background: #fde8d8; color: #e17055; }
+
+  .price-known   { font-weight: 600; color: #1a1a1a; }
+  .price-unknown { color: #aaa; font-style: italic; font-size: 12px; }
+  .price-cheap   { font-weight: 700; color: #27ae60; }
+
+  /* QUADRANT */
+  .quadrant-wrap { max-width: 960px; margin: 0 auto 32px; }
+  .quadrant {
+    position: relative;
+    width: 100%;
+    padding-top: 75%;
+    background: #fff;
+    border-radius: 12px;
+    border: 1.5px solid #ddd;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  }
+  .quadrant-inner {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    padding: 28px;
+  }
+  .axis-h { position: absolute; top: 50%; left: 5%; right: 5%; border-top: 2px solid #ccc; }
+  .axis-v { position: absolute; left: 50%; top: 5%; bottom: 5%; border-left: 2px solid #ccc; }
+  .axis-label {
+    position: absolute;
+    font-size: 10px;
+    font-weight: 700;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .label-top    { top: 6px; left: 50%; transform: translateX(-50%); }
+  .label-bottom { bottom: 6px; left: 50%; transform: translateX(-50%); }
+  .label-left   { left: 6px; top: 50%; transform: translateY(-50%) rotate(-90deg); }
+  .label-right  { right: 6px; top: 50%; transform: translateY(-50%) rotate(90deg); }
+
+  .zone-label {
+    position: absolute;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    opacity: 0.28;
+    pointer-events: none;
+  }
+
+  .dot {
+    position: absolute;
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .dot-us {
+    width: 15px; height: 15px;
+    box-shadow: 0 0 0 3px rgba(39,174,96,0.25);
+  }
+  .dot-label {
+    position: absolute;
+    font-size: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+    transform: translate(-50%, 8px);
+  }
+
+  /* PRICE COMPARISON BAR CHART */
+  .price-chart {
+    max-width: 800px;
+    margin: 0 auto 32px;
+    background: #fff;
+    border-radius: 10px;
+    border: 1.5px solid #ddd;
+    padding: 20px 24px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  }
+  .price-chart h3 {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #555;
+    margin-bottom: 16px;
+  }
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .bar-row:last-child { margin-bottom: 0; }
+  .bar-name {
+    font-size: 12px;
+    font-weight: 600;
+    width: 160px;
+    flex-shrink: 0;
+    color: #333;
+    text-align: right;
+  }
+  .bar-track {
+    flex: 1;
+    height: 22px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+  }
+  .bar-price {
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+  }
+  .bar-note {
+    font-size: 10px;
+    color: #aaa;
+    white-space: nowrap;
+  }
+
+  /* SWOT */
+  .swot {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    max-width: 1300px;
+    margin: 0 auto 32px;
+  }
+  .swot-box {
+    background: #fff;
+    border-radius: 8px;
+    padding: 14px 16px;
+    border: 1.5px solid #ddd;
+  }
+  .swot-box h3 {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid currentColor;
+  }
+  .swot-box ul { list-style: none; }
+  .swot-box ul li {
+    font-size: 13px;
+    padding: 5px 0;
+    border-bottom: 1px solid #f0f0f0;
+    color: #222;
+    line-height: 1.4;
+  }
+  .swot-box ul li:last-child { border-bottom: none; }
+  .swot-box ul li::before { content: "▸ "; color: #aaa; font-size: 10px; }
+  .s { border-color: #27ae60; } .s h3 { color: #27ae60; }
+  .w { border-color: #d63031; } .w h3 { color: #d63031; }
+  .o { border-color: #0984e3; } .o h3 { color: #0984e3; }
+  .t { border-color: #f39c12; } .t h3 { color: #f39c12; }
+
+  @media print { body { padding: 8px; background: white; } }
+</style>
+</head>
+<body>
+
+<h1><span class="flag">🇫🇷</span> Konkurrentkartan — Frankrike</h1>
+<p class="subtitle">Premium NFC-visitkort — Franskspråkig marknad &nbsp;|&nbsp; Utkast v1</p>
+
+<!-- ALERT -->
+<div class="alert">
+  <strong>⚠ Observera:</strong> Den franska marknaden är betydligt mer konkurrensutsatt än Sverige. Flera inhemska franska aktörer erbjuder redan <strong>NFC + premiummaterial + franska</strong>. Er starkaste fördel i Frankrike är <strong>personlig service, designhjälp som ingår och konkurrenskraftigt pris</strong> — inte att fylla ett marknadsgap. Rekommendation: befäst Skandinavien först och använd Frankrike som en sekundär marknad driven av Léas nätverk och modersmålskompetens.
+</div>
+
+<!-- =========================================================
+     SECTION 1: FEATURE COMPARISON TABLE
+     ========================================================= -->
+<p class="section-title" style="margin-bottom:14px;">1. Konkurrentjämförelse</p>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th style="min-width:170px;">Aktör</th>
+        <th>Bas</th>
+        <th>Material</th>
+        <th>NFC</th>
+        <th>Service på franska</th>
+        <th>Designhjälp</th>
+        <th>vCard-hosting</th>
+        <th>Pris/kort (kundpris)</th>
+        <th>Notering</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- OUR COMPANY -->
+      <tr class="us">
+        <td>Vårt företag ★</td>
+        <td>Sverige / FR</td>
+        <td><span class="check">✓</span> Metall, trä, PVC</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span> Modersmål</td>
+        <td><span class="check">✓</span> Ingår alltid</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="price-cheap">~50–80 kr (≈ 4–7 €)</span></td>
+        <td><span class="badge badge-green">Lägst pris, personlig service</span></td>
+      </tr>
+
+      <!-- FRENCH NFC + PREMIUM -->
+      <tr class="group-row"><td colspan="9">Franska — NFC + premiummaterial (direkta konkurrenter)</td></tr>
+
+      <tr>
+        <td><a href="https://www.kipful.com/en/" target="_blank" style="color:inherit;">kipful.com</a></td>
+        <td>Seine-et-Marne</td>
+        <td><span class="check">✓</span> Metall, trä, PVC, kol</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span> Franska</td>
+        <td><span class="part">~</span> Online-konfigurator</td>
+        <td><span class="check">✓</span> CRM-koppling</td>
+        <td><span class="price-known">€49 (PVC) / €50–69 (trä) / €79–109 (metall)</span></td>
+        <td><span class="badge badge-red">Starkaste konkurrenten</span></td>
+      </tr>
+
+      <tr>
+        <td><a href="https://uxcard.fr/carte-de-visite-metal-nfc/" target="_blank" style="color:inherit;">uxcard.fr</a></td>
+        <td>Frankrike</td>
+        <td><span class="check">✓</span> Rostfritt stål</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span> Franska</td>
+        <td><span class="part">~</span> Självdesign online</td>
+        <td><span class="check">✓</span> Ingen prenumeration</td>
+        <td><span class="price-known">€29 (Classic) / €49 (Custom)</span></td>
+        <td><span class="badge badge-red">Billigast med NFC+metall</span></td>
+      </tr>
+
+      <tr>
+        <td><a href="https://www.french-nfc.com/produit/carte-de-visite-nfc-metal/" target="_blank" style="color:inherit;">french-nfc.com</a></td>
+        <td>Sausheim (Alsace)</td>
+        <td><span class="check">✓</span> Metall (silver, svart, guld)</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span> Franska</td>
+        <td><span class="part">~</span> Online-plattform</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="price-known">€59,90/kort (exkl. moms)</span></td>
+        <td><span class="badge badge-orange">Franskt hantverk + NFC</span></td>
+      </tr>
+
+      <tr>
+        <td><a href="https://nfcfrance.com/produit/carte-nfc-metal/" target="_blank" style="color:inherit;">nfcfrance.com</a></td>
+        <td>Frankrike</td>
+        <td><span class="check">✓</span> Metall + PVC</td>
+        <td><span class="check">✓</span> NTAG216</td>
+        <td><span class="check">✓</span> Franska</td>
+        <td><span class="part">~</span> Online-dashboard</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="price-known">€70 (1 st) → €56 (20–29 st)</span></td>
+        <td><span class="badge badge-grey">GDPR, analysdashboard</span></td>
+      </tr>
+
+      <tr>
+        <td><a href="https://vkard.io/en/home/" target="_blank" style="color:inherit;">vkard.io</a></td>
+        <td>Vendée / Levallois</td>
+        <td><span class="check">✓</span> Metall, bambu, PVC</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span> Franska</td>
+        <td><span class="part">~</span> Online-konfigurator</td>
+        <td><span class="check">✓</span> ISO 27001</td>
+        <td><span class="price-unknown">Ej angett</span></td>
+        <td><span class="badge badge-blue">Säkerhetscertifierat, fri EU-frakt</span></td>
+      </tr>
+
+      <!-- FRENCH PREMIUM NO NFC -->
+      <tr class="group-row"><td colspan="9">Franska — Premiummaterial utan NFC</td></tr>
+
+      <tr>
+        <td><a href="https://www.label-francaise.fr/34-cartes-de-visite-de-luxe" target="_blank" style="color:inherit;">label-francaise.fr</a></td>
+        <td>Menestreau</td>
+        <td><span class="check">✓</span> Trä, metall-effekt, SnapPap</td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="check">✓</span> Franska</td>
+        <td><span class="part">~</span> Okänt</td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="price-known">€99 fast pris</span></td>
+        <td><span class="badge badge-grey">Made in France, lyx material</span></td>
+      </tr>
+
+      <tr>
+        <td><a href="https://www.noar.fr/produit/carte-de-visite-en-metal" target="_blank" style="color:inherit;">noar.fr</a></td>
+        <td>La Seyne-sur-Mer</td>
+        <td><span class="check">✓</span> Aluminium, trä</td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="check">✓</span> Franska</td>
+        <td><span class="check">✓</span> Designstöd</td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="price-known">från €0,53/kort</span></td>
+        <td><span class="badge badge-grey">Lägst pris för metall, ingen NFC</span></td>
+      </tr>
+
+      <tr>
+        <td><a href="https://www.impact-emotion.com/cartes-de-visite-metal-de-luxe" target="_blank" style="color:inherit;">impact-emotion.com</a></td>
+        <td>Ploeren (Bretagne)</td>
+        <td><span class="check">✓</span> Stål, zamak, aluminium</td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="check">✓</span> Franska</td>
+        <td><span class="check">✓</span> Fullt designstöd</td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="price-unknown">Ej angett — MOQ 500 st</span></td>
+        <td><span class="badge badge-grey">Grossist/B2B, ej privatpersoner</span></td>
+      </tr>
+
+      <!-- INTERNATIONAL -->
+      <tr class="group-row"><td colspan="9">Internationella — Aktiva på franska marknaden</td></tr>
+
+      <tr>
+        <td><a href="https://fds-cards.co.uk/sv/" target="_blank" style="color:inherit;">fds-cards.co.uk</a></td>
+        <td>London / Riga</td>
+        <td><span class="check">✓</span> Metall, trä, PVC</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="part">~</span> Ej bekräftat</td>
+        <td><span class="part">~</span> Gratis design</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="price-unknown">Ej angett</span></td>
+        <td><span class="badge badge-grey">UK/Lettland, global</span></td>
+      </tr>
+
+      <tr>
+        <td><a href="https://linq.to" target="_blank" style="color:inherit;">Linq / Popl</a></td>
+        <td>USA, global</td>
+        <td><span class="part">~</span> PVC</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="cross">✗</span> Engelska</td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="check">✓</span> App</td>
+        <td><span class="price-known">~150–300 kr/kort</span></td>
+        <td><span class="badge badge-grey">App-ekosystem, dyrt</span></td>
+      </tr>
+
+      <tr>
+        <td><a href="https://vistaprint.fr" target="_blank" style="color:inherit;">Vistaprint.fr</a></td>
+        <td>Global</td>
+        <td><span class="cross">✗</span> Papper</td>
+        <td><span class="part">~</span> VistaConnect</td>
+        <td><span class="check">✓</span> Franska</td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="price-known">~2–8 kr</span></td>
+        <td><span class="badge badge-grey">Massmarknad</span></td>
+      </tr>
+
+    </tbody>
+  </table>
+  <p style="font-size:11px;color:#aaa;margin-top:8px;">★ = Vårt företag &nbsp;|&nbsp; ✓ = Ja &nbsp;|&nbsp; ✗ = Nej &nbsp;|&nbsp; ~ = Delvis &nbsp;|&nbsp; Priser i <em>kursiv</em> = ej publicerat</p>
+</div>
+
+<!-- =========================================================
+     SECTION 2: PRICE COMPARISON
+     ========================================================= -->
+<p class="section-title" style="margin-bottom:14px;max-width:800px;">2. Prisjämförelse — NFC-metallkort, 1 kort</p>
+<div class="price-chart">
+  <h3>Ungefärligt pris per kort (liten kvantitet) — inkl. NFC</h3>
+
+  <div class="bar-row">
+    <span class="bar-name" style="color:#27ae60;">Vårt företag ★</span>
+    <div class="bar-track">
+      <div class="bar-fill" style="width:7%;background:#27ae60;">
+        <span class="bar-price">~7 €</span>
+      </div>
+    </div>
+    <span class="bar-note">≈ 4–7 € vid volym</span>
+  </div>
+
+  <div class="bar-row">
+    <span class="bar-name">uxcard.fr</span>
+    <div class="bar-track">
+      <div class="bar-fill" style="width:29%;background:#e17055;">
+        <span class="bar-price">€29</span>
+      </div>
+    </div>
+    <span class="bar-note">Classic (UXCard-branding)</span>
+  </div>
+
+  <div class="bar-row">
+    <span class="bar-name">uxcard.fr</span>
+    <div class="bar-track">
+      <div class="bar-fill" style="width:49%;background:#e17055;">
+        <span class="bar-price">€49</span>
+      </div>
+    </div>
+    <span class="bar-note">Custom (eget tryck)</span>
+  </div>
+
+  <div class="bar-row">
+    <span class="bar-name">kipful.com (PVC)</span>
+    <div class="bar-track">
+      <div class="bar-fill" style="width:49%;background:#6c5ce7;">
+        <span class="bar-price">€49</span>
+      </div>
+    </div>
+    <span class="bar-note">PVC med NFC</span>
+  </div>
+
+  <div class="bar-row">
+    <span class="bar-name">french-nfc.com</span>
+    <div class="bar-track">
+      <div class="bar-fill" style="width:60%;background:#0984e3;">
+        <span class="bar-price">€59,90</span>
+      </div>
+    </div>
+    <span class="bar-note">exkl. moms</span>
+  </div>
+
+  <div class="bar-row">
+    <span class="bar-name">nfcfrance.com</span>
+    <div class="bar-track">
+      <div class="bar-fill" style="width:70%;background:#0984e3;">
+        <span class="bar-price">€70</span>
+      </div>
+    </div>
+    <span class="bar-note">1 st, volymrabatt till €56</span>
+  </div>
+
+  <div class="bar-row">
+    <span class="bar-name">kipful.com (metall)</span>
+    <div class="bar-track">
+      <div class="bar-fill" style="width:90%;background:#6c5ce7;">
+        <span class="bar-price">€79–109</span>
+      </div>
+    </div>
+    <span class="bar-note">beroende på finish</span>
+  </div>
+
+  <p style="font-size:11px;color:#aaa;margin-top:12px;">
+    Staplar = ungefärligt pris per kort inkl. NFC. Skalan är relativ. Vårt pris i euro räknat på ~50–80 kr vid 1 SEK = 0,09 €.
+  </p>
+</div>
+
+<!-- =========================================================
+     SECTION 3: POSITIONING MAP
+     ========================================================= -->
+<p class="section-title" style="margin-bottom:14px;max-width:960px;">3. Positioneringskarta — Pris vs. Personlig service</p>
+<div class="quadrant-wrap">
+  <div class="quadrant">
+    <div class="quadrant-inner">
+      <div class="axis-h"></div>
+      <div class="axis-v"></div>
+
+      <span class="axis-label label-top">HÖG PERSONLIG SERVICE</span>
+      <span class="axis-label label-bottom">LÅG PERSONLIG SERVICE</span>
+      <span class="axis-label label-left">LÅGT PRIS</span>
+      <span class="axis-label label-right">HÖGT PRIS</span>
+
+      <span class="zone-label" style="top:10%;left:8%;">Vår målzon</span>
+      <span class="zone-label" style="top:10%;left:60%;">Premium + service</span>
+      <span class="zone-label" style="top:75%;left:55%;">Dyr + självbetjäning</span>
+      <span class="zone-label" style="top:75%;left:5%;">Billig + självbetjäning</span>
+
+      <!-- Vårt företag — lågt pris, hög personlig service → övre vänster -->
+      <div class="dot dot-us" style="left:22%;top:18%;background:#27ae60;"></div>
+      <span class="dot-label" style="left:22%;top:18%;color:#27ae60;">Vårt företag ★</span>
+
+      <!-- Kipful — medel pris, låg-medel personlig service (online-konfigurator) → nedre mitten -->
+      <div class="dot" style="left:72%;top:70%;background:#e74c3c;"></div>
+      <span class="dot-label" style="left:72%;top:70%;color:#e74c3c;">Kipful</span>
+
+      <!-- UXCard — lågt pris, låg service (självbetjäning) → nedre vänster -->
+      <div class="dot" style="left:32%;top:75%;background:#e17055;"></div>
+      <span class="dot-label" style="left:32%;top:75%;color:#e17055;">UXCard</span>
+
+      <!-- french-nfc.com — medel pris, låg service → nedre mitten -->
+      <div class="dot" style="left:58%;top:72%;background:#0984e3;"></div>
+      <span class="dot-label" style="left:58%;top:72%;color:#0984e3;">french-nfc.com</span>
+
+      <!-- nfcfrance.com — medel-högt pris, låg service → nedre höger -->
+      <div class="dot" style="left:66%;top:78%;background:#0984e3;"></div>
+      <span class="dot-label" style="left:66%;top:78%;color:#0984e3;">nfcfrance.com</span>
+
+      <!-- vkard — högt pris, låg service → nedre höger -->
+      <div class="dot" style="left:78%;top:68%;background:#6c5ce7;"></div>
+      <span class="dot-label" style="left:78%;top:68%;color:#6c5ce7;">VKARD</span>
+
+      <!-- noar — lågt pris, viss service (designstöd) → övre vänster -->
+      <div class="dot" style="left:12%;top:40%;background:#00b894;"></div>
+      <span class="dot-label" style="left:12%;top:40%;color:#00b894;">noar.fr</span>
+
+      <!-- label-francaise — högt pris, medel service → mitten-höger -->
+      <div class="dot" style="left:82%;top:45%;background:#fdcb6e;"></div>
+      <span class="dot-label" style="left:82%;top:45%;color:#c7920a;">label-francaise.fr</span>
+
+      <!-- impact-emotion — B2B grossist, hög service, högt pris (MOQ 500) → övre höger -->
+      <div class="dot" style="left:80%;top:22%;background:#b2bec3;"></div>
+      <span class="dot-label" style="left:80%;top:22%;color:#636e72;">impact-emotion (B2B)</span>
+
+      <!-- Vistaprint — lågt pris, låg service → nedre vänster -->
+      <div class="dot" style="left:10%;top:80%;background:#dfe6e9;border:1px solid #999;"></div>
+      <span class="dot-label" style="left:10%;top:80%;color:#636e72;">Vistaprint</span>
+    </div>
+  </div>
+  <p style="font-size:11px;color:#aaa;margin-top:8px;text-align:center;">
+    Y-axel = personlig service (telefon/e-post, designhjälp ingår, mänsklig kontakt) &nbsp;|&nbsp; X-axel = pris per kort
+  </p>
+</div>
+
+<!-- =========================================================
+     SECTION 4: SWOT FÖR FRANSKA MARKNADEN
+     ========================================================= -->
+<p class="section-title" style="margin-bottom:14px;">4. SWOT — Franska marknaden</p>
+<div class="swot">
+  <div class="swot-box s">
+    <h3>Styrkor (Strengths)</h3>
+    <ul>
+      <li><strong>Priset är vår starkaste fördel</strong> — vi är 4–10× billigare än franska NFC-metallkortsaktörer (€4–7 vs €29–109)</li>
+      <li>Léas modersmålskompetens — autentisk fransk kommunikation, inte översatt</li>
+      <li>Personlig service och designhjälp ingår — ingen fransk konkurrent erbjuder detta utan tillägg</li>
+      <li>Metall + trä + PVC + NFC under ett tak, som Kipful — men billigare</li>
+      <li>FSC-träkort för hållbarhetsmedvetna kunder</li>
+    </ul>
+  </div>
+  <div class="swot-box w">
+    <h3>Svagheter (Weaknesses)</h3>
+    <ul>
+      <li>Ingen fransk leveransadress — frakt från Sverige tar längre tid och kostar mer</li>
+      <li>Inget känt varumärke i Frankrike — noll igenkänning att bygga från</li>
+      <li>Franska kunder föredrar ofta att köpa lokalt (Made in France är ett starkt argument)</li>
+      <li>Kipful, UXCard m.fl. har "Made in France" — vi kan inte matcha det</li>
+      <li>Svårare att delta i franska mässor och nätverksevenemang på distans</li>
+    </ul>
+  </div>
+  <div class="swot-box o">
+    <h3>Möjligheter (Opportunities)</h3>
+    <ul>
+      <li><strong>Priskillnaden är extrem</strong> — vi kan ta franska B2B-kunder (hotell, byråer) med volympriser inga franska aktörer kan matcha</li>
+      <li>Léas personliga nätverk i Frankrike kan ge de första referenskunderna utan marknadsföringskostnad</li>
+      <li>Franska boutique-hotell och kreativa byråer söker unika alternativ till Kipful och Vistaprint</li>
+      <li>Google Ads på "carte de visite métal personnalisée" — liten konkurrens från väloptimerade svenska aktörer</li>
+      <li>impact-emotion kräver MOQ 500 — vi kan ta småbeställningar de inte vill ha</li>
+    </ul>
+  </div>
+  <div class="swot-box t">
+    <h3>Hot (Threats)</h3>
+    <ul>
+      <li><strong>Kipful är en stark fullskalig konkurrent</strong> — 100% franskt, full produktbredd, NFC, digital plattform</li>
+      <li>UXCard och french-nfc.com är redan billiga alternativ med NFC + metall på franska</li>
+      <li>Franska konsumenter är känsliga för "Made in France" — import från Sverige/Kina kan uppfattas negativt</li>
+      <li>Fraktkostnader och moms/VAT-hantering vid EU-export kan äta upp prisfördelen</li>
+      <li>VKARD har ISO 27001 och GDPR-certifiering — relevant för offentlig sektor</li>
+    </ul>
+  </div>
+</div>
+
+<p style="text-align:center; margin-top: 8px; font-size: 11px; color: #bbb;">
+  Konkurrentkartläggning Frankrike — Utkast v1 &nbsp;|&nbsp; Uppdaterad med webbsökning juni 2026 &nbsp;|&nbsp; Partners: Tom (ifPrint.eu), Frank (tillverkning, Kina)
+</p>
+
+</body>
+</html>
