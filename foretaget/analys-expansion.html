@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expansionsanalys — Strategisk bedömning</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:      #fafaf8;
+    --surface: #fff;
+    --border:  #e8e8e4;
+    --text:    #1a1a18;
+    --sub:     #666;
+    --green:   #1d6b3e;
+    --red:     #8b1c1c;
+    --amber:   #7a5200;
+    --blue:    #0b4d8a;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 0 0 80px;
+  }
+
+  .cover {
+    background: var(--text);
+    color: #f0f0ec;
+    padding: 64px 32px 52px;
+    text-align: center;
+  }
+  .cover-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #aaa; margin-bottom: 18px; }
+  .cover h1 {
+    font-family: 'Lora', Georgia, serif;
+    font-size: clamp(26px, 4vw, 40px);
+    font-weight: 600;
+    line-height: 1.25;
+    margin-bottom: 16px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .cover-meta { font-size: 13px; color: #888; margin-top: 10px; }
+  .cover-author {
+    display: inline-block;
+    margin-top: 28px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 12px 22px;
+    font-size: 12px;
+    color: #ccc;
+    line-height: 1.6;
+  }
+  .cover-author strong { color: #f0f0ec; display: block; font-size: 13px; }
+
+  /* EXPANSION ROADMAP GRID */
+  .roadmap {
+    max-width: 740px;
+    margin: 40px auto 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    border: 1.5px solid var(--border);
+    border-radius: 0;
+    overflow: hidden;
+    background: #fff;
+  }
+  .rm-cell {
+    padding: 18px 20px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .rm-cell:nth-child(3n) { border-right: none; }
+  .rm-cell:nth-last-child(-n+3) { border-bottom: none; }
+  .rm-phase { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--sub); margin-bottom: 6px; }
+  .rm-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .rm-items { font-size: 12px; color: var(--sub); line-height: 1.6; }
+  .rm-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 5px; flex-shrink: 0; }
+
+  /* ARTICLE */
+  .article { max-width: 740px; margin: 0 auto; padding: 0 24px; }
+
+  .section { margin-top: 52px; padding-top: 28px; border-top: 1.5px solid var(--border); }
+  .section-num { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--sub); margin-bottom: 8px; }
+  .section h2 {
+    font-family: 'Lora', Georgia, serif;
+    font-size: clamp(20px, 2.5vw, 26px);
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 20px;
+  }
+  p { margin-bottom: 18px; font-size: 15px; color: #2a2a28; }
+  p:last-child { margin-bottom: 0; }
+
+  .pull { border-left: 3px solid var(--text); margin: 28px 0; padding: 4px 0 4px 22px; }
+  .pull p { font-family: 'Lora', Georgia, serif; font-size: 17px; font-style: italic; color: var(--text); line-height: 1.55; margin: 0; }
+
+  .callout { border-radius: 6px; padding: 16px 20px; margin: 24px 0; font-size: 14px; line-height: 1.6; border-left: 3px solid; }
+  .callout strong { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .callout-green  { background: #f0faf4; border-color: #27ae60; color: #1a4a2e; }
+  .callout-green strong { color: #1d6b3e; }
+  .callout-red    { background: #fdf3f3; border-color: #c0392b; color: #4a1a1a; }
+  .callout-red strong { color: #8b1c1c; }
+  .callout-amber  { background: #fdf8f0; border-color: #e67e22; color: #4a3200; }
+  .callout-amber strong { color: #7a5200; }
+  .callout-blue   { background: #f0f6fd; border-color: #2980b9; color: #0a2a4a; }
+  .callout-blue strong { color: #0b4d8a; }
+  .callout-grey   { background: #f5f5f5; border-color: #999; color: #333; }
+  .callout-grey strong { color: #555; }
+
+  /* IDEA CARDS GRID */
+  .idea-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin: 24px 0;
+  }
+  .idea-card {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+  .idea-card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .idea-icon { font-size: 20px; flex-shrink: 0; }
+  .idea-title { font-size: 13px; font-weight: 700; line-height: 1.3; }
+  .idea-body { font-size: 12px; color: var(--sub); line-height: 1.55; }
+  .idea-tag {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+  .tag-now    { background: #d4edda; color: #1d6b3e; }
+  .tag-year2  { background: #fff3cd; color: #7a5200; }
+  .tag-year3  { background: #e8eaf6; color: #3949ab; }
+  .tag-never  { background: #fde8e8; color: #8b1c1c; }
+
+  /* VERDICT MATRIX */
+  .matrix { overflow-x: auto; margin: 24px 0; }
+  .matrix table { width: 100%; border-collapse: collapse; background: #fff; border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; font-size: 13px; }
+  .matrix thead tr { background: var(--text); color: #f0f0ec; }
+  .matrix thead th { padding: 11px 14px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+  .matrix tbody tr:nth-child(even) { background: #f9f9f8; }
+  .matrix tbody td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; line-height: 1.4; color: #222; }
+  .matrix tbody tr:last-child td { border-bottom: none; }
+  .matrix tbody td:first-child { font-weight: 600; }
+  .dot-g { color: #27ae60; font-size: 16px; }
+  .dot-y { color: #e67e22; font-size: 16px; }
+  .dot-r { color: #c0392b; font-size: 16px; }
+
+  /* ACTION LIST */
+  .action-list { list-style: none; margin: 20px 0; }
+  .action-list li { display: flex; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 14px; align-items: flex-start; line-height: 1.5; }
+  .action-list li:last-child { border-bottom: none; }
+  .action-num { font-size: 11px; font-weight: 700; background: var(--text); color: #fff; border-radius: 4px; padding: 2px 7px; flex-shrink: 0; margin-top: 1px; }
+
+  /* WARNING BLOCK */
+  .warning-block { background: var(--text); color: #f0f0ec; border-radius: 8px; padding: 24px 28px; margin: 28px 0; }
+  .warning-block h3 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #888; margin-bottom: 14px; }
+  .warning-block p { font-size: 14px; color: #d0d0cc; margin-bottom: 12px; padding-left: 14px; border-left: 2px solid #444; line-height: 1.6; }
+  .warning-block p:last-child { margin-bottom: 0; }
+
+  footer { text-align: center; font-size: 11px; color: #bbb; padding-top: 60px; max-width: 740px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+
+  @media (max-width: 600px) {
+    .cover { padding: 48px 20px 40px; }
+    .article { padding: 0 16px; }
+    .roadmap { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-label">Internt strategidokument</div>
+  <h1>Vart kan detta bolag växa — och i vilken ordning?</h1>
+  <p class="cover-meta">En strategisk analys av tillväxtmöjligheter bortom det första kortet</p>
+  <div class="cover-author">
+    <strong>Perspektiv: erfaren affärsman, 40+ år i branschen</strong>
+    Expansionsanalys för premium NFC-visitkortsverksamheten<br>
+    Juni 2026 &nbsp;|&nbsp; Internt — ej för spridning
+  </div>
+</div>
+
+<!-- ROADMAP STRIP -->
+<div class="article">
+  <div class="roadmap">
+    <div class="rm-cell">
+      <div class="rm-phase">Nu — År 1</div>
+      <div class="rm-title">Befäst kärnan</div>
+      <div class="rm-items">Visitkort SE + FI<br>RFID-blockerare (bundle)<br>Företagspaket<br>vCard-hosting</div>
+    </div>
+    <div class="rm-cell">
+      <div class="rm-phase">År 2</div>
+      <div class="rm-title">Expandera vertikalt</div>
+      <div class="rm-items">Hotellvertikal<br>Restaurang-bordskort<br>NO + DK marknad<br>Återförsäljare (byråer)</div>
+    </div>
+    <div class="rm-cell">
+      <div class="rm-phase">År 3+</div>
+      <div class="rm-title">Plattform och skala</div>
+      <div class="rm-items">Digital profilplattform<br>Event-badges<br>Frankrike (riktigt)<br>Vit­label API</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SECTION 1 — OPENING
+     ============================================================ -->
+<div class="article">
+  <div class="section">
+    <div class="section-num">Inledning</div>
+    <h2>Expansion är inte samma sak som tillväxt</h2>
+
+    <p>Det finns en fälla som nästan alla framgångsrika startups ramlar i: de hittar en produkt som fungerar och börjar genast leta efter nästa produkt. Det känns naturligt — om vi kan sälja NFC-visitkort, kan vi väl sälja RFID-blockerare, eventbrickor och hotellnycklar också?</p>
+
+    <p>Kanske. Men varje ny produkt ni lägger till kostar er fokus. Och fokus är det enda en liten organisation inte kan köpa sig. Tillväxt under det första året kommer inte från fler produkter — det kommer från att sälja er befintliga produkt till fler rätt kunder.</p>
+
+    <div class="pull">
+      <p>Det bästa sättet att expandera ett ungt bolag är att sälja mer till befintliga kunder, inte att hitta nya produkter för nya kunder.</p>
+    </div>
+
+    <p>Med det sagt: det finns genuint lovande expansionsvägar för det här bolaget. Vissa kan ni börja på redan i år. Andra kräver att ni har bevisat kärnaffären först. Och några idéer — hur logiska de än verkar — ska ni hålla er borta ifrån. Det är det jag ska gå igenom nu.</p>
+  </div>
+
+  <!-- ============================================================
+       SECTION 2 — RFID
+       ============================================================ -->
+  <div class="section">
+    <div class="section-num">01 — Er egen idé</div>
+    <h2>RFID-blockerare — bra idé, fel position</h2>
+
+    <p>Jag gillar instinkten bakom det här. RFID-blockerare är ett tillbehör som riktar sig till exakt samma person som köper ett premiumvisitskort: den professionella personen som bryr sig om detaljer och vill skydda sig. Samma material, samma tillverkare, samma kund. Det låter självklart.</p>
+
+    <p>Problemet är positioneringen. Om ni säljer en RFID-blockerare som en fristående produkt konkurrerar ni direkt med Amazon och AliExpress, där identiska produkter säljs för 15–30 kronor. Ni kan inte vinna det kriget på pris, och att motivera 149 kronor för ett metallkort med hål i kräver mer marknadsföringsarbete än produkten är värd.</p>
+
+    <div class="callout callout-green">
+      <strong>Rätt sätt att göra det</strong>
+      Sälj den inte som en separat produkt. Gör den till en del av ett paket. "Beställ 10 visitkort — få en lasergraverad RFID-blockerare med ert logotyp på köpet." Den kostar er marginellt i tillverkning men höjer det upplevda värdet av hela beställningen. Kunden känner att de får något exklusivt. Och det gör de — för ingen annan erbjuder det.
+    </div>
+
+    <p>För B2B-kunder — ett hotell, en advokatbyrå, ett konsultbolag — är en matchande RFID-blockerare med företagets logotyp dessutom ett present- och bonusartikel. "Beställ visitkort till hela avdelningen, vi skickar med fem graverade blockerare som chefen kan dela ut." Det är inte ett produkterbjudande. Det är ett servicegestalt som skapar minnesvärda relationer med era bästa kunder.</p>
+
+    <p>På lång sikt, när ni har ett etablerat varumärke och kunder som redan litar på er: lansera den som ett premiumtillbehör till 89–129 kronor. Men inte nu. Nu är den ett gratis argument som gör er större order mer attraktiv.</p>
+  </div>
+
+  <!-- ============================================================
+       SECTION 3 — CORPORATE PROGRAM
+       ============================================================ -->
+  <div class="section">
+    <div class="section-num">02 — Högst prioritet</div>
+    <h2>Företagspaketet — er snabbaste väg till riktiga pengar</h2>
+
+    <p>Just nu tänker ni förmodligen på kunder i singular: en konsult, en hotellchef, en frilansare. Det är ett naturligt startläge. Men den ekonomiska verkligheten är att en kund som köper fem kort genererar ungefär samma administrativa kostnad som en kund som köper femtio. Skillnaden är att den sistnämnda betalar tio gånger mer.</p>
+
+    <p>Företagspaketet är enkelt: ni erbjuder ett pris per kort som sjunker vid volym, ni tar hand om designen för hela gruppen med ett enhetligt uttryck, och ni levererar allt i en försändelse. Kunden är inte Jan Jansson på marknadsavdelningen — kunden är Janssons Konsultgrupp AB med arton anställda.</p>
+
+    <div class="callout callout-blue">
+      <strong>Varför det här är bättre än ni tror</strong>
+      En företagskund beställer inte en gång. När företaget anställer nya medarbetare beställer de igen. När de byter varumärke beställer de igen. Det är inte en engångstransaktion — det är ett kontoförhållande. En enda nöjd företagskund med tjugo anställda kan generera mer intäkter under tre år än femtio enskilda kunder.
+    </div>
+
+    <p>Hur tar ni er dit? Inte via Google Ads. Via personlig kontakt. Vilka företag känner ni eller Léa? Vilka har ni jobbat för? Vilka kontakter har ni på LinkedIn? De första fem företagskunderna hittar ni i era egna nätverk — inte i sökresultaten. Ring dem. Visa produkten. Fråga om de är intresserade.</p>
+
+    <p>Sätt ett tydligt minimiantal för företagspaketet — jag föreslår tio kort — och ett maximalt antal revideringsrundor (två ingår, fler kostar). Det gör er lönsamma. Utan dessa gränser är det inte ett paket, det är ett löfte ni inte vet om ni kan hålla.</p>
+  </div>
+
+  <!-- ============================================================
+       SECTION 4 — HOTEL VERTICAL
+       ============================================================ -->
+  <div class="section">
+    <div class="section-num">03 — Den naturliga vertikalen</div>
+    <h2>Hotell och hospitality — er bäst dolda B2B-marknad</h2>
+
+    <p>Hotellet som kund är speciellt. Det är inte en person — det är en organisation med återkommande behov, estetiska krav och en chef som fattar inköpsbeslut baserade på intryck lika mycket som på pris. Ett premiumhotell vill inte att conciergen räcker över ett plastkort. De vill att gästens första kontakt med personalen är en upplevelse.</p>
+
+    <p>Men visitkort till hotellpersonalen är bara ingångspunkten. Titta på det bredare bilden:</p>
+
+    <div class="idea-grid">
+      <div class="idea-card">
+        <div class="idea-card-top">
+          <div class="idea-icon">🪪</div>
+          <div class="idea-title">Personalkort</div>
+        </div>
+        <div class="idea-body">Visitkort till all kundnära personal. Concierge, restaurangchefen, säljaren. Bulk-order, enhetlig design, NFC till hotellets kontaktsida.</div>
+        <span class="idea-tag tag-now">Nu</span>
+      </div>
+      <div class="idea-card">
+        <div class="idea-card-top">
+          <div class="idea-icon">🍽</div>
+          <div class="idea-title">Bordskort</div>
+        </div>
+        <div class="idea-body">Metallkort på varje restaurangbord som länkar till menyn via NFC. Ersätter laminerade pappersmenyer. En per bord = 30–80 kort per restaurang.</div>
+        <span class="idea-tag tag-year2">År 2</span>
+      </div>
+      <div class="idea-card">
+        <div class="idea-card-top">
+          <div class="idea-icon">🗝</div>
+          <div class="idea-title">VIP-gästkort</div>
+        </div>
+        <div class="idea-body">Premiumkort som ges till VIP-gäster vid incheckning. Länkar till hotellets tjänsteutbud, välkomsthälsning och direktnummer till conciergen.</div>
+        <span class="idea-tag tag-year2">År 2</span>
+      </div>
+      <div class="idea-card">
+        <div class="idea-card-top">
+          <div class="idea-icon">🏨</div>
+          <div class="idea-title">Rumskort</div>
+        </div>
+        <div class="idea-body">NFC-kort i varje rum som ersätter pappersguiden. Länk till room service, wifi-lösen, lokala tips. Återanvändbara — inget slöseri.</div>
+        <span class="idea-tag tag-year2">År 2</span>
+      </div>
+    </div>
+
+    <p>Det vackra med hotellvertikalen är att en enda kund kan representera fyra produktkategorier och hundratals kort. Och boutique-hotell — som är er naturliga målgrupp — letar aktivt efter sätt att särskilja sin gästupplevelse från kedjornas. Ni är inte leverantör. Ni är en del av deras berättelse.</p>
+
+    <div class="callout callout-amber">
+      <strong>Varning för stora kedjor</strong>
+      Undvik Scandic, Radisson och liknande under de första åren. Stora kedjor har inköpsavdelningar med upphandlingsprocesser som tar sex månader och kräver ISO-certifieringar och kreditkontroller. Boutique-hotell med 30–100 rum fattar beslut på en lunch. Där är ni.
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SECTION 5 — RESTAURANT TABLE CARDS
+       ============================================================ -->
+  <div class="section">
+    <div class="section-num">04 — Volymmöjligheten</div>
+    <h2>Restaurang- och café-bordskort — en marknad som inte vet om att den letar</h2>
+
+    <p>Sedan pandemin har QR-koder exploderat i restaurangbranschen. Nästan varje café och restaurang har en QR-kod på bordet som leder till menyn. Problemet är att QR-koder är fula. De kräver att gästen öppnar sin kamera, riktar mot koden, väntar. Det är en teknisk handling som bryter matupplevelsen.</p>
+
+    <p>Ett premiummetallkort på bordet med NFC är ett tap — ingenting annat. Och ett metallkort som ser bra ut är en del av restaurangupplevelsen, inte ett hinder för den. Det är skillnaden mellan en laminerad papperslapp och en del av inredningen.</p>
+
+    <p>Räkna på det: en restaurang med 30 bord behöver 30 bordskort, kanske 40 med reserv. Samma design, en typ av kort, inga individuella anpassningar. Det är en enkel order som ni kan producera snabbt. Om ni har tio restaurangkunder i Stockholm har ni sålt 400 kort utan en enda timmes individuell designkonsultation.</p>
+
+    <div class="pull">
+      <p>Restaurangbordskortet är er enklaste produkt att producera och er starkaste argument för volymeffektivitet. Det behöver inte vara smart — det behöver se bra ut och fungera.</p>
+    </div>
+
+    <p>Ingångsvinkeln: kontakta restauranger som redan använder QR-koder och erbjud dem en premiumuppdatering. De betalar redan för ett system de egentligen inte gillar. Ni erbjuder dem ett alternativ som förbättrar upplevelsen och matchar deras estetik.</p>
+  </div>
+
+  <!-- ============================================================
+       SECTION 6 — DIGITAL PLATFORM
+       ============================================================ -->
+  <div class="section">
+    <div class="section-num">05 — Det stora vadslagandet</div>
+    <h2>Den digitala plattformen — här är era riktiga pengar på lång sikt</h2>
+
+    <p>Räkna med mig ett ögonblick. Om ni säljer ett kort för 70 kronor är det en engångsintäkt. Om ni dessutom erbjuder en hosted digital profil för 59 kronor per månad och tio procent av era kunder accepterar — vad händer?</p>
+
+    <p>Med hundra kortkunder som betalande prenumeranter: 100 × 59 kr = 5 900 kronor per månad i återkommande intäkt. Det täcker er hosting, er administration och skapar ett ekonomiskt golv som gör bolaget hållbart även i månader med svag kortförsäljning. Med fem hundra prenumeranter är det nästan 30 000 kronor per månad — en heltidslön utan att sälja ett enda nytt kort.</p>
+
+    <div class="callout callout-blue">
+      <strong>Vad plattformen måste innehålla (dag ett)</strong>
+      En unik URL per kort. Möjlighet för kunden att uppdatera sitt namn, titel, telefon, e-post och länk. En QR-kod som genereras automatiskt (fallback för gamla telefoner). Mobilanpassad visningssida. Det är allt. Det kan byggas på en helg med rätt verktyg — Notion, Carrd, eller ett enkelt Node-projekt.
+    </div>
+
+    <p>Vad ni lägger till sen, i den ordning det ger mest värde: statistik (hur många gånger kortet scannats), möjlighet att ha flera profiler per kort (jobbprofil på dagen, personlig profil på kvällen), och integration med LinkedIn och kalenderbokning. Ingen av dessa behövs dag ett. Dag ett behöver ni bara att länken fungerar och kunden kan uppdatera den.</p>
+
+    <p>UniTAP i Danmark tar 129–199 DKK per månad för sin plattform. Det är uppemot 200 kronor. Ni kan prissätta er under det och fortfarande vara lönsamma, för er tillverkningskostnad för plattformen är nära noll när det väl är byggt. Det är en av de få situationer i affärslivet där marginalen faktiskt ökar ju mer ni säljer.</p>
+  </div>
+
+  <!-- ============================================================
+       SECTION 7 — RESELLER
+       ============================================================ -->
+  <div class="section">
+    <div class="section-num">06 — Skalbarhet via andra</div>
+    <h2>Återförsäljare och designbyråer — låt andra sälja åt er</h2>
+
+    <p>Designbyråer och kommunikationsbyråer har klienter som behöver visitkort. De skickar sina klienter till Vistaprint eller till ett lokalt tryckeri — inte för att de älskar resultatet, utan för att de inte har ett bättre alternativ att rekommendera.</p>
+
+    <p>Ni kan vara det alternativet. Erbjud byråer ett återförsäljar­program: de säljer era kort till sina klienter med sin marginal på toppen, och ni producerar och levererar. De sköter kundrelationen, ni sköter produktionen. Resultatet är att ni säljer utan att sälja — ni skalar via andras försäljningskraft.</p>
+
+    <p>Det kräver tre saker av er: ett rabattsystem för byråer (typiskt 20–30% under kundpris), tydliga rutiner för hur beställningar görs, och ett sätt att leverera till slutkunden som ser ut som om beställningen kom från byrån (vit­label förpackning). Inget av det är tekniskt svårt. Det kräver en tydlig policy och lite administrativ disciplin.</p>
+
+    <div class="callout callout-amber">
+      <strong>Var försiktig med vem ni väljer</strong>
+      Alla byråer är inte bra partners. En byrå som säljer era kort till sina klienter men sedan ringer er varje dag med klagomål och specialönskemål kostar er mer i tid än de genererar i intäkter. Välj byråpartners med omsorg. Hellre tre starka partners än tjugo ohanterliga.
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SECTION 8 — EVENT BADGES
+       ============================================================ -->
+  <div class="section">
+    <div class="section-num">07 — Nicheverksamheten med hög marginal</div>
+    <h2>Event-badges och konferensbrickor — ett lönsamt sidosteg</h2>
+
+    <p>Varje år arrangeras hundratals konferenser, mässor och nätverksevenemang i Norden. De delar alla ut namnbrickor till deltagarna. De flesta av dessa brickor är papper i plasthållare som slängs i papperskorgen på väg ut. Deltagarens första och sista intryck av evenemanget är ett anonymt, tillfälligt och miljömässigt tvivelaktigt namn på ett papper.</p>
+
+    <p>En premiummetall- eller träbricka med NFC som kopplar till deltagarens profil — och som de kan behålla som ett minne — är en annan sak helt. Arrangören beställer 200 brickor. Varje deltagare lämnar med ett objekt de faktiskt vill ha. Nätverkandet fungerar via en tap istället för att utbyta tjocka högar av visitkort.</p>
+
+    <p>Det stora med event-segmentet är ordervolymen. En enda konferens kan generera mer intäkter än tre månaders ordinarie kortförsäljning. Marginalen är bra eftersom ni producerar en standarddesign med personalisering per bricka — inte individuella designsamtal med varje deltagare.</p>
+
+    <p>Ingångspunkten: ni eller Léa känner förmodligen någon som arrangerar ett event inom de närmaste sex månaderna. Erbjud er att göra ett pilotprojekt, gärna med en kostnad som täcker er produktion men inte mer. Det ger er en referensberättelse, foton och ett bevis på att ni kan hantera ett event i tid.</p>
+  </div>
+
+  <!-- ============================================================
+       SECTION 9 — OPPORTUNITY MATRIX
+       ============================================================ -->
+  <div class="section">
+    <div class="section-num">08 — Samlad bild</div>
+    <h2>Alla idéer på ett ställe — vad prioriterar vi och varför?</h2>
+
+    <div class="matrix">
+      <table>
+        <thead>
+          <tr>
+            <th>Idé</th>
+            <th>Tid till start</th>
+            <th>Insats</th>
+            <th>Intäktspotential</th>
+            <th>Kräver befintlig kund?</th>
+            <th>Rekommendation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Företagspaket (bulk)</td>
+            <td>Nu</td>
+            <td><span class="dot-g">●</span> Låg</td>
+            <td><span class="dot-g">●</span> Hög</td>
+            <td>Nej</td>
+            <td><strong style="color:#1d6b3e;">Starta omgående</strong></td>
+          </tr>
+          <tr>
+            <td>RFID-blockerare (bundle)</td>
+            <td>Nu</td>
+            <td><span class="dot-g">●</span> Låg</td>
+            <td><span class="dot-y">●</span> Medel</td>
+            <td>Nej</td>
+            <td><strong style="color:#1d6b3e;">Gör det som add-on</strong></td>
+          </tr>
+          <tr>
+            <td>vCard-hosting (prenumeration)</td>
+            <td>1–3 mån</td>
+            <td><span class="dot-y">●</span> Medel</td>
+            <td><span class="dot-g">●</span> Hög (recurring)</td>
+            <td>Ja</td>
+            <td><strong style="color:#1d6b3e;">Prioritera år 1</strong></td>
+          </tr>
+          <tr>
+            <td>Hotell — personalkort</td>
+            <td>Nu</td>
+            <td><span class="dot-g">●</span> Låg</td>
+            <td><span class="dot-g">●</span> Hög</td>
+            <td>Nej</td>
+            <td><strong style="color:#1d6b3e;">Hitta ett pilothotell nu</strong></td>
+          </tr>
+          <tr>
+            <td>Restaurang-bordskort</td>
+            <td>6–12 mån</td>
+            <td><span class="dot-y">●</span> Medel</td>
+            <td><span class="dot-y">●</span> Medel</td>
+            <td>Nej</td>
+            <td>År 2</td>
+          </tr>
+          <tr>
+            <td>Hotell — bordskort, rumskort</td>
+            <td>6–12 mån</td>
+            <td><span class="dot-y">●</span> Medel</td>
+            <td><span class="dot-y">●</span> Medel–hög</td>
+            <td>Ja (hotellkund)</td>
+            <td>År 2</td>
+          </tr>
+          <tr>
+            <td>Byrååterförsäljare (white-label)</td>
+            <td>6–12 mån</td>
+            <td><span class="dot-y">●</span> Medel</td>
+            <td><span class="dot-g">●</span> Hög (volym)</td>
+            <td>Nej</td>
+            <td>År 2 — välj partners noga</td>
+          </tr>
+          <tr>
+            <td>Event-badges (konferenser)</td>
+            <td>3–6 mån</td>
+            <td><span class="dot-y">●</span> Medel</td>
+            <td><span class="dot-g">●</span> Hög (volym)</td>
+            <td>Nej</td>
+            <td>Testa med ett pilotevent</td>
+          </tr>
+          <tr>
+            <td>Digital plattform (full SaaS)</td>
+            <td>12–24 mån</td>
+            <td><span class="dot-r">●</span> Hög</td>
+            <td><span class="dot-g">●</span> Mycket hög</td>
+            <td>Ja</td>
+            <td>År 3 — bygg rätt från start</td>
+          </tr>
+          <tr>
+            <td>RFID-blockerare (fristående)</td>
+            <td>6 mån</td>
+            <td><span class="dot-g">●</span> Låg</td>
+            <td><span class="dot-r">●</span> Låg</td>
+            <td>Nej</td>
+            <td>Ej rekommenderat separat</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SECTION 10 — WHAT NOT TO DO
+       ============================================================ -->
+  <div class="section">
+    <div class="section-num">09 — Lika viktigt som vad ni ska göra</div>
+    <h2>Vad ni inte ska göra — och varför</h2>
+
+    <div class="warning-block">
+      <h3>Idéer som låter bra men inte är det</h3>
+      <p><strong>Pappersvisitkort.</strong> Aldrig. Det är en döende produkt i ett prispress-segment. Ni säljer premium — papper är antitesen till er identitet. Varje krona ni investerar i papper är en krona stulen från det som faktiskt gör er unika.</p>
+      <p><strong>NFC-etiketter och stickers som fristående produkt.</strong> De kostar ingenting att producera och ingenting att köpa. Ni konkurrerar med Wish och Amazon. Använd dem eventuellt som en prova-på-produkt för att konvertera kunder till riktiga kort — inte som en intäktskälla i sig.</p>
+      <p><strong>Lyxgåvor och graverade presentartiklar.</strong> Nyckelringar, pennahållare, pengaclips med lasergravyr. Frank kan tillverka dem. Men ni är inte ett presentföretag. Varje ny produktkategori kräver ny marknadsföring, ny support och ny lagerhållning. Fokus är er mest värdefulla tillgång — skydda den.</p>
+      <p><strong>Massmarknadskunder med 500-kortbeställningar till självkostnadspris.</strong> Det låter som en stor affär men är ofta ett servicemardröm. Kunder som köper på volym och pris förhandlar alltid, kräver alltid mer och byter leverantör så fort de hittar något 5% billigare. Er målgrupp är de som köper på kvalitet och relation. Håll er där.</p>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SECTION 11 — ACTION PLAN
+       ============================================================ -->
+  <div class="section">
+    <div class="section-num">10 — Konkreta nästa steg</div>
+    <h2>Vad jag skulle göra den närmaste månaden</h2>
+
+    <ul class="action-list">
+      <li>
+        <span class="action-num">1</span>
+        <span><strong>Definiera företagspaketet denna vecka.</strong> Prissättning, minimiantal, vad som ingår, hur beställningen görs. Skriv en enkel produktsida för det — inte för webbplatsen, utan för att ni själva ska ha ett tydligt svar när någon frågar. En A4 med prislistan räcker.</span>
+      </li>
+      <li>
+        <span class="action-num">2</span>
+        <span><strong>Identifiera ett boutique-hotell i er stad att kontakta.</strong> Inte mejla — ring, eller boka ett möte. Ta med ett provkort i metall. Visa det fysiskt. Lägg fram idén om ett pilotpaket för personalen. Om de tackar ja har ni er första B2B-referenskund. Om de tackar nej har ni lärt er vad som behöver förbättras i erbjudandet.</span>
+      </li>
+      <li>
+        <span class="action-num">3</span>
+        <span><strong>Lägg till RFID-blockeraren i Frank-beställningen nästa gång.</strong> Beställ 50 blanks i metall. Testa kvaliteten. Ha dem redo att gravera med kunders logotyper som bonus vid bulk-beställningar.</span>
+      </li>
+      <li>
+        <span class="action-num">4</span>
+        <span><strong>Sätt upp en enkel vCard-sida för er egen räkning.</strong> Innan ni erbjuder det till kunder — testa det på er själva. Era egna visitkort ska leda till en hosted digital profil. Det är det bästa sättet att förstå vad produkten behöver, och ni kan använda det som en demonstration i kundmöten.</span>
+      </li>
+      <li>
+        <span class="action-num">5</span>
+        <span><strong>Fråga era första tio kunder om de har en byrå eller ett nätverk.</strong> Inte en kall utskicksmail — ett uppföljningssamtal. "Vi tittar på att samarbeta med byråer som kan rekommendera oss vidare. Känner du någon som kanske skulle passa?" En varm hänvisning från en nöjd kund är värd tio kalla samtal.</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ============================================================
+       CLOSING
+       ============================================================ -->
+  <div class="section">
+    <div class="section-num">Avslutning</div>
+    <h2>En sista tanke om expansion</h2>
+
+    <p>Jag har sett bolag växa sig stora och bolag växa sig ihjäl. Skillnaden är sällan produkten. Den är nästan alltid timingen och fokuset. Ni har en god idé, en klar produkt och en identifierad marknad. Det är mer än de flesta som startar ett bolag har.</p>
+
+    <p>Expansion handlar inte om att lägga till fler saker. Det handlar om att förstå vad era kunder egentligen köper, och att ge dem mer av det. En hotellkund köper inte ett metallkort — de köper professionalitet och ett intryck. Om ni förstår det, hittar ni expansionsmöjligheter på varje kundmöte ni har.</p>
+
+    <div class="pull">
+      <p>Det bästa expansionsbeslutet ni kan fatta är att bli så bra på en sak att kunderna frågar er om ni kan hjälpa dem med nästa sak också.</p>
+    </div>
+
+    <p>Lycka till. De bästa affärerna börjar inte med en stor plan — de börjar med en kund som berättar för en vän.</p>
+  </div>
+
+</div>
+
+<footer>
+  Expansionsanalys — Internt &nbsp;|&nbsp; oliveprojects.eu/foretaget &nbsp;|&nbsp; Ej indexerad &nbsp;|&nbsp; Juni 2026
+</footer>
+
+</body>
+</html>
