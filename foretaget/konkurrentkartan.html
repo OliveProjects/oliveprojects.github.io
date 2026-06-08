@@ -26,8 +26,6 @@
     color: #888;
     margin-bottom: 28px;
   }
-
-  /* POSITIONING MAP */
   .section-title {
     font-size: 13px;
     font-weight: 700;
@@ -55,10 +53,7 @@
     box-shadow: 0 1px 4px rgba(0,0,0,0.07);
     font-size: 13px;
   }
-  thead tr {
-    background: #2d3436;
-    color: #fff;
-  }
+  thead tr { background: #2d3436; color: #fff; }
   thead th {
     padding: 12px 14px;
     text-align: left;
@@ -68,12 +63,11 @@
     letter-spacing: 0.8px;
     white-space: nowrap;
   }
-  thead th:first-child { border-radius: 0; }
   tbody tr:nth-child(even) { background: #f9f9f9; }
   tbody tr:hover { background: #f0f7ff; }
   tbody td {
     padding: 11px 14px;
-    border-bottom: 1px solid #eeeeee;
+    border-bottom: 1px solid #eee;
     color: #222;
     vertical-align: middle;
     line-height: 1.4;
@@ -81,12 +75,26 @@
   tbody tr:last-child td { border-bottom: none; }
   tbody td:first-child { font-weight: 600; color: #1a1a1a; }
 
+  /* Group header rows */
+  .group-row td {
+    background: #f0f0f0;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #888;
+    padding: 7px 14px;
+    border-bottom: 1px solid #ddd;
+  }
+  .group-row:hover { background: #f0f0f0 !important; }
+
   .us { background: #e8f5e9 !important; }
   .us td:first-child { color: #27ae60; }
 
-  .check { color: #27ae60; font-size: 16px; }
-  .cross  { color: #d63031; font-size: 16px; }
-  .part   { color: #f39c12; font-size: 16px; }
+  .check { color: #27ae60; font-size: 15px; }
+  .cross  { color: #d63031; font-size: 15px; }
+  .part   { color: #f39c12; font-size: 15px; }
+
   .badge {
     display: inline-block;
     font-size: 10px;
@@ -97,20 +105,24 @@
     letter-spacing: 0.5px;
   }
   .badge-green  { background: #d4edda; color: #27ae60; }
-  .badge-red    { background: #fde8e8; color: #d63031; }
-  .badge-yellow { background: #fff3cd; color: #f39c12; }
   .badge-blue   { background: #dbeeff; color: #0984e3; }
-  .badge-grey   { background: #eee; color: #636e72; }
+  .badge-yellow { background: #fff3cd; color: #c7920a; }
+  .badge-red    { background: #fde8e8; color: #d63031; }
+  .badge-grey   { background: #eee;   color: #636e72; }
+  .badge-purple { background: #ede7ff; color: #6c5ce7; }
+
+  .price-known { font-weight: 600; color: #1a1a1a; }
+  .price-unknown { color: #aaa; font-style: italic; font-size: 12px; }
 
   /* QUADRANT */
   .quadrant-wrap {
-    max-width: 700px;
+    max-width: 960px;
     margin: 0 auto 32px;
   }
   .quadrant {
     position: relative;
     width: 100%;
-    padding-top: 70%;
+    padding-top: 75%;
     background: #fff;
     border-radius: 12px;
     border: 1.5px solid #ddd;
@@ -120,9 +132,8 @@
   .quadrant-inner {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    padding: 24px;
+    padding: 28px;
   }
-  /* Axis lines */
   .axis-h {
     position: absolute;
     top: 50%; left: 5%; right: 5%;
@@ -137,7 +148,7 @@
     position: absolute;
     font-size: 10px;
     font-weight: 700;
-    color: #888;
+    color: #aaa;
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
@@ -146,21 +157,37 @@
   .label-left   { left: 6px; top: 50%; transform: translateY(-50%) rotate(-90deg); }
   .label-right  { right: 6px; top: 50%; transform: translateY(-50%) rotate(90deg); }
 
+  /* Quadrant zone labels */
+  .zone-label {
+    position: absolute;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
   .dot {
     position: absolute;
-    width: 10px; height: 10px;
+    width: 11px; height: 11px;
     border-radius: 50%;
     transform: translate(-50%, -50%);
+    cursor: default;
+  }
+  .dot-us {
+    width: 15px; height: 15px;
+    box-shadow: 0 0 0 3px rgba(39,174,96,0.25);
   }
   .dot-label {
     position: absolute;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
     white-space: nowrap;
     transform: translate(-50%, 8px);
   }
 
-  /* SWOT strip */
+  /* SWOT */
   .swot {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -206,7 +233,7 @@
 <body>
 
 <h1>Konkurrentkartan</h1>
-<p class="subtitle">Premium NFC-visitkort — Sverige, Skandinavien &amp; Frankrike &nbsp;|&nbsp; Utkast v1</p>
+<p class="subtitle">Premium NFC-visitkort — Sverige, Skandinavien &amp; Frankrike &nbsp;|&nbsp; Utkast v2</p>
 
 <!-- =========================================================
      SECTION 1: FEATURE COMPARISON TABLE
@@ -216,154 +243,290 @@
   <table>
     <thead>
       <tr>
-        <th style="min-width:160px;">Aktör</th>
-        <th>Marknad</th>
-        <th>Premium material</th>
-        <th>NFC-aktiverat</th>
-        <th>Lokal service (SV/FR)</th>
-        <th>Designhjälp ingår</th>
+        <th style="min-width:170px;">Aktör</th>
+        <th>Bas</th>
+        <th>Material</th>
+        <th>NFC</th>
+        <th>Lokal service (SV)</th>
+        <th>Designhjälp</th>
         <th>vCard-hosting</th>
-        <th>Hållbart alternativ</th>
-        <th>Ungefärligt pris/kort</th>
-        <th>Styrka</th>
+        <th>Pris/kort (kundpris)</th>
+        <th>Notering</th>
       </tr>
     </thead>
     <tbody>
-      <!-- US = our company -->
+
+      <!-- OUR COMPANY -->
       <tr class="us">
         <td>Vårt företag ★</td>
-        <td>SE, NO, DK, FI, FR</td>
+        <td>Sverige / FR</td>
         <td><span class="check">✓</span> Metall, trä, PVC</td>
         <td><span class="check">✓</span></td>
-        <td><span class="check">✓</span> Svenska + franska</td>
+        <td><span class="check">✓</span> SV + FR</td>
         <td><span class="check">✓</span> Ingår</td>
-        <td><span class="check">✓</span> Prenumeration</td>
-        <td><span class="check">✓</span> FSC-trä</td>
-        <td>~50–80 kr</td>
-        <td><span class="badge badge-green">Lokalt, NFC, design</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="price-known">~50–80 kr</span></td>
+        <td><span class="badge badge-green">Hela paketet</span></td>
       </tr>
+
+      <!-- SWEDISH NFC COMPETITORS -->
+      <tr class="group-row"><td colspan="9">Svenska — NFC-fokus</td></tr>
+
       <tr>
-        <td>ifPrint.eu (Tom)</td>
-        <td>DACH, EU</td>
+        <td><a href="https://e-visitkort.se" target="_blank" style="color:inherit;">e-visitkort.se</a></td>
+        <td>Örebro, SE</td>
+        <td><span class="cross">✗</span> Plast + bambu</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span> Svenska</td>
+        <td><span class="part">~</span> Okänt</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="price-known">95 kr (50 st) — 295 kr (1 st)</span></td>
+        <td><span class="badge badge-yellow">NFC men inget premium material</span></td>
+      </tr>
+
+      <tr>
+        <td><a href="https://nfckort.se" target="_blank" style="color:inherit;">nfckort.se</a></td>
+        <td>Sverige</td>
+        <td><span class="cross">✗</span> Plast</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span> Svenska</td>
+        <td><span class="part">~</span> Okänt</td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="price-unknown">Ej angett</span></td>
+        <td><span class="badge badge-grey">Varumärkesanpassat plastikort</span></td>
+      </tr>
+
+      <tr>
+        <td><a href="https://ekoqrd.io" target="_blank" style="color:inherit;">ekoqrd.io</a></td>
+        <td>Sverige</td>
+        <td><span class="part">~</span> Trä (återvunnet)</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span> Svenska</td>
+        <td><span class="part">~</span> Okänt</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="price-unknown">Ej angett</span></td>
+        <td><span class="badge badge-green">Hållbarhetsprofil, sedan 2014</span></td>
+      </tr>
+
+      <!-- SWEDISH PREMIUM MATERIAL, NO NFC -->
+      <tr class="group-row"><td colspan="9">Svenska — Premium material, utan NFC</td></tr>
+
+      <tr>
+        <td><a href="https://www.easytryck.se/trycksaker/visitkort/visitkort-metall" target="_blank" style="color:inherit;">easytryck.se</a></td>
+        <td>Stockholm, SE</td>
+        <td><span class="check">✓</span> Massiv mässing</td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="check">✓</span> Svenska</td>
+        <td><span class="part">~</span> Okänt</td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="price-known">19 kr (1 000 st) — 58 kr (50 st)</span></td>
+        <td><span class="badge badge-grey">Lägst pris för metall, ingen NFC</span></td>
+      </tr>
+
+      <tr>
+        <td><a href="https://patchfabriken.se/products/visitkort-metall-extra-tjockt" target="_blank" style="color:inherit;">patchfabriken.se</a></td>
+        <td>Enköping, SE</td>
+        <td><span class="check">✓</span> Rostfritt stål</td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="check">✓</span> Svenska</td>
+        <td><span class="part">~</span> Okänt</td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="price-known">99 kr/kort</span></td>
+        <td><span class="badge badge-grey">Tillverkat i Sverige</span></td>
+      </tr>
+
+      <tr>
+        <td><a href="https://perkpiece.com" target="_blank" style="color:inherit;">perkpiece.com</a></td>
+        <td>Borås, SE</td>
+        <td><span class="check">✓</span> Metall, lasergravyr</td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="check">✓</span> Svenska</td>
+        <td><span class="part">~</span> Okänt</td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="price-unknown">Ej angett</span></td>
+        <td><span class="badge badge-purple">Handgjort i Sverige</span></td>
+      </tr>
+
+      <tr>
+        <td><a href="https://tryckakuten.se/product-category/cardstore/metallkort-med-tryck/" target="_blank" style="color:inherit;">tryckakuten.se</a></td>
+        <td>Stockholm, SE</td>
+        <td><span class="check">✓</span> Metallkort</td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="check">✓</span> Svenska</td>
+        <td><span class="part">~</span> Okänt</td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="price-unknown">Ej angett — offert krävs</span></td>
+        <td><span class="badge badge-grey">Tryckeri i Stockholm</span></td>
+      </tr>
+
+      <!-- INTERNATIONAL WITH SWEDISH PRESENCE -->
+      <tr class="group-row"><td colspan="9">Internationella — Aktiva på svenska marknaden</td></tr>
+
+      <tr>
+        <td><a href="https://fds-cards.co.uk/sv/" target="_blank" style="color:inherit;">fds-cards.co.uk</a></td>
+        <td>London / Riga</td>
+        <td><span class="check">✓</span> Metall, trä, PVC</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="cross">✗</span> Svensk sajt, ej lokal support</td>
+        <td><span class="part">~</span> Gratis designgranskning</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="price-unknown">Ej angett</span></td>
+        <td><span class="badge badge-red">Närmaste fullskaliga konkurrent</span></td>
+      </tr>
+
+      <tr>
+        <td><a href="https://ifprint.eu" target="_blank" style="color:inherit;">ifPrint.eu (Tom)</a></td>
+        <td>Schweiz / EU</td>
         <td><span class="check">✓</span> Metall, trä, PVC</td>
         <td><span class="check">✓</span></td>
         <td><span class="cross">✗</span> Enbart tyska</td>
         <td><span class="part">~</span> Begränsad</td>
         <td><span class="check">✓</span></td>
-        <td><span class="check">✓</span></td>
-        <td>~60–120 kr</td>
-        <td><span class="badge badge-blue">Schweizisk kvalitet</span></td>
+        <td><span class="price-known">~60–120 kr</span></td>
+        <td><span class="badge badge-blue">Schweizisk kvalitet, vår partner</span></td>
       </tr>
+
       <tr>
-        <td>Moo.com</td>
-        <td>Global (UK-baserad)</td>
+        <td><a href="https://moo.com" target="_blank" style="color:inherit;">Moo.com</a></td>
+        <td>UK, global</td>
         <td><span class="part">~</span> Specialpapper, hårdkort</td>
         <td><span class="cross">✗</span></td>
         <td><span class="cross">✗</span> Engelska</td>
         <td><span class="cross">✗</span></td>
         <td><span class="cross">✗</span></td>
-        <td><span class="part">~</span> Viss papperscertifiering</td>
-        <td>~15–40 kr</td>
-        <td><span class="badge badge-blue">Stort utbud, fin layout</span></td>
+        <td><span class="price-known">~15–40 kr</span></td>
+        <td><span class="badge badge-grey">Premiumdesign, inget metall/NFC</span></td>
       </tr>
+
       <tr>
-        <td>Linq / Popl</td>
-        <td>USA (global shipping)</td>
+        <td><a href="https://linq.to" target="_blank" style="color:inherit;">Linq / Popl</a></td>
+        <td>USA, global</td>
         <td><span class="part">~</span> PVC + NFC</td>
         <td><span class="check">✓</span></td>
         <td><span class="cross">✗</span> Engelska</td>
         <td><span class="cross">✗</span></td>
         <td><span class="check">✓</span> App-baserad</td>
-        <td><span class="cross">✗</span></td>
-        <td>~150–300 kr</td>
-        <td><span class="badge badge-grey">NFC-pionjärer, app-ekosystem</span></td>
+        <td><span class="price-known">~150–300 kr/kort</span></td>
+        <td><span class="badge badge-grey">NFC-pionjärer, dyrt</span></td>
       </tr>
+
+      <!-- MASS MARKET -->
+      <tr class="group-row"><td colspan="9">Massmarknad</td></tr>
+
       <tr>
-        <td>Vistaprint / Canva Print</td>
+        <td><a href="https://vistaprint.se" target="_blank" style="color:inherit;">Vistaprint.se</a></td>
         <td>Global</td>
-        <td><span class="cross">✗</span> Enbart papper</td>
+        <td><span class="cross">✗</span> Papper</td>
+        <td><span class="part">~</span> VistaConnect (papper)</td>
+        <td><span class="part">~</span> Svensk sajt</td>
         <td><span class="cross">✗</span></td>
-        <td><span class="part">~</span> Skandinaviska sajter</td>
         <td><span class="cross">✗</span></td>
-        <td><span class="cross">✗</span></td>
-        <td><span class="part">~</span> Viss papperscertifiering</td>
-        <td>~2–8 kr</td>
-        <td><span class="badge badge-grey">Lägst pris, storskalighet</span></td>
+        <td><span class="price-known">~2–8 kr</span></td>
+        <td><span class="badge badge-grey">Volym, lägst pris</span></td>
       </tr>
+
       <tr>
-        <td>Lokala svenska tryckerier</td>
-        <td>Sverige</td>
-        <td><span class="cross">✗</span> Papper + plast</td>
-        <td><span class="cross">✗</span></td>
-        <td><span class="check">✓</span> Svenska</td>
-        <td><span class="part">~</span> Varierar</td>
-        <td><span class="cross">✗</span></td>
-        <td><span class="cross">✗</span></td>
-        <td>~10–25 kr</td>
-        <td><span class="badge badge-grey">Lokal, välkänd</span></td>
-      </tr>
-      <tr>
-        <td>HiHello / Blinq</td>
-        <td>Global (digitalt)</td>
-        <td><span class="cross">✗</span> Digitalt kort</td>
-        <td><span class="cross">✗</span> App-baserat QR</td>
+        <td><a href="https://hihello.me" target="_blank" style="color:inherit;">HiHello / Blinq</a></td>
+        <td>USA, global</td>
+        <td><span class="cross">✗</span> Digitalt</td>
+        <td><span class="cross">✗</span> App-QR</td>
         <td><span class="cross">✗</span></td>
         <td><span class="cross">✗</span></td>
         <td><span class="check">✓</span> Molnbaserat</td>
-        <td><span class="check">✓</span> Inget fysiskt material</td>
-        <td>~0–150 kr/år</td>
-        <td><span class="badge badge-grey">Helt digitalt, låg kostnad</span></td>
+        <td><span class="price-known">~0–150 kr/år</span></td>
+        <td><span class="badge badge-grey">Helt digitalt, ingen fysisk produkt</span></td>
       </tr>
+
     </tbody>
   </table>
-  <p style="font-size:11px;color:#aaa;margin-top:6px;">★ = Vårt företag &nbsp;|&nbsp; ✓ = Ja &nbsp;|&nbsp; ✗ = Nej &nbsp;|&nbsp; ~ = Delvis</p>
+  <p style="font-size:11px;color:#aaa;margin-top:8px;">
+    ★ = Vårt företag &nbsp;|&nbsp; ✓ = Ja &nbsp;|&nbsp; ✗ = Nej &nbsp;|&nbsp; ~ = Delvis &nbsp;|&nbsp;
+    <strong>Priser med kursiv stil</strong> = ej publicerat på deras sajt, kontakta för offert
+  </p>
 </div>
 
 <!-- =========================================================
      SECTION 2: POSITIONING MAP
      ========================================================= -->
-<p class="section-title" style="margin-bottom:14px;max-width:700px;">2. Positioneringskarta — Pris vs. Lokal Service</p>
+<p class="section-title" style="margin-bottom:14px;max-width:960px;">2. Positioneringskarta — Materialkvalitet vs. Digital integration</p>
 <div class="quadrant-wrap">
   <div class="quadrant">
     <div class="quadrant-inner">
       <div class="axis-h"></div>
       <div class="axis-v"></div>
 
-      <span class="axis-label label-top">HÖG LOKAL SERVICE</span>
-      <span class="axis-label label-bottom">LÅG LOKAL SERVICE</span>
-      <span class="axis-label label-left">LÅGT PRIS</span>
-      <span class="axis-label label-right">HÖGT PRIS</span>
+      <span class="axis-label label-top">PREMIUM MATERIAL (metall / trä)</span>
+      <span class="axis-label label-bottom">BASMAT. (papper / plast)</span>
+      <span class="axis-label label-left">INGEN DIGITAL INTEG.</span>
+      <span class="axis-label label-right">NFC / DIGITAL PROFIL</span>
 
-      <!-- Vårt företag: hög local service, medium-högt pris → övre mitten-höger -->
-      <div class="dot" style="left:65%;top:20%;background:#27ae60;width:14px;height:14px;"></div>
-      <span class="dot-label" style="left:65%;top:20%;color:#27ae60;">Vårt företag ★</span>
+      <!-- Zone labels -->
+      <span class="zone-label" style="top:12%;left:55%;color:#27ae60;">IDEALZON</span>
+      <span class="zone-label" style="top:12%;left:10%;">Premium, ej digital</span>
+      <span class="zone-label" style="top:78%;left:55%;">Plastikort + NFC</span>
+      <span class="zone-label" style="top:78%;left:10%;">Massmarknad</span>
 
-      <!-- ifPrint: låg local service, högt pris → nedre höger -->
-      <div class="dot" style="left:75%;top:75%;background:#0984e3;"></div>
-      <span class="dot-label" style="left:75%;top:75%;color:#0984e3;">ifPrint.eu</span>
+      <!-- OUR COMPANY — premium metall + NFC, övre höger -->
+      <div class="dot dot-us" style="left:80%;top:18%;background:#27ae60;"></div>
+      <span class="dot-label" style="left:80%;top:18%;color:#27ae60;font-size:11px;">Vårt företag ★</span>
 
-      <!-- Lokala tryckerier: hög local service, lågt pris → övre vänster -->
-      <div class="dot" style="left:25%;top:25%;background:#6c5ce7;"></div>
-      <span class="dot-label" style="left:25%;top:25%;color:#6c5ce7;">Lokala tryckerier</span>
+      <!-- FDS Cards — premium metall+trä+NFC, UK, övre höger (nära oss) -->
+      <div class="dot" style="left:76%;top:28%;background:#e74c3c;"></div>
+      <span class="dot-label" style="left:76%;top:28%;color:#e74c3c;">FDS Cards (UK)</span>
 
-      <!-- Moo: låg local service, medel pris → nedre mitten -->
-      <div class="dot" style="left:55%;top:72%;background:#fdcb6e;"></div>
-      <span class="dot-label" style="left:55%;top:72%;color:#e67e22;">Moo.com</span>
+      <!-- ifPrint — premium metall+trä+NFC, EU, övre höger -->
+      <div class="dot" style="left:84%;top:22%;background:#0984e3;"></div>
+      <span class="dot-label" style="left:84%;top:22%;color:#0984e3;">ifPrint.eu</span>
 
-      <!-- Vistaprint: låg local service, lågt pris → nedre vänster -->
-      <div class="dot" style="left:15%;top:80%;background:#b2bec3;"></div>
-      <span class="dot-label" style="left:15%;top:80%;color:#636e72;">Vistaprint</span>
+      <!-- perkpiece — metall, ingen NFC, övre vänster -->
+      <div class="dot" style="left:18%;top:20%;background:#6c5ce7;"></div>
+      <span class="dot-label" style="left:18%;top:20%;color:#6c5ce7;">perkpiece.com</span>
 
-      <!-- Linq/Popl: låg local service, högt pris → nedre höger -->
-      <div class="dot" style="left:85%;top:80%;background:#e17055;"></div>
-      <span class="dot-label" style="left:85%;top:80%;color:#e17055;">Linq / Popl</span>
+      <!-- easytryck — mässing, ingen NFC, övre vänster -->
+      <div class="dot" style="left:12%;top:32%;background:#6c5ce7;"></div>
+      <span class="dot-label" style="left:12%;top:32%;color:#6c5ce7;">easytryck.se</span>
 
-      <!-- HiHello: låg local service, lågt pris men digitalt → nedre vänster -->
-      <div class="dot" style="left:20%;top:68%;background:#dfe6e9;border:1px solid #999;"></div>
-      <span class="dot-label" style="left:20%;top:68%;color:#636e72;">HiHello (digitalt)</span>
+      <!-- patchfabriken — stål, ingen NFC, övre vänster -->
+      <div class="dot" style="left:20%;top:40%;background:#6c5ce7;"></div>
+      <span class="dot-label" style="left:20%;top:40%;color:#6c5ce7;">patchfabriken.se</span>
+
+      <!-- tryckakuten — metall, ingen NFC, övre vänster -->
+      <div class="dot" style="left:13%;top:25%;background:#6c5ce7;"></div>
+      <span class="dot-label" style="left:13%;top:25%;color:#888;">tryckakuten.se</span>
+
+      <!-- ekoqrd — trä+NFC, men lägre premiumnivå, mitten-höger -->
+      <div class="dot" style="left:72%;top:48%;background:#00b894;"></div>
+      <span class="dot-label" style="left:72%;top:48%;color:#00b894;">ekoqrd.io</span>
+
+      <!-- e-visitkort — plast+NFC, nedre höger -->
+      <div class="dot" style="left:78%;top:68%;background:#fdcb6e;"></div>
+      <span class="dot-label" style="left:78%;top:68%;color:#c7920a;">e-visitkort.se</span>
+
+      <!-- nfckort — plast+NFC, nedre höger -->
+      <div class="dot" style="left:68%;top:75%;background:#fdcb6e;"></div>
+      <span class="dot-label" style="left:68%;top:75%;color:#c7920a;">nfckort.se</span>
+
+      <!-- Linq/Popl — plast+NFC, nedre höger -->
+      <div class="dot" style="left:85%;top:72%;background:#e17055;"></div>
+      <span class="dot-label" style="left:85%;top:72%;color:#e17055;">Linq / Popl</span>
+
+      <!-- Moo — specialpapper, ingen NFC, mitten-vänster -->
+      <div class="dot" style="left:22%;top:62%;background:#b2bec3;"></div>
+      <span class="dot-label" style="left:22%;top:62%;color:#636e72;">Moo.com</span>
+
+      <!-- Vistaprint — papper, viss NFC-etikett, nedre -->
+      <div class="dot" style="left:42%;top:85%;background:#b2bec3;"></div>
+      <span class="dot-label" style="left:42%;top:85%;color:#636e72;">Vistaprint</span>
+
+      <!-- HiHello — helt digitalt, ingen fysisk produkt, nedre höger -->
+      <div class="dot" style="left:88%;top:88%;background:#dfe6e9;border:1px solid #999;"></div>
+      <span class="dot-label" style="left:88%;top:88%;color:#636e72;">HiHello (digitalt)</span>
     </div>
   </div>
-  <p style="font-size:11px;color:#aaa;margin-top:8px;text-align:center;">Y-axel = lokal kundservice på skandinaviska/franska &nbsp;|&nbsp; X-axel = pris per kort</p>
+  <p style="font-size:11px;color:#aaa;margin-top:8px;text-align:center;">
+    Y-axel = materialkvalitet &nbsp;|&nbsp; X-axel = digital integration (NFC / digital profil) &nbsp;|&nbsp;
+    <span style="color:#6c5ce7;font-weight:600;">■ Svenska konkurrenter</span>
+  </p>
 </div>
 
 <!-- =========================================================
@@ -374,11 +537,11 @@
   <div class="swot-box s">
     <h3>Styrkor (Strengths)</h3>
     <ul>
-      <li>Enda aktören med lokal service på både svenska och franska</li>
-      <li>Kombinationen metall/trä/PVC + NFC under ett tak</li>
+      <li>Enda svenska aktören som kombinerar <strong>premium material (metall/trä) + NFC + lokal service</strong></li>
+      <li>Lokal service på svenska <em>och</em> franska — unikt i hela marknaden</li>
       <li>Schweizisk tryckkvalitet via Tom/ifPrint-partnerskapet</li>
-      <li>Ägardriven personlig service — snabbt, flexibelt, mänskligt</li>
-      <li>Kostnadseffektiv tillverkning via Frank i Kina</li>
+      <li>Ägardriven personlig service — snabbare beslut och djupare kundrelationer än kedjor</li>
+      <li>Kostnadseffektiv tillverkning via Frank i Kina — lägre kostnadsbas än perkpiece/patchfabriken</li>
     </ul>
   </div>
   <div class="swot-box w">
@@ -387,34 +550,34 @@
       <li>Litet team — begränsad kapacitet vid snabb tillväxt</li>
       <li>Inget eget varumärke ännu — bygger igenkänning från noll</li>
       <li>Beroende av externa partner (Frank, Tom) för produktion</li>
-      <li>Inget fysiskt showroom eller butik</li>
-      <li>Längre ledtider vid import från Kina</li>
+      <li>Längre ledtider vid Kina-import jämfört med perkpiece/patchfabriken som tillverkar i Sverige</li>
+      <li>Inget fysiskt showroom — kunder kan inte se och känna på materialet</li>
     </ul>
   </div>
   <div class="swot-box o">
     <h3>Möjligheter (Opportunities)</h3>
     <ul>
-      <li>Ingen etablerad lokal aktör dominerar premium NFC-kort i Skandinavien</li>
-      <li>Ökad efterfrågan på hållbara och tekniska alternativ till papperskort</li>
-      <li>Franskmarknaden nästan helt outnyttjad av lokala NFC-aktörer</li>
-      <li>Hotell &amp; företag som söker enhetliga personalkort i premium material</li>
-      <li>Digital vCard-hosting = återkommande intäkt med skalbarhet</li>
+      <li><strong>Marknadsglapp bekräftat:</strong> ingen svensk aktör har premiummaterial + NFC — varken easytryck, patchfabriken eller perkpiece erbjuder NFC</li>
+      <li>Svenska NFC-aktörer (e-visitkort, nfckort) har NFC men saknar metall/trä — vi fyller det gapet</li>
+      <li>FDS Cards (UK/Riga) är närmaste fullskaliga konkurrent men har noll lokal support på svenska</li>
+      <li>ekoqrd.io har trä+NFC men smal produkt — vi kan ta hotell- och B2B-segmentet de missar</li>
+      <li>Franskmarknaden: ingen av ovanstående är aktiv på franska</li>
     </ul>
   </div>
   <div class="swot-box t">
     <h3>Hot (Threats)</h3>
     <ul>
-      <li>ifPrint.eu kan lansera en skandinavisk/franskspråkig sajt</li>
-      <li>Linq/Popl expanderar globalt och investerar i lokala marknader</li>
-      <li>Priskrig från lågkostnadsleverantörer i Asien med direktshopping</li>
-      <li>Valutarisker vid inköp från Kina (SEK/CNY)</li>
-      <li>Digitala kort (HiHello, Blinq) kan ersätta fysiska kort hos kostnadsmedvetna kunder</li>
+      <li><strong>easytryck / patchfabriken / perkpiece</strong> kan lägga till NFC — de har redan material och svenska kunder</li>
+      <li><strong>e-visitkort / nfckort</strong> kan uppgradera till metallkort — de har redan NFC-infrastrukturen</li>
+      <li>FDS Cards kan satsa mer aktivt på Skandinavien med lokalt partnerskap</li>
+      <li>Direktimport från Kina (Alibaba) gör det enklare för kunder att kringgå oss vid höga volymer</li>
+      <li>Valutarisk SEK/CNY vid inköp från Frank</li>
     </ul>
   </div>
 </div>
 
 <p style="text-align:center; margin-top: 8px; font-size: 11px; color: #bbb;">
-  Konkurrentkartläggning — Utkast v1 &nbsp;|&nbsp; Skandinavien &amp; Frankrike &nbsp;|&nbsp; Partners: Tom (ifPrint.eu), Frank (tillverkning, Kina)
+  Konkurrentkartläggning — Utkast v2 &nbsp;|&nbsp; Uppdaterad med webbsökning juni 2026 &nbsp;|&nbsp; Skandinavien &amp; Frankrike
 </p>
 
 </body>
