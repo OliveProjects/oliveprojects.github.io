@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Konkurrensanalys — Strategisk bedömning</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:      #fafaf8;
+    --surface: #fff;
+    --border:  #e8e8e4;
+    --text:    #1a1a18;
+    --sub:     #666;
+    --accent:  #1a1a18;
+    --green:   #1d6b3e;
+    --red:     #8b1c1c;
+    --amber:   #7a5200;
+    --blue:    #0b4d8a;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 0 0 80px;
+  }
+
+  /* HEADER / COVER */
+  .cover {
+    background: var(--text);
+    color: #f0f0ec;
+    padding: 64px 32px 52px;
+    text-align: center;
+  }
+  .cover-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #aaa;
+    margin-bottom: 18px;
+  }
+  .cover h1 {
+    font-family: 'Lora', Georgia, serif;
+    font-size: clamp(26px, 4vw, 40px);
+    font-weight: 600;
+    line-height: 1.25;
+    margin-bottom: 16px;
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .cover-meta {
+    font-size: 13px;
+    color: #888;
+    margin-top: 10px;
+  }
+  .cover-author {
+    display: inline-block;
+    margin-top: 28px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 12px 22px;
+    font-size: 12px;
+    color: #ccc;
+    line-height: 1.6;
+  }
+  .cover-author strong { color: #f0f0ec; display: block; font-size: 13px; }
+
+  /* ARTICLE BODY */
+  .article {
+    max-width: 740px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* VERDICT STRIP */
+  .verdict-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0;
+    border: 1.5px solid var(--border);
+    border-radius: 0;
+    margin: 40px 0 0;
+    overflow: hidden;
+    background: #fff;
+  }
+  .verdict-cell {
+    padding: 18px 20px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .verdict-cell:last-child { border-right: none; }
+  .verdict-flag { font-size: 20px; margin-bottom: 4px; }
+  .verdict-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--sub); margin-bottom: 4px; }
+  .verdict-value { font-size: 13px; font-weight: 600; }
+  .v-go    { color: var(--green); }
+  .v-hold  { color: var(--amber); }
+  .v-wait  { color: var(--red); }
+
+  /* SECTIONS */
+  .section {
+    margin-top: 52px;
+    padding-top: 28px;
+    border-top: 1.5px solid var(--border);
+  }
+  .section-num {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--sub);
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-family: 'Lora', Georgia, serif;
+    font-size: clamp(20px, 2.5vw, 26px);
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+  p { margin-bottom: 18px; font-size: 15px; color: #2a2a28; }
+  p:last-child { margin-bottom: 0; }
+
+  /* PULL QUOTE */
+  .pull {
+    border-left: 3px solid var(--text);
+    margin: 28px 0;
+    padding: 4px 0 4px 22px;
+  }
+  .pull p {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 17px;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  /* CALLOUT BOXES */
+  .callout {
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 24px 0;
+    font-size: 14px;
+    line-height: 1.6;
+    border-left: 3px solid;
+  }
+  .callout strong { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .callout-green  { background: #f0faf4; border-color: #27ae60; color: #1a4a2e; }
+  .callout-green strong { color: #1d6b3e; }
+  .callout-red    { background: #fdf3f3; border-color: #c0392b; color: #4a1a1a; }
+  .callout-red strong { color: #8b1c1c; }
+  .callout-amber  { background: #fdf8f0; border-color: #e67e22; color: #4a3200; }
+  .callout-amber strong { color: #7a5200; }
+  .callout-blue   { background: #f0f6fd; border-color: #2980b9; color: #0a2a4a; }
+  .callout-blue strong { color: #0b4d8a; }
+  .callout-grey   { background: #f5f5f5; border-color: #999; color: #333; }
+  .callout-grey strong { color: #555; }
+
+  /* ACTION LIST */
+  .action-list {
+    list-style: none;
+    margin: 20px 0;
+  }
+  .action-list li {
+    display: flex;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    align-items: flex-start;
+    line-height: 1.5;
+  }
+  .action-list li:last-child { border-bottom: none; }
+  .action-num {
+    font-size: 11px;
+    font-weight: 700;
+    background: var(--text);
+    color: #fff;
+    border-radius: 4px;
+    padding: 2px 7px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* HARD QUESTIONS */
+  .question-block {
+    background: var(--text);
+    color: #f0f0ec;
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin: 28px 0;
+  }
+  .question-block h3 {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #888;
+    margin-bottom: 14px;
+  }
+  .question-block p {
+    font-size: 14px;
+    color: #d0d0cc;
+    margin-bottom: 12px;
+    padding-left: 14px;
+    border-left: 2px solid #444;
+    line-height: 1.6;
+  }
+  .question-block p:last-child { margin-bottom: 0; }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    font-size: 11px;
+    color: #bbb;
+    padding-top: 60px;
+    max-width: 740px;
+    margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  @media (max-width: 600px) {
+    .cover { padding: 48px 20px 40px; }
+    .article { padding: 0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-label">Internt strategidokument</div>
+  <h1>Konkurrenslandskapet — vad det egentligen säger oss</h1>
+  <p class="cover-meta">En strategisk bedömning av marknaden för premium NFC-visitkort i Europa</p>
+  <div class="cover-author">
+    <strong>Perspektiv: erfaren affärsman, 40+ år i branschen</strong>
+    Granskat: Sverige · Frankrike · Norge · Danmark · Finland<br>
+    Juni 2026 &nbsp;|&nbsp; Internt — ej för spridning
+  </div>
+</div>
+
+<!-- VERDICT STRIP -->
+<div class="article">
+  <div class="verdict-strip">
+    <div class="verdict-cell">
+      <div class="verdict-flag">🇸🇪</div>
+      <div class="verdict-label">Sverige</div>
+      <div class="verdict-value v-go">Kör nu</div>
+    </div>
+    <div class="verdict-cell">
+      <div class="verdict-flag">🇫🇮</div>
+      <div class="verdict-label">Finland</div>
+      <div class="verdict-value v-go">Testa tidigt</div>
+    </div>
+    <div class="verdict-cell">
+      <div class="verdict-flag">🇳🇴</div>
+      <div class="verdict-label">Norge</div>
+      <div class="verdict-value v-hold">År 2</div>
+    </div>
+    <div class="verdict-cell">
+      <div class="verdict-flag">🇩🇰</div>
+      <div class="verdict-label">Danmark</div>
+      <div class="verdict-value v-hold">År 2</div>
+    </div>
+    <div class="verdict-cell" style="border-right:none;">
+      <div class="verdict-flag">🇫🇷</div>
+      <div class="verdict-label">Frankrike</div>
+      <div class="verdict-value v-wait">Enbart via nätverk</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SECTION 1
+     ============================================================ -->
+<div class="article">
+  <div class="section">
+    <div class="section-num">01</div>
+    <h2>Det glap som finns — och varför det förmodligen inte håller</h2>
+
+    <p>Jag har granskat det svenska marknadslandskapet noga, och jag måste erkänna att det är ovanligt. Det finns ett genuint glap. Ingen svensk aktör kombinerar tre saker som egentligen borde höra ihop: premiumkort i metall eller trä, NFC-teknik och lokal service på svenska. easytryck har metallen men saknar NFC. e-visitkort har NFC:et men saknar metallen. Ingen har allt.</p>
+
+    <p>Det är en möjlighet. Men jag har sett tillräckligt många marknadsglap under fyrtio år för att veta att de fylls snabbare än grundare räknar med. easytryck.se har kundbasen och metallkapaciteten. e-visitkort.se har NFC-infrastrukturen och svenska kunder. Endera av dem — eller båda — kan stänga det här glapet under 2025 om de märker det. Och de märker det till slut.</p>
+
+    <div class="pull">
+      <p>Ni har förmodligen tolv månader på er. Kanske arton. Använda varje vecka som om den kostar pengar.</p>
+    </div>
+
+    <p>Det betyder inte att ni ska rusa ut med ett halvfärdigt erbjudande. Det betyder att ni inte har råd med ett halvår av "vi planerar fortfarande." Konkurrensen väntar inte.</p>
+  </div>
+
+  <!-- ============================================================
+       SECTION 2
+       ============================================================ -->
+  <div class="section">
+    <div class="section-num">02</div>
+    <h2>Frankrike — lär er av Kipful, sälj inte dit ännu</h2>
+
+    <p>Jag förstår attraktionen. Léas modersmål, ett spännande land, känslan av att Europa är er arena. Men om man lägger bort känslorna och tittar på fakta: Frankrike är den svåraste marknaden av de fem ni har analyserat.</p>
+
+    <p>Kipful gör exakt det ni planerar — i Frankrike, på franska, med "Made in France" på etiketten. UXCard säljer NFC-metallkort för €29. Det är fortfarande fyra gånger mer än er prisbild, men ni behöver förstå varför en fransk köpare väljer oss och inte dem. "Billigare" är ett argument. Men B2B-kunder i Frankrike köper inte enbart på pris. De köper på förtroende, på rykte, på att kunna peka på ett franskt bolag när de förklarar valet för sin chef.</p>
+
+    <div class="callout callout-red">
+      <strong>Varning</strong>
+      Att investera marknadsföringspengar i Frankrike under det första året är ett misstag. Ni har inget varumärke där. Ingen känner er. Google Ads på franska är ett svart hål för pengar tills ni har referenskunderna som bevisar att ni levererar.
+    </div>
+
+    <p>Det Léas nätverk kan göra är däremot genuint värdefullt. Personliga rekommendationer är den enda ingångspunkten som faktiskt fungerar i ett tidigt skede i ett nytt land. Använd nätverket för att få de första tio franska kunderna. Låt dem bli ambassadörer. Bygg långsamt. Frankrike är år tre, inte år ett.</p>
+
+    <p>Och studera Kipful noga — inte för att kopiera dem, utan för att förstå dem. De visar er vad en välexekverad version av ert bolag ser ut. Var är deras svagheter? Deras kundservice? Deras leveranstider? Det är där ni hittar ingångsvinkeln för framtiden.</p>
+  </div>
+
+  <!-- ============================================================
+       SECTION 3
+       ============================================================ -->
+  <div class="section">
+    <div class="section-num">03</div>
+    <h2>Finland — det som alla missar</h2>
+
+    <p>Det här är den mest underskattade observationen i hela er marknadsanalys, och jag vill att ni förstår varför den är viktig.</p>
+
+    <p>Finland har extremt svag lokal konkurrens. ledmenu.fi i Helsingfors är den enda riktiga lokala aktören, och de är i grunden ett tech-bolag som säljer NFC-kort som ett sidoprojekt. De erbjuder ingen designkonsultation. De har ingen vCard-hosting. En kund som vill ha hjälp hänvisas till att "skicka filen via e-post." Det är inte en serviceorganisation — det är en webbutik.</p>
+
+    <div class="pull">
+      <p>Men det som verkligen förändrar kalkylen för Finland är att svenska är officiellt andraspråk. Ni kan kommunicera, marknadsföra och stödja på svenska utan en enda krona i översättningskostnad.</p>
+    </div>
+
+    <p>300 000 finlandssvenskar bor primärt i Helsingfors, Åbo och Österbotten — och de är generellt sett välutbildade, välbetalda, och vana vid skandinavisk affärskultur. Det är er naturliga inkörsport. Inte för att Sverige är fullt, utan för att Finland är ett nästan tomt rum med dörren öppen.</p>
+
+    <div class="callout callout-green">
+      <strong>Rekommendation</strong>
+      Testa Finland redan under det första halvåret. Inte med stort kapital — med två riktade Google Ads-annonser på svenska mot Helsingfors. Mät om ni får förfrågningar. Det kostar hundra kronor att ta reda på om marknaden svarar.
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SECTION 4
+       ============================================================ -->
+  <div class="section">
+    <div class="section-num">04</div>
+    <h2>Norge och Danmark — lågt hängande frukt, men inte nu</h2>
+
+    <p>Norge är spännande på pappret. Nästan ingen lokal konkurrens i NFC+metall, norrmän förväntar sig skandinavisk service, och den norska ekonomin är generöst utrustad med betalningsvilja. Men Norge är inte EU. Det betyder tull, momsregistrering och administrativ overhead som ett litet bolag inte ska ta på sig i uppstartsfasen.</p>
+
+    <p>Danmark har UniTAP — en välpositionerad lokal aktör med transparent prissättning och danskt anseende. Ni kan slå dem 5–20 gånger på pris. Men prisfördelen hjälper er inte om potentiella danska kunder aldrig hör talas om er. Det är ett varumärkesproblem, inte ett produktproblem.</p>
+
+    <div class="callout callout-amber">
+      <strong>Råd</strong>
+      Lägg Norge och Danmark i en låda märkt "År 2." Inte för att marknaderna är dåliga, utan för att ni inte kan serva fem marknader bra med ett litet team. Det är bättre att dominera en marknad än att vara osynlig på fem.
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SECTION 5
+       ============================================================ -->
+  <div class="section">
+    <div class="section-num">05</div>
+    <h2>Enhetsekonomin — det jag inte ser i era dokument</h2>
+
+    <p>Era konkurrentkartor är välgjorda. Men det som saknas är den fråga som håller affärsmän vakna om natten: vad kostar det faktiskt att producera och leverera ett kort till en kund?</p>
+
+    <p>Om Frank i Kina producerar för $2 per kort, frakten är $1 och ni säljer för 60 kronor — det ser ut som 50% marginal. Men räkna in designtiden. En kund som skickar en dålig logotyp och vill ha sex revideringar är inte en kund som genererar 50% marginal. De genererar förlust, och de är vanligare än ni tror.</p>
+
+    <div class="callout callout-grey">
+      <strong>Kritisk observation</strong>
+      Designhjälp ingår alltid är ett löfte som låter bra i marknadsföringen. Men utan prissättning som täcker den faktiska tidsåtgången, riskerar ni att bygga en välälskad tjänst med katastrofal ekonomi. Sätt ett tak: X antal revideringsrundor ingår, därefter timdebitering.
+    </div>
+
+    <p>En annan sak: enstycksbeställningar. Om en kund vill ha ett enda metallkort som testbeställning är det ekonomiskt ohållbart till era annonserade priser. Ni behöver ett minimum — jag skulle föreslå fem kort — och ett separat "provkortspris" på 200–300 kronor för det enstaka kortet som täcker er hanteringskostnad.</p>
+  </div>
+
+  <!-- ============================================================
+       SECTION 6
+       ============================================================ -->
+  <div class="section">
+    <div class="section-num">06</div>
+    <h2>Återkommande intäkter — er bäst bevarade hemlighet</h2>
+
+    <p>Det fysiska kortet är en engångsintäkt. Men en digital profil som uppdateras när kunden byter titel, byter nummer eller byter arbetsgivare — det är en relation, och relationer genererar återkommande intäkter.</p>
+
+    <p>UniTAP tar 129–199 DKK per månad för sin digitala profil. Det är dyrt och det är ett argument mot dem. Men principen är rätt. Om ni kan erbjuda en grundläggande hosted vCard-profil för 49–79 kronor per månad och konvertera 20% av era kortkunder till prenumeranter — då har ni en affärsmodell som är hållbar även vid låga kortvolymer.</p>
+
+    <div class="pull">
+      <p>Ingen av era nordiska konkurrenter har löst det här på ett elegant sätt. Det är er möjlighet att göra det rätt från dag ett.</p>
+    </div>
+
+    <p>Det behöver inte vara tekniskt avancerat. Ett enkelt hostingsystem där kunden uppdaterar sin information själv, ni håller länken vid liv, och faktureringen sker månadsvis via Stripe. Det är ett par dagars bygge. Det kan förändra hela affärsmodellens hållbarhet.</p>
+  </div>
+
+  <!-- ============================================================
+       SECTION 7
+       ============================================================ -->
+  <div class="section">
+    <div class="section-num">07</div>
+    <h2>Hotbilden ni underskattar — FDS Cards</h2>
+
+    <p>I era dokument är FDS Cards flaggade som "närmaste fullskaliga konkurrent" för Sverige. Det är korrekt. Men implikationen är djupare än den ser ut.</p>
+
+    <p>FDS Cards är ett bolag baserat i London och Riga som redan har lokala webbsidor på svenska, norska, danska, finska och franska. De har produktbredden ni planerar. De har NFC-infrastrukturen. Det enda de saknar är lokal service med en mänsklig röst bakom.</p>
+
+    <p>Om FDS Cards anställer en svensk kundtjänstperson — eller lanserar en chat-funktion med scandinavisk täckning — stängs det enda glapet ni faktiskt fyller. Det kan ske när som helst. Det kostar dem femtiotusen kronor om året att göra det.</p>
+
+    <div class="callout callout-blue">
+      <strong>Bevakning</strong>
+      Sätt en bevakning på FDS Cards. Följ deras annonser, deras jobbannonser, deras sociala medier. Den dag de annonserar en "Nordic customer success" tjänst är det ett tecknet att marknaden bekräftat sig för dem.
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SECTION 8 — PARTNER PARADOX
+       ============================================================ -->
+  <div class="section">
+    <div class="section-num">08</div>
+    <h2>Partnerparadoxen — Tom och ifPrint</h2>
+
+    <p>ifPrint.eu finns med i era dokument som partner. Det är rätt. Tom är er kvalitetsleverantör och er tillgång till schweizisk precision. Men partnerskap utan tydliga gränser förvandlas till konkurrenssituationer.</p>
+
+    <p>Tom hos ifPrint.eu har i dag inga lokala svenska partners. Men han har produkterna, tillverkningskapaciteten och en befintlig europeisk kundkrets. Om han en dag bestämmer sig för att erbjuda svensk kundservice via sin befintliga plattform — kanske med en frilansare som svarar på svenska — är han er starkaste konkurrent. Han behöver inte ens bygga något nytt.</p>
+
+    <p>Det är ingen anledning att sluta arbeta med Tom. Det är en anledning att ha ett tydligt avtal om marknadsexklusivitet för den svenska marknaden, eller åtminstone förståelse för var gränserna går. Det är en konversation som ska ske tidigt, inte när det uppstår en konflikt.</p>
+  </div>
+
+  <!-- ============================================================
+       SECTION 9 — HARD QUESTIONS
+       ============================================================ -->
+  <div class="section">
+    <div class="section-num">09</div>
+    <h2>Frågorna ni kommer att få — och bör ha svar på</h2>
+
+    <div class="question-block">
+      <h3>Frågor som en kund, investerare eller partner kommer att ställa</h3>
+      <p>Varför har ingen gjort detta redan? Om glapet är uppenbart — varför är det fortfarande tomt? (Svaret ni behöver ha: marginalen är tunn vid låga volymer, och premium B2B-kunder är långsamma att köpa online utan referens. Det är ett distributionsproblem, inte ett produktproblem.)</p>
+      <p>Vad händer om Frank i Kina plötsligt inte kan leverera? Vad är er backup-plan? (Om ni inte har ett svar på detta är ni ett leveransproblem bort från att inte kunna uppfylla kundlöften.)</p>
+      <p>Hur skalar ni designservicen när ni har 200 aktiva kunder? (Designhjälp ingår fungerar tills det inte gör det. Ha svaret redo.)</p>
+      <p>Vad är er minsta lönsamma order? (Om ni inte vet det med siffror, vet ni det inte.)</p>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SECTION 10 — ACTION PLAN
+       ============================================================ -->
+  <div class="section">
+    <div class="section-num">10</div>
+    <h2>Vad jag skulle göra — i ordning</h2>
+
+    <ul class="action-list">
+      <li>
+        <span class="action-num">1</span>
+        <span><strong>Starta i Sverige. Skaffa 30 betalande kunder inom 90 dagar.</strong> Inte gratis provkunder, inte rabatterade "vänner och familj." Betalande kunder till era riktiga priser. Det är det enda sättet att veta att affärsmodellen fungerar.</span>
+      </li>
+      <li>
+        <span class="action-num">2</span>
+        <span><strong>Prissätt korrekt från dag ett.</strong> De priser ni sätter på er första kund sätter normen för alla kunder som följer. Om ni underprissätter i början för att "komma igång" bygger ni en kund­bild som förväntar sig låga priser för alltid. Det är svårt att komma ur.</span>
+      </li>
+      <li>
+        <span class="action-num">3</span>
+        <span><strong>Definiera minsta beställning och enstycks­pris.</strong> Fem kort som minimum. Enstaka provkort: 200–250 kronor. Dokumentera det som policy och stå fast vid den.</span>
+      </li>
+      <li>
+        <span class="action-num">4</span>
+        <span><strong>Testa Finland med en liten annons under månad 2–3.</strong> En Google Ads-kampanj på svenska riktad mot Helsingfors och Åbo. Budget: 500–1 000 kronor. Om den genererar tre förfrågningar — expandera. Om den inte gör det — lär av det och justera.</span>
+      </li>
+      <li>
+        <span class="action-num">5</span>
+        <span><strong>Bygg ett enkelt vCard-hostingalternativ.</strong> Det behöver inte vara avancerat. En uppdaterbar länk, er domän, månadsbetalning via Stripe. Det ger er ett återkommande intäktsflöde och ett skäl för kunden att stanna kvar hos er.</span>
+      </li>
+      <li>
+        <span class="action-num">6</span>
+        <span><strong>Dokumentera era första tio kunduppdrag noggrant.</strong> Vad frågade de om? Vad förvånade dem? Vad höll dem tillbaka? Den informationen är mer värd än alla konkurrentanalyser sammantagna.</span>
+      </li>
+      <li>
+        <span class="action-num">7</span>
+        <span><strong>Ha konversationen med Tom/ifPrint om marknadsexklusivitet.</strong> Gör det nu, innan ni är beroende av honom. Det är en bekväm konversation nu; det är en obehaglig konversation om två år.</span>
+      </li>
+      <li>
+        <span class="action-num">8</span>
+        <span><strong>Frankrike — använd Léas nätverk för de första tio franska kunderna. Ingenting annat.</strong> Inga annonspengar. Inga franska Google Ads. Personliga rekommendationer är det enda som fungerar i ett nytt land utan varumärke.</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ============================================================
+       CLOSING
+       ============================================================ -->
+  <div class="section">
+    <div class="section-num">Avslutning</div>
+    <h2>Det som avgör om detta blir ett bolag eller ett hobbyprojekt</h2>
+
+    <p>Konkurrensen är inte ert största problem. Ert största problem är execution. Marknaden finns — det har er analys bekräftat. Men marknader väntar inte. De tillhör dem som rör sig snabbt, prissätter rätt och ger kunderna en anledning att berätta för nästa kund.</p>
+
+    <p>Det ni säljer är inte ett NFC-metallkort. Det är känslan som professionella människor vill förmedla när de räcker över sitt visitkort. Det är ett förstaintryck i ett enda format. Den som förstår det — och kommunicerar det — vinner. Inte den som har bäst kort till lägst pris.</p>
+
+    <div class="pull">
+      <p>Bygg ett bolag ni är stolta över att visa upp. Allt annat — marknaderna, priserna, konkurrenterna — löser sig om kunderna älskar det ni gör.</p>
+    </div>
+
+    <p>Lycka till. Marknaden väntar på er.</p>
+  </div>
+
+</div>
+
+<footer>
+  Strategisk bedömning — Internt &nbsp;|&nbsp; oliveprojects.eu/foretaget &nbsp;|&nbsp; Ej indexerad &nbsp;|&nbsp; Juni 2026
+</footer>
+
+</body>
+</html>
