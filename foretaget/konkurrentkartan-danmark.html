@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Konkurrentkartan Danmark – Premium NFC-visitkort</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f4f4; padding: 24px; }
+  h1 { text-align: center; font-size: 22px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #1a1a1a; margin-bottom: 6px; }
+  .subtitle { text-align: center; font-size: 13px; color: #888; margin-bottom: 28px; }
+  .flag { font-size: 18px; vertical-align: middle; margin-right: 6px; }
+  .section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 14px; max-width: 1300px; margin-left: auto; margin-right: auto; }
+  .alert { max-width: 1300px; margin: 0 auto 28px; background: #fff8f0; border: 1.5px solid #f39c12; border-radius: 8px; padding: 14px 18px; font-size: 13px; color: #7d5a00; line-height: 1.6; }
+  .alert strong { color: #c0800a; }
+  .table-wrap { max-width: 1300px; margin: 0 auto 32px; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.07); font-size: 13px; }
+  thead tr { background: #2d3436; color: #fff; }
+  thead th { padding: 12px 14px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; white-space: nowrap; }
+  tbody tr:nth-child(even) { background: #f9f9f9; }
+  tbody tr:hover { background: #f0f7ff; }
+  tbody td { padding: 11px 14px; border-bottom: 1px solid #eee; color: #222; vertical-align: middle; line-height: 1.4; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody td:first-child { font-weight: 600; color: #1a1a1a; }
+  .group-row td { background: #f0f0f0; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #888; padding: 7px 14px; border-bottom: 1px solid #ddd; }
+  .group-row:hover { background: #f0f0f0 !important; }
+  .us { background: #e8f5e9 !important; }
+  .us td:first-child { color: #27ae60; }
+  .check { color: #27ae60; font-size: 15px; }
+  .cross  { color: #d63031; font-size: 15px; }
+  .part   { color: #f39c12; font-size: 15px; }
+  .badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .badge-green  { background: #d4edda; color: #27ae60; }
+  .badge-blue   { background: #dbeeff; color: #0984e3; }
+  .badge-yellow { background: #fff3cd; color: #c7920a; }
+  .badge-red    { background: #fde8e8; color: #d63031; }
+  .badge-grey   { background: #eee; color: #636e72; }
+  .badge-purple { background: #ede7ff; color: #6c5ce7; }
+  .price-known   { font-weight: 600; color: #1a1a1a; }
+  .price-unknown { color: #aaa; font-style: italic; font-size: 12px; }
+  .price-cheap   { font-weight: 700; color: #27ae60; }
+  .quadrant-wrap { max-width: 960px; margin: 0 auto 32px; }
+  .quadrant { position: relative; width: 100%; padding-top: 70%; background: #fff; border-radius: 12px; border: 1.5px solid #ddd; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+  .quadrant-inner { position: absolute; top: 0; left: 0; right: 0; bottom: 0; padding: 28px; }
+  .axis-h { position: absolute; top: 50%; left: 5%; right: 5%; border-top: 2px solid #ccc; }
+  .axis-v { position: absolute; left: 50%; top: 5%; bottom: 5%; border-left: 2px solid #ccc; }
+  .axis-label { position: absolute; font-size: 10px; font-weight: 700; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px; }
+  .label-top    { top: 6px; left: 50%; transform: translateX(-50%); }
+  .label-bottom { bottom: 6px; left: 50%; transform: translateX(-50%); }
+  .label-left   { left: 6px; top: 50%; transform: translateY(-50%) rotate(-90deg); }
+  .label-right  { right: 6px; top: 50%; transform: translateY(-50%) rotate(90deg); }
+  .dot { position: absolute; width: 11px; height: 11px; border-radius: 50%; transform: translate(-50%, -50%); }
+  .dot-us { width: 15px; height: 15px; box-shadow: 0 0 0 3px rgba(39,174,96,0.25); }
+  .dot-label { position: absolute; font-size: 10px; font-weight: 600; white-space: nowrap; transform: translate(-50%, 8px); }
+  .swot { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-width: 1300px; margin: 0 auto 32px; }
+  .swot-box { background: #fff; border-radius: 8px; padding: 14px 16px; border: 1.5px solid #ddd; }
+  .swot-box h3 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding-bottom: 6px; margin-bottom: 10px; border-bottom: 2px solid currentColor; }
+  .swot-box ul { list-style: none; }
+  .swot-box ul li { font-size: 13px; padding: 5px 0; border-bottom: 1px solid #f0f0f0; color: #222; line-height: 1.4; }
+  .swot-box ul li:last-child { border-bottom: none; }
+  .swot-box ul li::before { content: "▸ "; color: #aaa; font-size: 10px; }
+  .s { border-color: #27ae60; } .s h3 { color: #27ae60; }
+  .w { border-color: #d63031; } .w h3 { color: #d63031; }
+  .o { border-color: #0984e3; } .o h3 { color: #0984e3; }
+  .t { border-color: #f39c12; } .t h3 { color: #f39c12; }
+  @media print { body { padding: 8px; background: white; } }
+</style>
+</head>
+<body>
+
+<h1><span class="flag">🇩🇰</span> Konkurrentkartan — Danmark</h1>
+<p class="subtitle">Premium NFC-visitkort — Danska marknaden &nbsp;|&nbsp; Utkast v1</p>
+
+<div class="alert">
+  <strong>⚠ Observera:</strong> Danmark har den starkaste inhemska konkurrensen av de nordiska länderna. <strong>UniTAP</strong> är en välpositionerad dansk aktör med NFC+metallkort och transparent prissättning. Fördelen är dock att de tar <strong>299–749 DKK/kort</strong> — vi kan konkurrera kraftigt på pris.
+</div>
+
+<p class="section-title" style="margin-bottom:14px;">1. Konkurrentjämförelse</p>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th style="min-width:180px;">Aktör</th>
+        <th>Bas</th>
+        <th>Material</th>
+        <th>NFC</th>
+        <th>Lokal service (DK)</th>
+        <th>Designhjälp</th>
+        <th>vCard-hosting</th>
+        <th>Pris/kort</th>
+        <th>Notering</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="us">
+        <td>Vårt företag ★</td>
+        <td>Sverige</td>
+        <td><span class="check">✓</span> Metall, trä, PVC</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="part">~</span> Svenska (ej danska)</td>
+        <td><span class="check">✓</span> Ingår alltid</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="price-cheap">~50–80 kr (≈ 36–58 DKK)</span></td>
+        <td><span class="badge badge-green">4–20× billigare än UniTAP</span></td>
+      </tr>
+
+      <tr class="group-row"><td colspan="9">Danska — NFC + premiummaterial</td></tr>
+      <tr>
+        <td><a href="https://unitap.dk" target="_blank" style="color:inherit;">unitap.dk</a></td>
+        <td>Danmark (CVR: 39481979)</td>
+        <td><span class="check">✓</span> Metall (guld/platina gravyr, matt svart)</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="check">✓</span> Danska</td>
+        <td><span class="part">~</span> Online-konfigurator</td>
+        <td><span class="check">✓</span> 129–199 DKK/mån</td>
+        <td><span class="price-known">299 DKK (PVC) / 749 DKK (metall, exkl. moms)</span></td>
+        <td><span class="badge badge-red">Starkaste danska konkurrenten</span></td>
+      </tr>
+      <tr>
+        <td><a href="http://metalkort.dk" target="_blank" style="color:inherit;">metalkort.dk</a></td>
+        <td>Danmark</td>
+        <td><span class="check">✓</span> Guld, silver, borstat stål, aluminium, mässing</td>
+        <td><span class="part">~</span> Möjligt</td>
+        <td><span class="check">✓</span> Danska</td>
+        <td><span class="part">~</span> Okänt</td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="price-unknown">Ej angett — offert</span></td>
+        <td><span class="badge badge-yellow">Brett metallsortiment</span></td>
+      </tr>
+
+      <tr class="group-row"><td colspan="9">Danska — NFC-komponenter / butikskedja (ej custom)</td></tr>
+      <tr>
+        <td><a href="https://nfcw.dk/ntag213-chips/nfc-kort-i-metal/" target="_blank" style="color:inherit;">nfcw.dk</a></td>
+        <td>Nederländerna (dansk domän)</td>
+        <td><span class="check">✓</span> Blankt metallkort</td>
+        <td><span class="check">✓</span> NTAG213</td>
+        <td><span class="part">~</span> Dansk sajt</td>
+        <td><span class="cross">✗</span> Ej customisering</td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="price-known">€37,18 / 10 st (≈ 3,72 €/st, blankt)</span></td>
+        <td><span class="badge badge-grey">Grossist för NFC-chips, ej visitkort</span></td>
+      </tr>
+      <tr>
+        <td><a href="https://idekort.dk" target="_blank" style="color:inherit;">idekort.dk</a></td>
+        <td>Danmark</td>
+        <td><span class="cross">✗</span> Plast</td>
+        <td><span class="check">✓</span> NFC-produkter</td>
+        <td><span class="check">✓</span> Danska</td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="price-unknown">Ej angett</span></td>
+        <td><span class="badge badge-grey">NFC/RFID-butik, kortprintrar</span></td>
+      </tr>
+
+      <tr class="group-row"><td colspan="9">Internationella — Aktiva på danska marknaden</td></tr>
+      <tr>
+        <td><a href="https://fds-cards.co.uk/da/" target="_blank" style="color:inherit;">fds-cards.co.uk</a></td>
+        <td>London / Riga</td>
+        <td><span class="check">✓</span> Metall, trä, PVC</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="cross">✗</span> Dansk sajt, ej lokal</td>
+        <td><span class="part">~</span> Gratis design</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="price-unknown">Ej angett</span></td>
+        <td><span class="badge badge-grey">UK/Lettland, dansk sajt</span></td>
+      </tr>
+      <tr>
+        <td><a href="https://spreadly.app" target="_blank" style="color:inherit;">Spreadly</a></td>
+        <td>Global</td>
+        <td><span class="part">~</span> PVC + metall</td>
+        <td><span class="check">✓</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="check">✓</span></td>
+        <td><span class="price-known">~€60 (metall)</span></td>
+        <td><span class="badge badge-grey">Internationell plattform</span></td>
+      </tr>
+      <tr>
+        <td><a href="https://vistaprint.dk" target="_blank" style="color:inherit;">Vistaprint.dk</a></td>
+        <td>Global</td>
+        <td><span class="cross">✗</span> Papper</td>
+        <td><span class="part">~</span> VistaConnect</td>
+        <td><span class="check">✓</span> Danska</td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="cross">✗</span></td>
+        <td><span class="price-known">~2–8 kr</span></td>
+        <td><span class="badge badge-grey">Massmarknad, papper</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-size:11px;color:#aaa;margin-top:8px;">★ = Vårt företag &nbsp;|&nbsp; 1 SEK ≈ 0,72 DKK &nbsp;|&nbsp; Priser i <em>kursiv</em> = ej publicerat</p>
+</div>
+
+<p class="section-title" style="margin-bottom:14px;max-width:960px;">2. Positioneringskarta — Materialkvalitet vs. Digital integration</p>
+<div class="quadrant-wrap">
+  <div class="quadrant">
+    <div class="quadrant-inner">
+      <div class="axis-h"></div>
+      <div class="axis-v"></div>
+      <span class="axis-label label-top">PREMIUM MATERIAL (metall / trä)</span>
+      <span class="axis-label label-bottom">BASMAT. (papper / plast)</span>
+      <span class="axis-label label-left">INGEN DIGITAL INTEG.</span>
+      <span class="axis-label label-right">NFC / DIGITAL PROFIL</span>
+
+      <div class="dot dot-us" style="left:80%;top:18%;background:#27ae60;"></div>
+      <span class="dot-label" style="left:80%;top:18%;color:#27ae60;">Vårt företag ★</span>
+
+      <div class="dot" style="left:78%;top:28%;background:#e74c3c;"></div>
+      <span class="dot-label" style="left:78%;top:28%;color:#e74c3c;">UniTAP (metall)</span>
+
+      <div class="dot" style="left:56%;top:68%;background:#e74c3c;"></div>
+      <span class="dot-label" style="left:56%;top:68%;color:#e74c3c;">UniTAP (PVC)</span>
+
+      <div class="dot" style="left:20%;top:22%;background:#6c5ce7;"></div>
+      <span class="dot-label" style="left:20%;top:22%;color:#6c5ce7;">metalkort.dk</span>
+
+      <div class="dot" style="left:82%;top:38%;background:#b2bec3;"></div>
+      <span class="dot-label" style="left:82%;top:38%;color:#0984e3;">FDS Cards</span>
+
+      <div class="dot" style="left:72%;top:72%;background:#b2bec3;"></div>
+      <span class="dot-label" style="left:72%;top:72%;color:#636e72;">nfcw.dk (blankt)</span>
+
+      <div class="dot" style="left:62%;top:78%;background:#b2bec3;"></div>
+      <span class="dot-label" style="left:62%;top:78%;color:#636e72;">Spreadly</span>
+
+      <div class="dot" style="left:30%;top:85%;background:#dfe6e9;border:1px solid #999;"></div>
+      <span class="dot-label" style="left:30%;top:85%;color:#636e72;">Vistaprint</span>
+    </div>
+  </div>
+  <p style="font-size:11px;color:#aaa;margin-top:8px;text-align:center;">Y-axel = materialkvalitet &nbsp;|&nbsp; X-axel = digital integration (NFC / digital profil)</p>
+</div>
+
+<p class="section-title" style="margin-bottom:14px;">3. SWOT — Danska marknaden</p>
+<div class="swot">
+  <div class="swot-box s">
+    <h3>Styrkor (Strengths)</h3>
+    <ul>
+      <li><strong>Extrem prisfördel:</strong> vi tar ~36–58 DKK vs UniTAPs 299–749 DKK — samma NFC+metallkort</li>
+      <li>Svenska och danska är mycket lika — kommunikation fungerar utan problem</li>
+      <li>Designhjälp ingår — UniTAP erbjuder bara online-konfigurator</li>
+      <li>Metall + trä + PVC — UniTAP saknar träkort</li>
+      <li>Inga prenumerationskrav — vi kan erbjuda engångsköp och vCard-hosting separat</li>
+    </ul>
+  </div>
+  <div class="swot-box w">
+    <h3>Svagheter (Weaknesses)</h3>
+    <ul>
+      <li>UniTAP har etablerat danskt varumärke och lokalt förtroende</li>
+      <li>Vi talar inte danska — kan uppfattas som utländsk aktör</li>
+      <li>metalkort.dk har brett metallsortiment vi inte kan matcha i materialvariation</li>
+      <li>Danmark är EU men ha koll på moms-regler för B2B-fakturering</li>
+    </ul>
+  </div>
+  <div class="swot-box o">
+    <h3>Möjligheter (Opportunities)</h3>
+    <ul>
+      <li>UniTAPs priser är extremt höga — volymkunder (hotell, företag) sparar enormt med oss</li>
+      <li>metalkort.dk har inget NFC — vi kan ta kunder som vill ha båda</li>
+      <li>Google Ads på "NFC visitkort metall Danmark" — liten konkurrens från väloptimerade aktörer</li>
+      <li>Danska boutiquehotell och advokatbyråer är en naturlig målgrupp</li>
+      <li>UniTAP planterar ett träd per kort — vi kan möta det med FSC-träkort</li>
+    </ul>
+  </div>
+  <div class="swot-box t">
+    <h3>Hot (Threats)</h3>
+    <ul>
+      <li>UniTAP kan sänka priserna om de möter priskonkurrens</li>
+      <li>metalkort.dk kan integrera NFC i sitt sortiment</li>
+      <li>FDS Cards (UK) investerar i nordisk marknadsföring</li>
+      <li>Danska kunder föredrar danskt — "Køb dansk" är en stark sentiment</li>
+    </ul>
+  </div>
+</div>
+
+<p style="text-align:center; margin-top: 8px; font-size: 11px; color: #bbb;">
+  Konkurrentkartläggning Danmark — Utkast v1 &nbsp;|&nbsp; Juni 2026
+</p>
+</body>
+</html>
