@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Partnerkartan – Premium NFC-visitkort</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f4f4;
+    padding: 24px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 28px;
+  }
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #555;
+    margin-bottom: 14px;
+    max-width: 1300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* HUB MAP */
+  .hub-wrap {
+    max-width: 900px;
+    margin: 0 auto 36px;
+    position: relative;
+  }
+  .hub-map {
+    position: relative;
+    width: 100%;
+    padding-top: 65%;
+    background: #fff;
+    border-radius: 12px;
+    border: 1.5px solid #ddd;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  }
+  .hub-inner {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  }
+  /* Centre node */
+  .node-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 110px; height: 110px;
+    border-radius: 50%;
+    background: #2d3436;
+    color: #fff;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    font-size: 11px; font-weight: 700; line-height: 1.4;
+    z-index: 2;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  }
+  /* Partner nodes */
+  .node {
+    position: absolute;
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    font-size: 10px; font-weight: 700; line-height: 1.35;
+    color: #fff;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    cursor: default;
+  }
+  .node .role {
+    font-size: 9px; font-weight: 400; opacity: 0.85; margin-top: 2px;
+  }
+  /* SVG lines are handled via absolute positioned divs */
+
+  /* Type colours */
+  .node-production  { background: #e17055; }
+  .node-quality     { background: #0984e3; }
+  .node-logistics   { background: #00b894; }
+  .node-payment     { background: #6c5ce7; }
+  .node-tech        { background: #fdcb6e; color: #333; }
+  .node-channel     { background: #b2bec3; color: #333; }
+
+  /* PARTNER CARDS */
+  .partner-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    max-width: 1300px;
+    margin: 0 auto 32px;
+  }
+  .partner-card {
+    background: #fff;
+    border-radius: 8px;
+    border: 1.5px solid #ddd;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .partner-card .header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .partner-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .partner-card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+  }
+  .partner-card .type-tag {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    display: inline-block;
+  }
+  .partner-card .desc {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.55;
+  }
+  .partner-card .value-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .value-box {
+    background: #f7f7f7;
+    border-radius: 6px;
+    padding: 8px 10px;
+  }
+  .value-box .vb-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #888;
+    margin-bottom: 4px;
+  }
+  .value-box p {
+    font-size: 11px;
+    color: #333;
+    line-height: 1.4;
+  }
+  .risk-tag {
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: #fef9e7;
+    border: 1px solid #f39c12;
+    color: #856404;
+    line-height: 1.4;
+  }
+  .risk-tag::before { content: "⚠ "; }
+
+  /* type tag colours */
+  .tt-prod    { background: #fde8d8; color: #e17055; }
+  .tt-quality { background: #dbeeff; color: #0984e3; }
+  .tt-logi    { background: #d5f5e3; color: #27ae60; }
+  .tt-pay     { background: #e8e4ff; color: #6c5ce7; }
+  .tt-tech    { background: #fef9e7; color: #f39c12; }
+  .tt-chan    { background: #eee;    color: #636e72; }
+
+  /* av-colours */
+  .av-prod    { background: #fde8d8; }
+  .av-quality { background: #dbeeff; }
+  .av-logi    { background: #d5f5e3; }
+  .av-pay     { background: #e8e4ff; }
+  .av-tech    { background: #fef9e7; }
+  .av-chan    { background: #eee; }
+
+  /* DEPENDENCY TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    font-size: 13px;
+    max-width: 1300px;
+    margin: 0 auto 32px;
+  }
+  thead tr { background: #2d3436; color: #fff; }
+  thead th {
+    padding: 12px 14px;
+    text-align: left;
+    font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.8px;
+  }
+  tbody td {
+    padding: 11px 14px;
+    border-bottom: 1px solid #eee;
+    color: #222;
+    vertical-align: middle;
+    line-height: 1.4;
+  }
+  tbody tr:nth-child(even) { background: #f9f9f9; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody td:first-child { font-weight: 600; }
+  .dep-high   { color: #e74c3c; font-weight: 700; }
+  .dep-medium { color: #f39c12; font-weight: 700; }
+  .dep-low    { color: #27ae60; font-weight: 700; }
+
+  @media print {
+    body { padding: 8px; background: white; }
+    .hub-map { padding-top: 50%; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Partnerkartan</h1>
+<p class="subtitle">Premium NFC-visitkort — Sverige, Skandinavien &amp; Frankrike &nbsp;|&nbsp; Utkast v1</p>
+
+<!-- PARTNER DETAIL CARDS -->
+<p class="section-title">Partnerprofiler</p>
+<div class="partner-grid">
+
+  <!-- Frank -->
+  <div class="partner-card">
+    <div class="header">
+      <div class="partner-avatar av-prod">🏭</div>
+      <div>
+        <h3>Frank</h3>
+        <span class="type-tag tt-prod">Tillverkning</span>
+      </div>
+    </div>
+    <div class="desc">Ägare av kortproduktionsanläggning i Kina. Tillverkar metall- (stål/aluminium), trä- och PVC-kort i stora volymer till konkurrenskraftiga kostnader. Primär källa för fysisk produktion.</div>
+    <div class="value-row">
+      <div class="value-box">
+        <div class="vb-label">Vi ger</div>
+        <p>Löpande beställningar, förutsägbar volym, design-underlag</p>
+      </div>
+      <div class="value-box">
+        <div class="vb-label">Vi får</div>
+        <p>Tillverkningskapacitet, låg kostnad/kort, materialbredd</p>
+      </div>
+    </div>
+    <div class="risk-tag">Hög beroendegraden — kräver alternativleverantör på sikt. Ledtid 3–5 veckor.</div>
+  </div>
+
+  <!-- Tom / ifPrint -->
+  <div class="partner-card">
+    <div class="header">
+      <div class="partner-avatar av-quality">🖨</div>
+      <div>
+        <h3>Tom / ifPrint.eu</h3>
+        <span class="type-tag tt-quality">Tryck &amp; Kvalitet</span>
+      </div>
+    </div>
+    <div class="desc">Europeisk tryck- och tillverkningspartner baserad i Schweiz/EU. Bidrar med branschexpertis, kvalitetsprocess och etablerade produktionsflöden. Alternativ till Frank vid kortare ledtider eller EU-produktion.</div>
+    <div class="value-row">
+      <div class="value-box">
+        <div class="vb-label">Vi ger</div>
+        <p>Hänvisningar, volymer för skandinaviska/franska kunder</p>
+      </div>
+      <div class="value-box">
+        <div class="vb-label">Vi får</div>
+        <p>Schweizisk kvalitetsstandard, nätverks­koppling, EU-produktion</p>
+      </div>
+    </div>
+    <div class="risk-tag">Medelberoende — viktig för kvalitetssäkring och EU-alternativ.</div>
+  </div>
+
+  <!-- PostNord / DHL / Bring -->
+  <div class="partner-card">
+    <div class="header">
+      <div class="partner-avatar av-logi">📦</div>
+      <div>
+        <h3>PostNord / DHL / Bring</h3>
+        <span class="type-tag tt-logi">Logistik</span>
+      </div>
+    </div>
+    <div class="desc">Fraktpartners för utgående leveranser till kunder i Sverige, Norge, Danmark och Finland. DHL används för expressleveranser och internationella sändningar. Chronopost/DHL för Frankrike.</div>
+    <div class="value-row">
+      <div class="value-box">
+        <div class="vb-label">Vi ger</div>
+        <p>Volym, avtal, leveransadresser</p>
+      </div>
+      <div class="value-box">
+        <div class="vb-label">Vi får</div>
+        <p>Spårbarhet, täckning i Skandinavien och Frankrike</p>
+      </div>
+    </div>
+    <div class="risk-tag">Lågt risk — flera alternativ finns. Prissätt alltid med fraktmarginalen inräknad.</div>
+  </div>
+
+  <!-- Stripe / Klarna -->
+  <div class="partner-card">
+    <div class="header">
+      <div class="partner-avatar av-pay">💳</div>
+      <div>
+        <h3>Stripe / Klarna</h3>
+        <span class="type-tag tt-pay">Betalning</span>
+      </div>
+    </div>
+    <div class="desc">Betalningslösning för kortbetalningar online och fakturering. Klarna lämpar sig för B2C och ger köparna flexibilitet. Stripe används för internationella kunder och löpande prenumerationer (vCard-hosting).</div>
+    <div class="value-row">
+      <div class="value-box">
+        <div class="vb-label">Vi ger</div>
+        <p>Transaktionsvolym (1,5–2,5 % avgift)</p>
+      </div>
+      <div class="value-box">
+        <div class="vb-label">Vi får</div>
+        <p>Smidig betalning, återkommande fakturering, trygghet för kunder</p>
+      </div>
+    </div>
+    <div class="risk-tag">Lågt risk — standardlösningar. Håll koll på avgifter per transaktion.</div>
+  </div>
+
+  <!-- NFC-chipleverantör -->
+  <div class="partner-card">
+    <div class="header">
+      <div class="partner-avatar av-tech">📡</div>
+      <div>
+        <h3>NFC-chipleverantör</h3>
+        <span class="type-tag tt-tech">Teknik</span>
+      </div>
+    </div>
+    <div class="desc">Leverantör av NFC-inlägg (NTAG213/215) som inbäddas i metall-, trä- och PVC-kort. Frank hanterar inbyggnaden i tillverkningsprocessen. Viktigt att säkerställa kompatibilitet med iOS och Android.</div>
+    <div class="value-row">
+      <div class="value-box">
+        <div class="vb-label">Vi ger</div>
+        <p>Volymorder via Frank</p>
+      </div>
+      <div class="value-box">
+        <div class="vb-label">Vi får</div>
+        <p>Pålitlig NFC-funktion, bred telefonkompatibilitet</p>
+      </div>
+    </div>
+    <div class="risk-tag">Medelberoende — hanteras via Frank. Testa alltid NFC-funktion vid leverans.</div>
+  </div>
+
+  <!-- Hosting / Techplattform -->
+  <div class="partner-card">
+    <div class="header">
+      <div class="partner-avatar av-chan">☁️</div>
+      <div>
+        <h3>Hostingleverantör (vCard)</h3>
+        <span class="type-tag tt-chan">Teknisk infrastruktur</span>
+      </div>
+    </div>
+    <div class="desc">Moln- eller serverinfrastruktur för digitala vCard-sidor som NFC-korten pekar på. Kan byggas på en befintlig plattform (t.ex. Tapni, Popl API) eller byggas eget på WordPress/Webflow + plugin.</div>
+    <div class="value-row">
+      <div class="value-box">
+        <div class="vb-label">Vi ger</div>
+        <p>Månadsavgift per kund, volymmålet</p>
+      </div>
+      <div class="value-box">
+        <div class="vb-label">Vi får</div>
+        <p>Stabil hosting, kundportal, URL-hantering</p>
+      </div>
+    </div>
+    <div class="risk-tag">Strategisk — vCard-hosting är en återkommande intäktskälla. Välj skalbar lösning.</div>
+  </div>
+
+</div>
+
+<!-- DEPENDENCY TABLE -->
+<p class="section-title">Beroendeöversikt</p>
+<table>
+  <thead>
+    <tr>
+      <th>Partner</th>
+      <th>Roll</th>
+      <th>Beroende</th>
+      <th>Risk om de faller bort</th>
+      <th>Alternativ / Mitigation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Frank (Kina)</td>
+      <td>Korttillverkning — metall, trä, PVC</td>
+      <td class="dep-high">Hög</td>
+      <td>Ingen produktion — verksamheten stannar</td>
+      <td>Tom/ifPrint som backup; sök en andra kinesisk tillverkare på sikt</td>
+    </tr>
+    <tr>
+      <td>Tom / ifPrint.eu</td>
+      <td>Tryckkvalitet, EU-produktion, expertis</td>
+      <td class="dep-medium">Medel</td>
+      <td>Förlorar EU-produktion och kvalitetsstöd</td>
+      <td>Frank kan täcka volymen; hitta en EU-tryckpartner som backup</td>
+    </tr>
+    <tr>
+      <td>PostNord / DHL / Bring</td>
+      <td>Utgående frakt till kund</td>
+      <td class="dep-low">Låg</td>
+      <td>Byt fraktbolag — minimal påverkan</td>
+      <td>Flera alternativ; förhandla avtal med volymrabatt</td>
+    </tr>
+    <tr>
+      <td>Stripe / Klarna</td>
+      <td>Betalningshantering</td>
+      <td class="dep-low">Låg</td>
+      <td>Byt betalningslösning — 1–2 veckors arbete</td>
+      <td>PayPal, Svea Ekonomi som alternativ</td>
+    </tr>
+    <tr>
+      <td>NFC-chipleverantör</td>
+      <td>NFC-inlägg i korten</td>
+      <td class="dep-medium">Medel</td>
+      <td>Kan inte erbjuda NFC-funktion</td>
+      <td>Frank hanterar — säkerställ att Frank har flera chipleverantörer</td>
+    </tr>
+    <tr>
+      <td>Hostingleverantör (vCard)</td>
+      <td>Digital vCard-hosting</td>
+      <td class="dep-medium">Medel</td>
+      <td>Hosting-tjänsten faller bort → migrering krävs</td>
+      <td>Bygg eget om möjligt; välj hostingleverantör med datacenter i EU</td>
+    </tr>
+  </tbody>
+</table>
+
+<p style="text-align:center; font-size: 11px; color: #bbb;">
+  Partnerkarta — Utkast v1 &nbsp;|&nbsp; Skandinavien &amp; Frankrike &nbsp;|&nbsp; Partners: Tom (ifPrint.eu), Frank (tillverkning, Kina)
+</p>
+
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Model Canvas</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f4f4;
+    padding: 24px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 20px;
+  }
+  .canvas {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 8px;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+  .box {
+    background: #fff;
+    border: 1.5px solid #ddd;
+    border-radius: 8px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+  }
+  .box h2 {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #555;
+    border-bottom: 2px solid currentColor;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+  }
+  .box ul {
+    list-style: none;
+    padding: 0;
+    flex: 1;
+  }
+  .box ul li {
+    font-size: 13px;
+    color: #222;
+    padding: 5px 0;
+    border-bottom: 1px solid #f0f0f0;
+    line-height: 1.45;
+  }
+  .box ul li:last-child { border-bottom: none; }
+  .box ul li::before {
+    content: "▸ ";
+    color: #aaa;
+    font-size: 10px;
+  }
+  .box .note {
+    font-size: 11px;
+    color: #999;
+    font-style: italic;
+    margin-top: 8px;
+  }
+
+  /* Grid placement */
+  .key-partners       { grid-column: 1; grid-row: 1 / 3; }
+  .key-activities     { grid-column: 2; grid-row: 1; }
+  .key-resources      { grid-column: 2; grid-row: 2; }
+  .value-proposition  { grid-column: 3; grid-row: 1 / 3; }
+  .cust-relationships { grid-column: 4; grid-row: 1; }
+  .channels           { grid-column: 4; grid-row: 2; }
+  .cust-segments      { grid-column: 5; grid-row: 1 / 3; }
+  .cost-structure     { grid-column: 1 / 4; grid-row: 3; }
+  .revenue-streams    { grid-column: 4 / 6; grid-row: 3; }
+
+  /* Colors per section */
+  .key-partners h2       { color: #6c5ce7; }
+  .key-activities h2     { color: #0984e3; }
+  .key-resources h2      { color: #0984e3; }
+  .value-proposition h2  { color: #e17055; }
+  .value-proposition     { border-color: #e17055; background: #fff8f6; }
+  .cust-relationships h2 { color: #00b894; }
+  .channels h2           { color: #00b894; }
+  .cust-segments h2      { color: #fdcb6e; border-color: #fdcb6e; }
+  .cust-segments         { border-color: #fdcb6e; }
+  .cost-structure h2     { color: #d63031; }
+  .revenue-streams h2    { color: #27ae60; }
+
+  @media print {
+    body { padding: 8px; background: white; }
+    .canvas { gap: 5px; }
+    .box { padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Business Model Canvas</h1>
+<p class="subtitle">Premium NFC Business Cards — Sweden, Scandinavia &amp; France &nbsp;|&nbsp; Draft v1</p>
+
+<div class="canvas">
+
+  <!-- KEY PARTNERS -->
+  <div class="box key-partners">
+    <h2>Key Partners</h2>
+    <ul>
+      <li><strong>Tom / ifPrint.eu</strong> — European printing &amp; manufacturing partner; provides card production expertise, quality standards, and established processes</li>
+      <li><strong>Frank</strong> — Owner of the card production facility in China; handles large-scale manufacturing of metal, wood, and PVC cards at lower cost</li>
+      <li><strong>Shipping carriers</strong> — PostNord, Bring, and/or DHL for delivery within Sweden and Scandinavia; Chronopost/DHL for France</li>
+      <li><strong>Payment processor</strong> — Stripe, Klarna or similar for invoicing and online payments</li>
+      <li><strong>NFC chip supplier</strong> — Provider of NFC inlays (embedded in metal/wood/PVC cards)</li>
+      <li><strong>Hosting provider</strong> — Server/cloud infrastructure for digital vCard hosting service</li>
+    </ul>
+  </div>
+
+  <!-- KEY ACTIVITIES -->
+  <div class="box key-activities">
+    <h2>Key Activities</h2>
+    <ul>
+      <li>Sales &amp; customer acquisition (LinkedIn, Google Ads, cold outreach)</li>
+      <li>Customer service &amp; order management (handled by the owners)</li>
+      <li>Design consultation &amp; artwork preparation for each order</li>
+      <li>Coordinating production between Frank (manufacturing) and Tom (print quality)</li>
+      <li>NFC programming &amp; setup for digital cards</li>
+      <li>Shipping &amp; order fulfillment to Scandinavia and France</li>
+      <li>Hosting &amp; maintaining digital vCard pages for NFC customers</li>
+    </ul>
+  </div>
+
+  <!-- KEY RESOURCES -->
+  <div class="box key-resources">
+    <h2>Key Resources</h2>
+    <ul>
+      <li>Frank's manufacturing capacity in China (metal, wood, PVC)</li>
+      <li>Tom's printing expertise and quality process at ifPrint.eu</li>
+      <li>The owners' language skills (Swedish, French) and local market knowledge</li>
+      <li>Website with quote request system</li>
+      <li>Design software (Adobe Illustrator / Canva Pro)</li>
+      <li>NFC hosting platform</li>
+      <li>Startup capital (est. 25,000 kr) for marketing and first stock</li>
+    </ul>
+  </div>
+
+  <!-- VALUE PROPOSITION -->
+  <div class="box value-proposition">
+    <h2>Value Proposition</h2>
+    <ul>
+      <li><strong>Premium physical cards</strong> in metal (steel/aluminium), wood, and PVC — materials that make a lasting first impression</li>
+      <li><strong>NFC-enabled</strong> — tap the card to instantly share contact details, LinkedIn profile, or website</li>
+      <li><strong>Local service in Scandinavian languages</strong> — a gap ifPrint.eu doesn't fill (German-language only)</li>
+      <li><strong>French-language service</strong> for the French market — another underserved gap</li>
+      <li><strong>Design check included</strong> with every order — no extra cost</li>
+      <li><strong>Fast quote response</strong> (within 24 hours)</li>
+      <li><strong>Sustainable option</strong> — FSC-certified wood cards for eco-conscious clients</li>
+      <li><strong>Digital vCard hosting</strong> — optional subscription so NFC cards always link to up-to-date contact info</li>
+      <li>Swiss-standard quality through Tom / ifPrint partnership</li>
+    </ul>
+  </div>
+
+  <!-- CUSTOMER RELATIONSHIPS -->
+  <div class="box cust-relationships">
+    <h2>Customer Relationships</h2>
+    <ul>
+      <li>Personal, high-touch service via email and phone (the owners handle all contact)</li>
+      <li>Free design consultation included with each order</li>
+      <li>24-hour quote response guarantee</li>
+      <li>Proactive follow-up after delivery to ensure satisfaction</li>
+      <li>Long-term account relationships for corporate clients (reorders, staff card updates)</li>
+      <li>Self-service digital vCard management portal for NFC hosting subscribers</li>
+    </ul>
+  </div>
+
+  <!-- CHANNELS -->
+  <div class="box channels">
+    <h2>Channels</h2>
+    <ul>
+      <li>Company website (quote request form, product showcase, gallery)</li>
+      <li>Google Ads (search ads targeting "visitkort metall", "NFC visitkort" etc.)</li>
+      <li>LinkedIn — organic content and outreach to B2B decision-makers</li>
+      <li>Instagram — visual showcase of finished card designs</li>
+      <li>Direct / cold outreach to hotels, agencies, and law firms</li>
+      <li>Word of mouth &amp; referrals from satisfied clients</li>
+      <li>Trade fairs and networking events (longer term)</li>
+    </ul>
+  </div>
+
+  <!-- CUSTOMER SEGMENTS -->
+  <div class="box cust-segments">
+    <h2>Customer Segments</h2>
+    <ul>
+      <li><strong>Hotels &amp; hospitality</strong> — staff cards, key cards, NFC check-in / room info</li>
+      <li><strong>Corporate professionals</strong> — executives, sales teams, consultants wanting premium brand representation</li>
+      <li><strong>Real estate agents &amp; brokers</strong> — high card usage, brand-conscious</li>
+      <li><strong>Law firms &amp; financial advisors</strong> — premium image is essential</li>
+      <li><strong>Politicians &amp; public figures</strong> — personal branding, NFC to campaign site</li>
+      <li><strong>Marketing &amp; creative agencies</strong> — differentiated client gifts and self-promotion</li>
+      <li><strong>Private individuals</strong> — entrepreneurs, freelancers, networkers</li>
+    </ul>
+    <p class="note">Primary markets: Sweden, Norway, Denmark, Finland. Secondary: France.</p>
+  </div>
+
+  <!-- COST STRUCTURE -->
+  <div class="box cost-structure">
+    <h2>Cost Structure</h2>
+    <ul>
+      <li><strong>Production costs</strong> — per-card manufacturing fee to Frank (China) or Tom (ifPrint); varies by material and quantity</li>
+      <li><strong>Shipping costs</strong> — inbound (China/Europe → Sweden) and outbound (to customers); PostNord/DHL rates</li>
+      <li><strong>Marketing</strong> — Google Ads budget, LinkedIn Ads (est. 25,000 kr startup allocation)</li>
+      <li><strong>Website</strong> — domain, hosting, WordPress/Webflow subscription (~1,000–3,000 kr/year)</li>
+      <li><strong>NFC hosting infrastructure</strong> — server costs for digital vCard pages</li>
+      <li><strong>Design tools</strong> — Adobe Creative Cloud or similar (~3,000 kr/year)</li>
+      <li><strong>Payment processing fees</strong> — ~1.5–2.5% per transaction (Stripe/Klarna)</li>
+      <li><strong>Administrative &amp; accounting</strong> — bookkeeping software (Fortnox or similar)</li>
+      <li><strong>NFC chips</strong> — cost of embedding NFC inlays per card</li>
+    </ul>
+  </div>
+
+  <!-- REVENUE STREAMS -->
+  <div class="box revenue-streams">
+    <h2>Revenue Streams</h2>
+    <ul>
+      <li><strong>Card sales</strong> — primary revenue; priced per unit with quantity discounts (e.g. from ~80 kr/card at low qty, down to ~50 kr/card at 100+)</li>
+      <li><strong>NFC setup fee</strong> — one-time fee for programming and linking NFC chip to digital profile</li>
+      <li><strong>vCard hosting subscription</strong> — monthly or annual recurring fee per card (e.g. 99–199 kr/month per account)</li>
+      <li><strong>Design/artwork fee</strong> — optional premium design service for clients without ready artwork</li>
+      <li><strong>Corporate accounts</strong> — volume contracts with hotels or companies for annual card supply</li>
+      <li><strong>Reorders</strong> — returning customers updating designs or ordering for new staff</li>
+    </ul>
+  </div>
+
+</div>
+
+<p style="text-align:center; margin-top: 20px; font-size: 11px; color: #bbb;">
+  Based on ifPrint.eu business model analysis &nbsp;|&nbsp; Adapted for Scandinavian &amp; French markets &nbsp;|&nbsp; Partners: Tom (ifPrint.eu), Frank (manufacturing, China)
+</p>
+
+</body>
+</html>

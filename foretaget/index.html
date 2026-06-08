@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Företaget — Internt</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #0a0a0a;
+    --surface:  #141414;
+    --card:     #1a1a1a;
+    --border:   rgba(255,255,255,0.07);
+    --text:     #f0f0f0;
+    --subtext:  #777;
+    --accent:   #00E676;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* HEADER */
+  header {
+    padding: 48px 32px 36px;
+    max-width: 1100px;
+    margin: 0 auto;
+    border-bottom: 1px solid var(--border);
+  }
+  .header-top {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 6px;
+  }
+  header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+  .badge-internal {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: rgba(0,230,118,0.12);
+    color: var(--accent);
+    border: 1px solid rgba(0,230,118,0.3);
+    padding: 3px 9px;
+    border-radius: 20px;
+  }
+  header p {
+    font-size: 14px;
+    color: var(--subtext);
+    line-height: 1.6;
+    max-width: 560px;
+  }
+
+  /* SECTION LABELS */
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--subtext);
+    padding: 32px 32px 12px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* CARD GRID */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  .doc-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    cursor: pointer;
+  }
+  .doc-card:hover {
+    border-color: rgba(255,255,255,0.18);
+    background: #202020;
+    transform: translateY(-2px);
+  }
+  .doc-card-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .doc-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .doc-card h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.35;
+  }
+  .doc-card p {
+    font-size: 12px;
+    color: var(--subtext);
+    line-height: 1.55;
+  }
+  .doc-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4px;
+  }
+  .lang-tag {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+  .arrow {
+    font-size: 14px;
+    color: var(--subtext);
+    transition: color 0.2s, transform 0.2s;
+  }
+  .doc-card:hover .arrow {
+    color: var(--accent);
+    transform: translateX(3px);
+  }
+
+  /* Colour themes per icon bg */
+  .ic-orange { background: rgba(225,112,85,0.15); }
+  .ic-blue   { background: rgba(9,132,227,0.15); }
+  .ic-green  { background: rgba(0,184,148,0.15); }
+  .ic-purple { background: rgba(108,92,231,0.15); }
+  .ic-yellow { background: rgba(253,203,110,0.15); }
+
+  /* Lang tag colours */
+  .lt-en { background: rgba(9,132,227,0.12); color: #74b9ff; }
+  .lt-sv { background: rgba(253,203,110,0.12); color: #fdcb6e; }
+  .lt-bi { background: rgba(0,230,118,0.12); color: var(--accent); }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    font-size: 11px;
+    color: #333;
+    padding-top: 48px;
+  }
+
+  @media (max-width: 600px) {
+    header { padding: 36px 20px 28px; }
+    .grid  { padding: 0 20px; }
+    .section-label { padding: 28px 20px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <h1>Företaget</h1>
+    <span class="badge-internal">Internt</span>
+  </div>
+  <p>Affärsdokument för premium NFC-visitkortsverksamheten. Ej publikt — dela inte länken.</p>
+</header>
+
+<!-- BUSINESS MODEL CANVASES -->
+<p class="section-label">Business Model Canvas</p>
+<div class="grid">
+
+  <a class="doc-card" href="bmc-svenska.html" target="_blank">
+    <div class="doc-card-top">
+      <div class="doc-icon ic-orange">🗂</div>
+      <h3>Business Model Canvas</h3>
+    </div>
+    <p>Alla nio byggstenarna: nyckelpartners, aktiviteter, resurser, värdeerbjudande, kundrelationer, kanaler, segment, kostnader och intäkter.</p>
+    <div class="doc-card-footer">
+      <span class="lang-tag lt-sv">Svenska</span>
+      <span class="arrow">→</span>
+    </div>
+  </a>
+
+  <a class="doc-card" href="bmc-english.html" target="_blank">
+    <div class="doc-card-top">
+      <div class="doc-icon ic-orange">🗂</div>
+      <h3>Business Model Canvas</h3>
+    </div>
+    <p>All nine building blocks: key partners, activities, resources, value proposition, customer relationships, channels, segments, costs and revenue.</p>
+    <div class="doc-card-footer">
+      <span class="lang-tag lt-en">English</span>
+      <span class="arrow">→</span>
+    </div>
+  </a>
+
+</div>
+
+<!-- LEAN CANVAS -->
+<p class="section-label">Lean Canvas</p>
+<div class="grid">
+
+  <a class="doc-card" href="lean-canvas-svenska.html" target="_blank">
+    <div class="doc-card-top">
+      <div class="doc-icon ic-blue">📐</div>
+      <h3>Lean Canvas</h3>
+    </div>
+    <p>Problem, lösning, nyckeltal, unikt värdeerbjudande, unik fördel, kanaler, målgrupper och hållbarhetsrisker.</p>
+    <div class="doc-card-footer">
+      <span class="lang-tag lt-sv">Svenska</span>
+      <span class="arrow">→</span>
+    </div>
+  </a>
+
+  <a class="doc-card" href="lean-canvas-english.html" target="_blank">
+    <div class="doc-card-top">
+      <div class="doc-icon ic-blue">📐</div>
+      <h3>Lean Canvas</h3>
+    </div>
+    <p>Problem, solution, key metrics, unique value proposition, unfair advantage, channels, customer segments, cost structure and revenue streams.</p>
+    <div class="doc-card-footer">
+      <span class="lang-tag lt-en">English</span>
+      <span class="arrow">→</span>
+    </div>
+  </a>
+
+</div>
+
+<!-- STRATEGY TOOLS -->
+<p class="section-label">Strategiverktyg</p>
+<div class="grid">
+
+  <a class="doc-card" href="konkurrentkartan.html" target="_blank">
+    <div class="doc-card-top">
+      <div class="doc-icon ic-purple">⚔️</div>
+      <h3>Konkurrentkartan</h3>
+    </div>
+    <p>Jämförelsetabell mot ifPrint, Moo, Linq, Vistaprint och lokala tryckerier. Positioneringskarta och SWOT-analys.</p>
+    <div class="doc-card-footer">
+      <span class="lang-tag lt-sv">Svenska</span>
+      <span class="arrow">→</span>
+    </div>
+  </a>
+
+  <a class="doc-card" href="mojlighetskartan.html" target="_blank">
+    <div class="doc-card-top">
+      <div class="doc-icon ic-green">🎯</div>
+      <h3>Möjlighetskartan</h3>
+    </div>
+    <p>Prioriteringsmatris (Påverkan vs. Insats) och sex detaljerade möjlighetskort med timing och marknadsanalys.</p>
+    <div class="doc-card-footer">
+      <span class="lang-tag lt-sv">Svenska</span>
+      <span class="arrow">→</span>
+    </div>
+  </a>
+
+  <a class="doc-card" href="partnerkartan.html" target="_blank">
+    <div class="doc-card-top">
+      <div class="doc-icon ic-yellow">🤝</div>
+      <h3>Partnerkartan</h3>
+    </div>
+    <p>Profiler för Frank, Tom/ifPrint, fraktbolag, Stripe/Klarna, NFC-chipleverantör och hostingleverantör med beroendeöversikt.</p>
+    <div class="doc-card-footer">
+      <span class="lang-tag lt-sv">Svenska</span>
+      <span class="arrow">→</span>
+    </div>
+  </a>
+
+  <a class="doc-card" href="kundresan.html" target="_blank">
+    <div class="doc-card-top">
+      <div class="doc-icon ic-green">🗺</div>
+      <h3>Kundresan</h3>
+    </div>
+    <p>Sju faser från Medvetenhet till Lojalitet med tre personas (Erik, Anna, Marc), kontaktpunkter, smärtpunkter och möjligheter.</p>
+    <div class="doc-card-footer">
+      <span class="lang-tag lt-sv">Svenska</span>
+      <span class="arrow">→</span>
+    </div>
+  </a>
+
+</div>
+
+<footer>
+  Internt — oliveprojects.eu/foretaget — ej indexerad
+</footer>
+
+</body>
+</html>

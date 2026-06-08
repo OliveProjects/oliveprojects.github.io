@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lean Canvas – Premium NFC Business Cards</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f4f4;
+    padding: 24px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 20px;
+  }
+  .canvas {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 8px;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+  .box {
+    background: #fff;
+    border: 1.5px solid #ddd;
+    border-radius: 8px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+  }
+  .box h2 {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #555;
+    border-bottom: 2px solid currentColor;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+  }
+  .box h3 {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #aaa;
+    margin: 10px 0 6px;
+  }
+  .box ul {
+    list-style: none;
+    padding: 0;
+    flex: 1;
+  }
+  .box ul li {
+    font-size: 13px;
+    color: #222;
+    padding: 5px 0;
+    border-bottom: 1px solid #f0f0f0;
+    line-height: 1.45;
+  }
+  .box ul li:last-child { border-bottom: none; }
+  .box ul li::before {
+    content: "▸ ";
+    color: #aaa;
+    font-size: 10px;
+  }
+  .box p {
+    font-size: 13px;
+    color: #222;
+    line-height: 1.5;
+  }
+  .box .note {
+    font-size: 11px;
+    color: #999;
+    font-style: italic;
+    margin-top: 8px;
+  }
+  .divider {
+    border: none;
+    border-top: 1px dashed #e0e0e0;
+    margin: 10px 0;
+  }
+
+  /* Grid placement — same structure as BMC */
+  .problem        { grid-column: 1; grid-row: 1 / 3; }
+  .solution       { grid-column: 2; grid-row: 1; }
+  .key-metrics    { grid-column: 2; grid-row: 2; }
+  .uvp            { grid-column: 3; grid-row: 1 / 3; }
+  .unfair-adv     { grid-column: 4; grid-row: 1; }
+  .channels       { grid-column: 4; grid-row: 2; }
+  .cust-segments  { grid-column: 5; grid-row: 1 / 3; }
+  .cost-structure { grid-column: 1 / 4; grid-row: 3; }
+  .revenue        { grid-column: 4 / 6; grid-row: 3; }
+
+  /* Colours */
+  .problem h2        { color: #d63031; }
+  .problem           { border-color: #d63031; }
+  .solution h2       { color: #0984e3; }
+  .key-metrics h2    { color: #0984e3; }
+  .uvp h2            { color: #e17055; }
+  .uvp               { border-color: #e17055; background: #fff8f6; }
+  .unfair-adv h2     { color: #6c5ce7; }
+  .channels h2       { color: #00b894; }
+  .cust-segments h2  { color: #fdcb6e; }
+  .cust-segments     { border-color: #fdcb6e; }
+  .cost-structure h2 { color: #b2bec3; }
+  .revenue h2        { color: #27ae60; }
+
+  @media print {
+    body { padding: 8px; background: white; }
+    .canvas { gap: 5px; }
+    .box { padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Lean Canvas</h1>
+<p class="subtitle">Premium NFC Business Cards — Sweden, Scandinavia &amp; France &nbsp;|&nbsp; Draft v1</p>
+
+<div class="canvas">
+
+  <!-- PROBLEM -->
+  <div class="box problem">
+    <h2>Problem</h2>
+    <p style="font-size:11px;color:#999;font-style:italic;margin-bottom:8px;">Top 3 problems to solve</p>
+    <ul>
+      <li>Paper business cards leave no lasting impression — they are discarded within days</li>
+      <li>Digital-only sharing (QR codes, AirDrop) lacks the tactile premium feel expected in high-end B2B contexts</li>
+      <li>No local Scandinavian- or French-language supplier offers premium NFC-enabled physical cards with personal service</li>
+    </ul>
+    <hr class="divider">
+    <h3>Existing Alternatives</h3>
+    <ul>
+      <li>Standard paper card printers (Vistaprint, Canva Print, local print shops)</li>
+      <li>ifPrint.eu — Swiss quality, but German-only interface and no local support</li>
+      <li>Direct Chinese imports — low cost, but no quality control or local service</li>
+      <li>US NFC card brands (Linq, Popl) — not marketed to Scandinavia/France, no local language</li>
+    </ul>
+  </div>
+
+  <!-- SOLUTION -->
+  <div class="box solution">
+    <h2>Solution</h2>
+    <ul>
+      <li>Premium metal, wood, and PVC business cards with embedded NFC chip — tap to share contact info instantly</li>
+      <li>Full service in Swedish and French: quote within 24 h, design check included, personal follow-up</li>
+      <li>Optional digital vCard hosting so the card always links to up-to-date information</li>
+    </ul>
+  </div>
+
+  <!-- KEY METRICS -->
+  <div class="box key-metrics">
+    <h2>Key Metrics</h2>
+    <ul>
+      <li>Orders per month</li>
+      <li>Average order value (kr)</li>
+      <li>Customer acquisition cost (CAC)</li>
+      <li>NFC hosting subscription count &amp; churn rate</li>
+      <li>Repeat / reorder rate</li>
+      <li>Quote-to-order conversion rate</li>
+    </ul>
+  </div>
+
+  <!-- UNIQUE VALUE PROPOSITION -->
+  <div class="box uvp">
+    <h2>Unique Value Proposition</h2>
+    <p style="font-size:15px;font-weight:600;color:#e17055;line-height:1.5;margin-bottom:12px;">
+      Premium NFC business cards — in your language, with your design — that make a lasting first impression and work with a single tap.
+    </p>
+    <ul>
+      <li>Metal, wood, and PVC — materials that signal quality before a word is spoken</li>
+      <li>Local service in Swedish and French, something no competitor offers</li>
+      <li>Swiss-standard print quality via ifPrint.eu partnership</li>
+      <li>FSC-certified wood cards for sustainability-conscious clients</li>
+    </ul>
+    <hr class="divider">
+    <h3>High-level Concept</h3>
+    <p style="font-size:12px;color:#555;">"The premium business card that works like a smartphone — built for Scandinavian and French professionals."</p>
+  </div>
+
+  <!-- UNFAIR ADVANTAGE -->
+  <div class="box unfair-adv">
+    <h2>Unfair Advantage</h2>
+    <p style="font-size:11px;color:#999;font-style:italic;margin-bottom:8px;">Hard to copy or buy</p>
+    <ul>
+      <li><strong>Language advantage</strong> — native Swedish + French service; no competitor covers both markets locally</li>
+      <li><strong>Partner network</strong> — exclusive access to Frank (low-cost Chinese manufacturing) and Tom/ifPrint (Swiss quality process)</li>
+      <li><strong>Personal owner-operated service</strong> — faster decisions and deeper client relationships than any agency</li>
+      <li><strong>First-mover position</strong> in Scandinavian premium NFC card market</li>
+    </ul>
+  </div>
+
+  <!-- CHANNELS -->
+  <div class="box channels">
+    <h2>Channels</h2>
+    <ul>
+      <li>Google Ads (search: "visitkort metall", "NFC visitkort", "carte de visite métal")</li>
+      <li>LinkedIn — B2B organic content and direct outreach to decision-makers</li>
+      <li>Instagram — visual portfolio of finished card designs</li>
+      <li>Cold outreach to hotels, law firms, agencies</li>
+      <li>Word of mouth and client referrals</li>
+    </ul>
+  </div>
+
+  <!-- CUSTOMER SEGMENTS -->
+  <div class="box cust-segments">
+    <h2>Customer Segments</h2>
+    <ul>
+      <li><strong>Hotels &amp; hospitality</strong> — staff cards, key cards, NFC for room info</li>
+      <li><strong>Corporate professionals</strong> — executives, consultants, sales teams</li>
+      <li><strong>Real estate agents</strong> — high card volume, brand-conscious</li>
+      <li><strong>Law firms &amp; financial advisors</strong> — premium image essential</li>
+      <li><strong>Marketing &amp; creative agencies</strong> — differentiated client gifts</li>
+      <li><strong>Private individuals</strong> — entrepreneurs, freelancers</li>
+    </ul>
+    <hr class="divider">
+    <h3>Early Adopters</h3>
+    <ul>
+      <li>Boutique hotels wanting to impress guests at check-in</li>
+      <li>Consultants and executives who attend frequent networking events</li>
+    </ul>
+  </div>
+
+  <!-- COST STRUCTURE -->
+  <div class="box cost-structure">
+    <h2>Cost Structure</h2>
+    <ul>
+      <li><strong>Card manufacturing</strong> — per-unit cost to Frank (China) or Tom (ifPrint); varies by material and order size</li>
+      <li><strong>Inbound shipping</strong> — China/Europe → Sweden (consolidation shipments)</li>
+      <li><strong>Outbound shipping</strong> — PostNord/DHL/Bring to customers across Scandinavia; Chronopost for France</li>
+      <li><strong>Marketing spend</strong> — Google Ads and LinkedIn Ads budget (est. 25,000 kr startup allocation)</li>
+      <li><strong>Website &amp; hosting</strong> — domain, WordPress/Webflow, NFC vCard platform (~1,000–3,000 kr/year)</li>
+      <li><strong>Design tools</strong> — Adobe Creative Cloud or Canva Pro (~3,000 kr/year)</li>
+      <li><strong>NFC chips</strong> — cost of inlays embedded per card</li>
+      <li><strong>Payment processing</strong> — Stripe/Klarna fees (~1.5–2.5% per transaction)</li>
+    </ul>
+  </div>
+
+  <!-- REVENUE STREAMS -->
+  <div class="box revenue">
+    <h2>Revenue Streams</h2>
+    <ul>
+      <li><strong>Card sales</strong> — per-unit pricing with quantity discounts (est. ~80 kr/card at low qty, ~50 kr/card at 100+)</li>
+      <li><strong>NFC setup fee</strong> — one-time fee for programming and linking chip to digital profile</li>
+      <li><strong>vCard hosting subscription</strong> — recurring monthly/annual fee per account (est. 99–199 kr/month)</li>
+      <li><strong>Design/artwork service</strong> — optional premium design fee for clients without ready-to-print files</li>
+      <li><strong>Corporate volume contracts</strong> — annual supply agreements with hotels and larger companies</li>
+    </ul>
+  </div>
+
+</div>
+
+<p style="text-align:center; margin-top: 20px; font-size: 11px; color: #bbb;">
+  Lean Canvas framework by Ash Maurya &nbsp;|&nbsp; Adapted for Scandinavian &amp; French markets &nbsp;|&nbsp; Partners: Tom (ifPrint.eu), Frank (manufacturing, China)
+</p>
+
+</body>
+</html>

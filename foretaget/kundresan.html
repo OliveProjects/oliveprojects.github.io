@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kundresan – Premium NFC-visitkort</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f4f4;
+    padding: 24px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 28px;
+  }
+
+  /* PERSONA STRIP */
+  .personas {
+    display: flex;
+    gap: 10px;
+    max-width: 1300px;
+    margin: 0 auto 28px;
+  }
+  .persona {
+    flex: 1;
+    background: #fff;
+    border-radius: 8px;
+    border: 1.5px solid #ddd;
+    padding: 14px 16px;
+  }
+  .persona h3 {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+  }
+  .persona p { font-size: 12px; color: #555; line-height: 1.5; }
+  .persona-a h3 { color: #0984e3; }
+  .persona-b h3 { color: #6c5ce7; }
+  .persona-c h3 { color: #e17055; }
+
+  /* JOURNEY GRID */
+  .journey {
+    max-width: 1300px;
+    margin: 0 auto 32px;
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 13px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  }
+  .stage-header {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 12px 14px;
+    text-align: center;
+    border-right: 1px solid rgba(255,255,255,0.15);
+    color: #fff;
+  }
+  .row-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: #555;
+    background: #f7f7f7;
+    padding: 11px 14px;
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
+    white-space: nowrap;
+    min-width: 130px;
+  }
+  td {
+    padding: 11px 13px;
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
+    font-size: 12px;
+    color: #333;
+    line-height: 1.5;
+  }
+  td:last-child { border-right: none; }
+  tr:last-child td, tr:last-child .row-label { border-bottom: none; }
+
+  /* Stage colours */
+  .s1 { background: #dbeeff; }
+  .s2 { background: #d5f5e3; }
+  .s3 { background: #fef9e7; }
+  .s4 { background: #fde8e8; }
+  .s5 { background: #e8e4ff; }
+  .s6 { background: #fde8d8; }
+  .s7 { background: #d5f0f5; }
+
+  .cell-s1 { background: #f0f7ff; }
+  .cell-s2 { background: #f0faf5; }
+  .cell-s3 { background: #fefdf0; }
+  .cell-s4 { background: #fff5f5; }
+  .cell-s5 { background: #f5f3ff; }
+  .cell-s6 { background: #fff8f3; }
+  .cell-s7 { background: #f0f9fb; }
+
+  /* Emotion bar */
+  .emotions {
+    display: flex;
+    max-width: 1300px;
+    margin: 0 auto 32px;
+    gap: 0;
+    background: #fff;
+    border-radius: 8px;
+    border: 1.5px solid #ddd;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  }
+  .emotion-stage {
+    flex: 1;
+    text-align: center;
+    padding: 14px 8px;
+    border-right: 1px solid #eee;
+  }
+  .emotion-stage:last-child { border-right: none; }
+  .emotion-stage .emoji { font-size: 22px; margin-bottom: 4px; }
+  .emotion-stage .label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: #888; }
+  .emotion-stage .desc  { font-size: 11px; color: #555; margin-top: 4px; line-height: 1.4; }
+
+  /* Opportunities strip */
+  .opps {
+    display: flex;
+    gap: 8px;
+    max-width: 1300px;
+    margin: 0 auto 24px;
+  }
+  .opp {
+    flex: 1;
+    background: #e8f5e9;
+    border: 1.5px solid #27ae60;
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .opp h4 {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: #27ae60;
+    margin-bottom: 6px;
+  }
+  .opp p { font-size: 12px; color: #333; line-height: 1.45; }
+
+  @media print {
+    body { padding: 8px; background: white; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Kundresan</h1>
+<p class="subtitle">Premium NFC-visitkort — Sverige, Skandinavien &amp; Frankrike &nbsp;|&nbsp; Utkast v1</p>
+
+<!-- PERSONAS -->
+<div class="personas">
+  <div class="persona persona-a">
+    <h3>Persona A — Erik, 42, Konsultchef</h3>
+    <p>Nätverkar intensivt på konferenser. Vill imponera med ett professionellt förstaintryck. Har budget och vill ha något som sticker ut.</p>
+  </div>
+  <div class="persona persona-b">
+    <h3>Persona B — Anna, 35, Hotellchef</h3>
+    <p>Ansvarar för 30 personalkort och incheckningsteknik. Söker en enhetlig lösning i premiumkvalitet med NFC-funktion.</p>
+  </div>
+  <div class="persona persona-c">
+    <h3>Persona C — Marc, 29, Frilansdesigner (Frankrike)</h3>
+    <p>Vill differentiera sig med ett kreativt visitkort i trä. Söker en franskspråkig leverantör med designkompetens.</p>
+  </div>
+</div>
+
+<!-- EMOTION BAR -->
+<div class="emotions">
+  <div class="emotion-stage">
+    <div class="emoji">🤔</div>
+    <div class="label">Medvetenhet</div>
+    <div class="desc">Nyfiken, omedveten om alternativ</div>
+  </div>
+  <div class="emotion-stage">
+    <div class="emoji">😮</div>
+    <div class="label">Intresse</div>
+    <div class="desc">Imponerad av produkterna</div>
+  </div>
+  <div class="emotion-stage">
+    <div class="emoji">🧐</div>
+    <div class="label">Övervägande</div>
+    <div class="desc">Jämför, lite osäker på pris</div>
+  </div>
+  <div class="emotion-stage">
+    <div class="emoji">😊</div>
+    <div class="label">Köp</div>
+    <div class="desc">Trygg, förväntansfull</div>
+  </div>
+  <div class="emotion-stage">
+    <div class="emoji">🎉</div>
+    <div class="label">Leverans</div>
+    <div class="desc">Positivt överraskad av kvaliteten</div>
+  </div>
+  <div class="emotion-stage">
+    <div class="emoji">😎</div>
+    <div class="label">Användning</div>
+    <div class="desc">Stolt, tar emot komplimanger</div>
+  </div>
+  <div class="emotion-stage">
+    <div class="emoji">❤️</div>
+    <div class="label">Lojalitet</div>
+    <div class="desc">Rekommenderar oss till andra</div>
+  </div>
+</div>
+
+<!-- JOURNEY TABLE -->
+<div class="journey">
+  <table>
+    <thead>
+      <tr>
+        <th style="background:#2d3436;color:#fff;padding:12px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;min-width:130px;">Dimension</th>
+        <th class="stage-header s1">1. Medvetenhet</th>
+        <th class="stage-header s2">2. Intresse</th>
+        <th class="stage-header s3">3. Övervägande</th>
+        <th class="stage-header s4">4. Köp</th>
+        <th class="stage-header s5">5. Leverans</th>
+        <th class="stage-header s6">6. Användning</th>
+        <th class="stage-header s7">7. Lojalitet</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- KUNDENS MÅL -->
+      <tr>
+        <td class="row-label">Kundens mål</td>
+        <td class="cell-s1">Hitta ett bättre alternativ till papperskort</td>
+        <td class="cell-s2">Förstå vad vi erbjuder och om det passar</td>
+        <td class="cell-s3">Jämföra pris, kvalitet och service</td>
+        <td class="cell-s4">Beställa snabbt och enkelt, med rätt design</td>
+        <td class="cell-s5">Ta emot kortet i tid och i perfekt skick</td>
+        <td class="cell-s6">Använda kortet med självförtroende i möten</td>
+        <td class="cell-s7">Beställa igen och tipsa kollegor</td>
+      </tr>
+
+      <!-- TOUCHPOINTS -->
+      <tr>
+        <td class="row-label">Kontaktpunkter</td>
+        <td class="cell-s1">
+          Google-sökning ("visitkort metall")<br>
+          LinkedIn-inlägg eller annons<br>
+          Kollegas NFC-kort på mässa<br>
+          Instagram-reklam
+        </td>
+        <td class="cell-s2">
+          Webbplats — galleri och produktsidor<br>
+          Instagram-profil<br>
+          LinkedIn-innehåll
+        </td>
+        <td class="cell-s3">
+          Offertformulär på webbplatsen<br>
+          E-postkontakt / telefonsamtal<br>
+          Jämförelse med ifPrint/Linq
+        </td>
+        <td class="cell-s4">
+          Offertgodkännande via e-post<br>
+          Designgranskning (fram och tillbaka)<br>
+          Betalning via Stripe / Klarna / faktura
+        </td>
+        <td class="cell-s5">
+          Orderbekräftelse och spårningsnummer<br>
+          Paket via PostNord / DHL<br>
+          Uppföljningsmejl efter leverans
+        </td>
+        <td class="cell-s6">
+          Daglig användning av kortet<br>
+          NFC-tapp mot mottagarens telefon<br>
+          Digital vCard-sida visas
+        </td>
+        <td class="cell-s7">
+          Uppföljningsmejl (30 dagar)<br>
+          Nyhetsbrev med nyheter<br>
+          Återbeställningsformulär<br>
+          Remissförfrågan
+        </td>
+      </tr>
+
+      <!-- KUNDENS HANDLINGAR -->
+      <tr>
+        <td class="row-label">Kundens handlingar</td>
+        <td class="cell-s1">Klickar på annons eller söker aktivt</td>
+        <td class="cell-s2">Bläddrar i galleriet, läser om material och NFC</td>
+        <td class="cell-s3">Fyller i offertformulär, ställer frågor via e-post</td>
+        <td class="cell-s4">Godkänner design, väljer antal, betalar</td>
+        <td class="cell-s5">Tar emot paket, testar NFC-funktionen</td>
+        <td class="cell-s6">Knackar kort mot telefoner, konfigurerar vCard</td>
+        <td class="cell-s7">Beställer fler kort, tipsar kollega, skriver recension</td>
+      </tr>
+
+      <!-- VÅR RESPONS -->
+      <tr>
+        <td class="row-label">Vår respons</td>
+        <td class="cell-s1">Välriktade annonser; starkt galleri på sociala medier</td>
+        <td class="cell-s2">Tydlig webbplats med priser, material och exempel</td>
+        <td class="cell-s3">Offert inom 24 h; personlig e-post med råd</td>
+        <td class="cell-s4">Designgranskning inkluderad; tydlig process och leveranstid</td>
+        <td class="cell-s5">Proaktiv orderuppdatering; fin förpackning; uppföljning</td>
+        <td class="cell-s6">NFC-chip förkonfigurerat; vCard-portal lättanvänd</td>
+        <td class="cell-s7">Personligt uppföljningsmejl; lojalitetsrabatt vid återbeställning</td>
+      </tr>
+
+      <!-- SMÄRTPUNKTER -->
+      <tr>
+        <td class="row-label">Smärtpunkter / Risker</td>
+        <td class="cell-s1">Kunden hittar inte oss (SEO/annonsbuget begränsad i start)</td>
+        <td class="cell-s2">Prissättning oklart på webbplatsen → kunden lämnar</td>
+        <td class="cell-s3">Lång svarstid kan göra att kunden väljer annan</td>
+        <td class="cell-s4">Designprocessen tar lång tid om kunden saknar filer</td>
+        <td class="cell-s5">Fördröjd frakt från Kina skapar frustration</td>
+        <td class="cell-s6">NFC fungerar inte med äldre telefoner → kund besviken</td>
+        <td class="cell-s7">Kund glömmer bort oss mellan beställningar</td>
+      </tr>
+
+      <!-- MÖJLIGHETER -->
+      <tr>
+        <td class="row-label">Möjligheter</td>
+        <td class="cell-s1">Synas på nischade LinkedIn-forum och hotellbranschen</td>
+        <td class="cell-s2">Erbjud gratis designmall att ladda ned → e-postlista</td>
+        <td class="cell-s3">Lägg upp tydlig priskalkylator på sajten</td>
+        <td class="cell-s4">Erbjud provkort gratis till hotellkunder → lägre tröskel</td>
+        <td class="cell-s5">Premiumförpackning som skapar "unboxing-upplevelse"</td>
+        <td class="cell-s6">Erbjud vCard-hosting som upsell vid leveransen</td>
+        <td class="cell-s7">Remissbonus: 10 % rabatt per rekommenderad kund</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<!-- OPPORTUNITY HIGHLIGHTS -->
+<div class="opps">
+  <div class="opp">
+    <h4>Snabbvinst 1</h4>
+    <p>Lägg till tydlig FAQ och prisriktlinje på webbplatsen för att minska avhopp i övervägandestadiet.</p>
+  </div>
+  <div class="opp">
+    <h4>Snabbvinst 2</h4>
+    <p>Skicka ett uppföljningsmejl 48 h efter leverans och fråga om NFC fungerar — löser problem tidigt och bygger förtroende.</p>
+  </div>
+  <div class="opp">
+    <h4>Snabbvinst 3</h4>
+    <p>Erbjud ett "startpaket" för hotell (provkort i metall + trädesign) — sänker beslutsbarriären för B2B-kunden.</p>
+  </div>
+  <div class="opp">
+    <h4>Snabbvinst 4</h4>
+    <p>Bygg ett enkelt remissystem: nöjd kund tipsar en vän och får 10 % på nästa beställning — billig kundanskaffning.</p>
+  </div>
+</div>
+
+<p style="text-align:center; font-size: 11px; color: #bbb;">
+  Kundresekarta — Utkast v1 &nbsp;|&nbsp; Skandinavien &amp; Frankrike &nbsp;|&nbsp; Partners: Tom (ifPrint.eu), Frank (tillverkning, Kina)
+</p>
+
+</body>
+</html>

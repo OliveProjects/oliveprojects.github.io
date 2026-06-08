@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lean Canvas – Svenska</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f4f4;
+    padding: 24px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 20px;
+  }
+  .canvas {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 8px;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+  .box {
+    background: #fff;
+    border: 1.5px solid #ddd;
+    border-radius: 8px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+  }
+  .box h2 {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #555;
+    border-bottom: 2px solid currentColor;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+  }
+  .box h3 {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #aaa;
+    margin: 10px 0 6px;
+  }
+  .box ul {
+    list-style: none;
+    padding: 0;
+    flex: 1;
+  }
+  .box ul li {
+    font-size: 13px;
+    color: #222;
+    padding: 5px 0;
+    border-bottom: 1px solid #f0f0f0;
+    line-height: 1.45;
+  }
+  .box ul li:last-child { border-bottom: none; }
+  .box ul li::before {
+    content: "▸ ";
+    color: #aaa;
+    font-size: 10px;
+  }
+  .box p { font-size: 13px; color: #222; line-height: 1.5; }
+  .box .note { font-size: 11px; color: #999; font-style: italic; margin-top: 8px; }
+  .divider { border: none; border-top: 1px dashed #e0e0e0; margin: 10px 0; }
+
+  /* Hållbarhetsbox */
+  .sustain-box {
+    background: #f0faf4;
+    border: 1.5px solid #27ae60;
+    border-radius: 8px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+  }
+  .sustain-box h2 {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #27ae60;
+    border-bottom: 2px solid #27ae60;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+  }
+  .sustain-box ul { list-style: none; padding: 0; flex: 1; }
+  .sustain-box ul li {
+    font-size: 13px;
+    color: #222;
+    padding: 5px 0;
+    border-bottom: 1px solid #d4edda;
+    line-height: 1.45;
+  }
+  .sustain-box ul li:last-child { border-bottom: none; }
+  .sustain-box ul li::before { content: "♻ "; color: #27ae60; font-size: 10px; }
+
+  /* Grid placement */
+  .problem        { grid-column: 1; grid-row: 1 / 3; }
+  .solution       { grid-column: 2; grid-row: 1; }
+  .key-metrics    { grid-column: 2; grid-row: 2; }
+  .uvp            { grid-column: 3; grid-row: 1 / 3; }
+  .unfair-adv     { grid-column: 4; grid-row: 1; }
+  .channels       { grid-column: 4; grid-row: 2; }
+  .cust-segments  { grid-column: 5; grid-row: 1 / 3; }
+  .cost-structure { grid-column: 1 / 3; grid-row: 3; }
+  .sustain-risks  { grid-column: 3; grid-row: 3; }
+  .revenue        { grid-column: 4 / 6; grid-row: 3; }
+
+  /* Färger */
+  .problem h2        { color: #d63031; }
+  .problem           { border-color: #d63031; }
+  .solution h2       { color: #0984e3; }
+  .key-metrics h2    { color: #0984e3; }
+  .uvp h2            { color: #e17055; }
+  .uvp               { border-color: #e17055; background: #fff8f6; }
+  .unfair-adv h2     { color: #6c5ce7; }
+  .channels h2       { color: #00b894; }
+  .cust-segments h2  { color: #fdcb6e; }
+  .cust-segments     { border-color: #fdcb6e; }
+  .cost-structure h2 { color: #b2bec3; }
+  .revenue h2        { color: #27ae60; }
+
+  @media print {
+    body { padding: 8px; background: white; }
+    .canvas { gap: 5px; }
+    .box, .sustain-box { padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Lean Canvas</h1>
+<p class="subtitle">Premium NFC-visitkort — Sverige, Skandinavien &amp; Frankrike &nbsp;|&nbsp; Utkast v1</p>
+
+<div class="canvas">
+
+  <!-- PROBLEM -->
+  <div class="box problem">
+    <h2>Målgruppens Problem / Behov</h2>
+    <p style="font-size:11px;color:#999;font-style:italic;margin-bottom:8px;">Topp 3 problem att lösa</p>
+    <ul>
+      <li>Traditionella visitkort av papper ger inget bestående intryck — de slängs inom några dagar</li>
+      <li>Digital delning (QR-koder, AirDrop) saknar den taktila premiumkänslan som förväntas i högkvalitativa B2B-möten</li>
+      <li>Det finns ingen lokal skandinavisk- eller franskspråkig leverantör av premium NFC-aktiverade visitkort med personlig service</li>
+    </ul>
+    <hr class="divider">
+    <h3>Målgruppens Alternativ Idag</h3>
+    <ul>
+      <li>Standardkort från tryckerier (Vistaprint, lokala tryckerier)</li>
+      <li>ifPrint.eu — schweizisk kvalitet, men enbart tyskt gränssnitt</li>
+      <li>Direktimport från Kina — låg kostnad men ingen kvalitetskontroll eller lokal service</li>
+      <li>Amerikanska NFC-kort (Linq, Popl) — inte anpassade för Skandinavien/Frankrike</li>
+    </ul>
+  </div>
+
+  <!-- LÖSNING -->
+  <div class="box solution">
+    <h2>Lösning</h2>
+    <ul>
+      <li>Premium visitkort i metall, trä och PVC med inbyggt NFC-chip — håll mot telefonen för att dela kontaktuppgifter direkt</li>
+      <li>Full service på svenska och franska: offert inom 24 h, designgranskning ingår, personlig uppföljning</li>
+      <li>Valfri digital vCard-hosting så att kortet alltid visar aktuell information</li>
+    </ul>
+  </div>
+
+  <!-- NYCKELTAL -->
+  <div class="box key-metrics">
+    <h2>Nyckeltal</h2>
+    <ul>
+      <li>Antal beställningar per månad</li>
+      <li>Genomsnittligt ordervärde (kr)</li>
+      <li>Kundanskaffningskostnad (CAC)</li>
+      <li>Antal NFC-hostingprenumeranter &amp; churntakt</li>
+      <li>Återbeställningsfrekvens</li>
+      <li>Konverteringsgrad: offert → beställning</li>
+    </ul>
+  </div>
+
+  <!-- UNIKT VÄRDEERBJUDANDE -->
+  <div class="box uvp">
+    <h2>Unikt Värdeerbjudande</h2>
+    <p style="font-size:15px;font-weight:600;color:#e17055;line-height:1.5;margin-bottom:12px;">
+      Premium NFC-visitkort — på ditt språk, med din design — som ger ett bestående första intryck och fungerar med en enda tapp.
+    </p>
+    <ul>
+      <li>Metall, trä och PVC — material som signalerar kvalitet innan ett ord har sagts</li>
+      <li>Lokal service på svenska och franska, något ingen konkurrent erbjuder</li>
+      <li>Schweizisk tryckkvalitet via partnerskapet med ifPrint.eu</li>
+      <li>FSC-certifierade träkort för miljömedvetna kunder</li>
+    </ul>
+    <hr class="divider">
+    <h3>Övergripande Koncept</h3>
+    <p style="font-size:12px;color:#555;">"Visitkortet som fungerar som en smartphone — skapat för skandinaviska och franska yrkespersoner."</p>
+  </div>
+
+  <!-- UNIK FÖRDEL -->
+  <div class="box unfair-adv">
+    <h2>Unik Fördel</h2>
+    <p style="font-size:11px;color:#999;font-style:italic;margin-bottom:8px;">Svårt att kopiera eller köpa</p>
+    <ul>
+      <li><strong>Språkfördel</strong> — infödd svenska + franska; ingen konkurrent täcker båda marknaderna lokalt</li>
+      <li><strong>Partnernätverk</strong> — tillgång till Frank (kostnadseffektiv kinesisk tillverkning) och Tom/ifPrint (schweizisk kvalitetsprocess)</li>
+      <li><strong>Ägardriven personlig service</strong> — snabbare beslut och djupare kundrelationer än något stort bolag</li>
+      <li><strong>First-mover-position</strong> på den skandinaviska marknaden för premium NFC-kort</li>
+    </ul>
+  </div>
+
+  <!-- KANALER -->
+  <div class="box channels">
+    <h2>Kanaler</h2>
+    <ul>
+      <li>Google Ads (sökannonser: "visitkort metall", "NFC visitkort", "carte de visite métal")</li>
+      <li>LinkedIn — B2B-innehåll och direktkontakt med beslutsfattare</li>
+      <li>Instagram — visuellt galleri av färdiga kortdesigner</li>
+      <li>Direkt bearbetning av hotell, advokatbyråer, byråer</li>
+      <li>Mun-till-mun och rekommendationer från nöjda kunder</li>
+    </ul>
+  </div>
+
+  <!-- MÅLGRUPPER -->
+  <div class="box cust-segments">
+    <h2>Målgrupper</h2>
+    <ul>
+      <li><strong>Hotell &amp; besöksnäring</strong> — personalkort, nyckelkort, NFC för rumsinformation</li>
+      <li><strong>Företagsprofessionella</strong> — chefer, konsulter, säljteam</li>
+      <li><strong>Fastighetsmäklare</strong> — hög kortanvändning, varumärkesmedvetna</li>
+      <li><strong>Advokatbyråer &amp; finansrådgivare</strong> — premiumbild är avgörande</li>
+      <li><strong>Marknadsförings- &amp; kreativa byråer</strong> — differentierade kundgåvor</li>
+      <li><strong>Privatpersoner</strong> — entreprenörer, frilansare</li>
+    </ul>
+    <hr class="divider">
+    <h3>Tidiga Användare</h3>
+    <ul>
+      <li>Boutiquehotell som vill imponera på gäster vid incheckning</li>
+      <li>Konsulter och chefer som nätverkar aktivt</li>
+    </ul>
+  </div>
+
+  <!-- KOSTNADSSTRUKTUR -->
+  <div class="box cost-structure">
+    <h2>Kostnadsstruktur</h2>
+    <ul>
+      <li><strong>Korttillverkning</strong> — kostnad per enhet till Frank (Kina) eller Tom (ifPrint); varierar efter material och kvantitet</li>
+      <li><strong>Inkommande frakt</strong> — Kina/Europa → Sverige (samlastning)</li>
+      <li><strong>Utgående leverans</strong> — PostNord/DHL/Bring till kunder i Skandinavien; Chronopost för Frankrike</li>
+      <li><strong>Marknadsföringsbudget</strong> — Google Ads och LinkedIn Ads (ca 25 000 kr startkapital avsatt)</li>
+      <li><strong>Webbplats &amp; hosting</strong> — domän, WordPress/Webflow, NFC vCard-plattform (ca 1 000–3 000 kr/år)</li>
+      <li><strong>Designverktyg</strong> — Adobe Creative Cloud eller Canva Pro (ca 3 000 kr/år)</li>
+      <li><strong>NFC-chip</strong> — kostnad för inbyggda inlägg per kort</li>
+      <li><strong>Betalningsavgifter</strong> — Stripe/Klarna (ca 1,5–2,5 % per transaktion)</li>
+    </ul>
+  </div>
+
+  <!-- HÅLLBARHETSRISKER -->
+  <div class="sustain-box sustain-risks">
+    <h2>Hållbarhetsrisker</h2>
+    <ul>
+      <li>Metallutvinning och bearbetning har hög miljöpåverkan — bör kommuniceras öppet</li>
+      <li>Lång fraktväg från Kina ökar koldioxidavtrycket per order</li>
+      <li>Risk att kort ses som statussymbol snarare än hållbart val — motverkas med FSC-trä och lång livslängd</li>
+      <li>Elektronikavfall om NFC-chip inte kan återvinnas i slutet av kortets livscykel</li>
+    </ul>
+  </div>
+
+  <!-- INTÄKTSFLÖDEN -->
+  <div class="box revenue">
+    <h2>Intäktsflöden</h2>
+    <ul>
+      <li><strong>Kortförsäljning</strong> — prissatt per enhet med mängdrabatt (ca 80 kr/kort vid liten mängd, ca 50 kr/kort vid 100+)</li>
+      <li><strong>NFC-uppstartsavgift</strong> — engångsavgift för programmering och koppling av chip till digital profil</li>
+      <li><strong>vCard-hostingprenumeration</strong> — månads- eller årsvis återkommande avgift per konto (ca 99–199 kr/månad)</li>
+      <li><strong>Design-/artwork-tjänst</strong> — valfri premiumdesigntjänst för kunder utan färdigt tryckmaterial</li>
+      <li><strong>Företagsavtal</strong> — volymkontrakt med hotell och företag för löpande kortleverans</li>
+    </ul>
+  </div>
+
+</div>
+
+<p style="text-align:center; margin-top: 20px; font-size: 11px; color: #bbb;">
+  Lean Canvas-ramverket av Ash Maurya &nbsp;|&nbsp; Anpassad för skandinaviska och franska marknader &nbsp;|&nbsp; Partners: Tom (ifPrint.eu), Frank (tillverkning, Kina)
+</p>
+
+</body>
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Möjlighetskartan – Premium NFC-visitkort</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f4f4;
+    padding: 24px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 28px;
+  }
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #555;
+    margin-bottom: 14px;
+    max-width: 1300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* PRIORITY MATRIX */
+  .matrix-wrap {
+    max-width: 900px;
+    margin: 0 auto 36px;
+  }
+  .matrix {
+    display: grid;
+    grid-template-columns: 80px 1fr 1fr;
+    grid-template-rows: 30px 1fr 1fr;
+    gap: 6px;
+    height: 520px;
+  }
+  .axis-blank { }
+  .axis-label-top {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.7px; color: #fff; border-radius: 5px;
+    padding: 4px;
+  }
+  .axis-label-side {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.7px; color: #fff; border-radius: 5px;
+    writing-mode: vertical-rl; text-orientation: mixed;
+    transform: rotate(180deg); padding: 4px;
+  }
+  .quadrant {
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .quadrant h3 {
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.6px; margin-bottom: 6px;
+  }
+  .opp-item {
+    background: rgba(255,255,255,0.7);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 12px;
+    line-height: 1.45;
+    color: #222;
+    border-left: 3px solid;
+  }
+
+  /* Quadrant colours */
+  .q-do-now    { background: #d5f5e3; }
+  .q-do-now h3 { color: #27ae60; }
+  .q-do-now .opp-item { border-color: #27ae60; }
+
+  .q-plan      { background: #dbeeff; }
+  .q-plan h3   { color: #0984e3; }
+  .q-plan .opp-item { border-color: #0984e3; }
+
+  .q-delegate  { background: #fef9e7; }
+  .q-delegate h3 { color: #f39c12; }
+  .q-delegate .opp-item { border-color: #f39c12; }
+
+  .q-skip      { background: #fde8e8; }
+  .q-skip h3   { color: #e74c3c; }
+  .q-skip .opp-item { border-color: #e74c3c; opacity: 0.7; }
+
+  .axis-high-impact { background: #2d3436; }
+  .axis-low-impact  { background: #636e72; }
+  .axis-easy        { background: #2d3436; }
+  .axis-hard        { background: #636e72; }
+
+  /* OPPORTUNITY CARDS */
+  .opp-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    max-width: 1300px;
+    margin: 0 auto 32px;
+  }
+  .opp-card {
+    background: #fff;
+    border-radius: 8px;
+    border: 1.5px solid #ddd;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+  .opp-card .tag {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    margin-bottom: 8px;
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+  .opp-card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+  .opp-card p {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.55;
+    flex: 1;
+  }
+  .opp-card .metrics {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .metric {
+    flex: 1;
+    text-align: center;
+    background: #f7f7f7;
+    border-radius: 6px;
+    padding: 6px 4px;
+  }
+  .metric .val {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+  .metric .lbl {
+    font-size: 10px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Tag colours */
+  .tag-core      { background: #d5f5e3; color: #27ae60; }
+  .tag-growth    { background: #dbeeff; color: #0984e3; }
+  .tag-partner   { background: #e8e4ff; color: #6c5ce7; }
+  .tag-market    { background: #fef9e7; color: #f39c12; }
+  .tag-product   { background: #fde8e8; color: #e17055; }
+
+  @media print {
+    body { padding: 8px; background: white; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Möjlighetskartan</h1>
+<p class="subtitle">Premium NFC-visitkort — Sverige, Skandinavien &amp; Frankrike &nbsp;|&nbsp; Utkast v1</p>
+
+<!-- PRIORITY MATRIX -->
+<p class="section-title">1. Prioriteringsmatris — Påverkan vs. Insats</p>
+<div class="matrix-wrap">
+  <div class="matrix">
+
+    <div class="axis-blank"></div>
+    <div class="axis-label-top axis-easy">Lätt att genomföra</div>
+    <div class="axis-label-top axis-hard">Kräver mer insats</div>
+
+    <div class="axis-label-side axis-high-impact">Hög påverkan</div>
+    <div class="quadrant q-do-now">
+      <h3>★ Gör nu</h3>
+      <div class="opp-item"><strong>Lokal SEO + Google Ads</strong> — sök på "visitkort metall Sverige" — omedelbar synlighet</div>
+      <div class="opp-item"><strong>LinkedIn outreach</strong> — direkt kontakt med HR-chefer och konsultbyråer</div>
+      <div class="opp-item"><strong>Offert inom 24 h</strong> — garantin är ett starkt differentierat löfte</div>
+      <div class="opp-item"><strong>Hotellpilot</strong> — ett boutiquhotell som referenskund ger trovärdighet direkt</div>
+    </div>
+    <div class="quadrant q-plan">
+      <h3>Planera</h3>
+      <div class="opp-item"><strong>Franskmarknaden</strong> — bygga sajt på franska och köra Google Ads (carte de visite métal)</div>
+      <div class="opp-item"><strong>vCard hosting-prenumeration</strong> — infrastruktur kräver setup men ger återkommande intäkt</div>
+      <div class="opp-item"><strong>Företagsavtal med hotellkedjor</strong> — längre säljcykel men hög volym</div>
+    </div>
+
+    <div class="axis-label-side axis-low-impact">Lägre påverkan</div>
+    <div class="quadrant q-delegate">
+      <h3>Gör senare</h3>
+      <div class="opp-item"><strong>Instagram-profil</strong> — visuellt men lägre konvertering i B2B-start</div>
+      <div class="opp-item"><strong>Mässor och nätverksevenemang</strong> — bra för varumärke, höga kostnader</div>
+      <div class="opp-item"><strong>Nyhetsbrev</strong> — bra retention men kräver lista att bygga</div>
+    </div>
+    <div class="quadrant q-skip">
+      <h3>Undvik nu</h3>
+      <div class="opp-item">Eget tryckeri / in-house produktion — för kapitalintensivt i startfas</div>
+      <div class="opp-item">Marknadsföring på TikTok — fel målgrupp för B2B premium</div>
+      <div class="opp-item">Fysisk butik — höga fasta kostnader utan bevisad efterfrågan</div>
+    </div>
+
+  </div>
+  <p style="font-size:11px;color:#aaa;margin-top:8px;text-align:center;">
+    Y-axel: affärspåverkan &nbsp;|&nbsp; X-axel: genomförbarhet med nuvarande resurser
+  </p>
+</div>
+
+<!-- OPPORTUNITY CARDS -->
+<p class="section-title">2. Detaljerade Möjligheter</p>
+<div class="opp-grid">
+
+  <div class="opp-card">
+    <span class="tag tag-core">Kärnmarknad</span>
+    <h3>Svenska företagsprofessionella med premium-behov</h3>
+    <p>Konsulter, chefer och säljchefer som nätverkar aktivt och förstår värdet av ett starkt förstaintryck. Kortanvändning är hög och betalningsvilligheten för premium är bevisad.</p>
+    <div class="metrics">
+      <div class="metric"><div class="val">Hög</div><div class="lbl">Påverkan</div></div>
+      <div class="metric"><div class="val">Låg</div><div class="lbl">Insats</div></div>
+      <div class="metric"><div class="val">Nu</div><div class="lbl">Timing</div></div>
+    </div>
+  </div>
+
+  <div class="opp-card">
+    <span class="tag tag-core">Kärnmarknad</span>
+    <h3>Hotell &amp; besöksnäring — personalkort + NFC</h3>
+    <p>Hotell med 10–100+ anställda söker enhetliga, exklusiva personalkort som också fungerar som nyckelkort eller informationspunkter. Återkommande beställningar när personal byts.</p>
+    <div class="metrics">
+      <div class="metric"><div class="val">Hög</div><div class="lbl">Volym</div></div>
+      <div class="metric"><div class="val">Medel</div><div class="lbl">Insats</div></div>
+      <div class="metric"><div class="val">Q1</div><div class="lbl">Timing</div></div>
+    </div>
+  </div>
+
+  <div class="opp-card">
+    <span class="tag tag-market">Ny marknad</span>
+    <h3>Franskspråkig marknad — "carte de visite" premium</h3>
+    <p>Ingen lokal fransk aktör erbjuder premium NFC-kort med personlig service på franska. Léas modersmålskompetens är en omedelbar konkurrensfördel. Paris boutiques, byråer och advokater.</p>
+    <div class="metrics">
+      <div class="metric"><div class="val">Stor</div><div class="lbl">Potential</div></div>
+      <div class="metric"><div class="val">Medel</div><div class="lbl">Insats</div></div>
+      <div class="metric"><div class="val">Q2</div><div class="lbl">Timing</div></div>
+    </div>
+  </div>
+
+  <div class="opp-card">
+    <span class="tag tag-growth">Tillväxt</span>
+    <h3>vCard-hosting som återkommande intäkt (SaaS-modell)</h3>
+    <p>Varje NFC-kund kan prenumerera på digital hosting. Låg churn (kunden vill inte byta kortleverantör) och stabil MRR. Kan skalas utan proportionell kostnadsökning.</p>
+    <div class="metrics">
+      <div class="metric"><div class="val">MRR</div><div class="lbl">Modell</div></div>
+      <div class="metric"><div class="val">Låg</div><div class="lbl">Churn</div></div>
+      <div class="metric"><div class="val">Q1</div><div class="lbl">Timing</div></div>
+    </div>
+  </div>
+
+  <div class="opp-card">
+    <span class="tag tag-partner">Partnerkanal</span>
+    <h3>Byråer som återförsäljare — "white-label" möjlighet</h3>
+    <p>Marknadsförings- och designbyråer kan erbjuda NFC-visitkort till sina kunder som en tilläggstjänst. Vi levererar produktionen, de hanterar kundkontakten. Hög volym, lägre marginal.</p>
+    <div class="metrics">
+      <div class="metric"><div class="val">Skalbar</div><div class="lbl">Modell</div></div>
+      <div class="metric"><div class="val">Medel</div><div class="lbl">Insats</div></div>
+      <div class="metric"><div class="val">Q3</div><div class="lbl">Timing</div></div>
+    </div>
+  </div>
+
+  <div class="opp-card">
+    <span class="tag tag-product">Produkt</span>
+    <h3>Hållbarhetsprofil — FSC-trä och cirkulärt erbjudande</h3>
+    <p>Miljömedvetna kunder och företag med hållbarhetsmål (ESG-rapportering) söker alternativ till plast. FSC-certifierade träkort, tydlig kommunikation om materialursprung och lång livslängd.</p>
+    <div class="metrics">
+      <div class="metric"><div class="val">Växande</div><div class="lbl">Trend</div></div>
+      <div class="metric"><div class="val">Låg</div><div class="lbl">Insats</div></div>
+      <div class="metric"><div class="val">Nu</div><div class="lbl">Timing</div></div>
+    </div>
+  </div>
+
+</div>
+
+<p style="text-align:center; font-size: 11px; color: #bbb;">
+  Möjlighetskartan — Utkast v1 &nbsp;|&nbsp; Skandinavien &amp; Frankrike &nbsp;|&nbsp; Partners: Tom (ifPrint.eu), Frank (tillverkning, Kina)
+</p>
+
+</body>
+</html>
