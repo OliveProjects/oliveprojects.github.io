@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ifPrint — Samarbetspartner Sammanställning</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:      #0a0a0a;
+    --surface: #141414;
+    --card:    #1a1a1a;
+    --border:  rgba(255,255,255,0.07);
+    --text:    #f0f0f0;
+    --sub:     #777;
+    --accent:  #00E676;
+    --yellow:  #fdcb6e;
+    --blue:    #74b9ff;
+    --red:     #ff7675;
+    --orange:  #e17055;
+    --purple:  #a29bfe;
+  }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 0 0 80px; }
+
+  header { padding: 48px 32px 36px; max-width: 960px; margin: 0 auto; border-bottom: 1px solid var(--border); }
+  .badge { display: inline-block; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; background: rgba(0,230,118,0.12); color: var(--accent); border: 1px solid rgba(0,230,118,0.3); padding: 3px 9px; border-radius: 20px; margin-bottom: 12px; }
+  header h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; }
+  header p { font-size: 14px; color: var(--sub); line-height: 1.65; max-width: 640px; }
+
+  .content { max-width: 960px; margin: 0 auto; padding: 0 32px; }
+  .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; color: var(--sub); padding: 40px 0 14px; }
+
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 12px; }
+  .card h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+  .card p, .card li { font-size: 14px; color: #ccc; line-height: 1.7; }
+  .card ul { padding-left: 18px; margin-top: 6px; }
+  .card ul li { margin-bottom: 5px; }
+
+  .two-col   { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+  .tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; margin-right: 6px; margin-bottom: 8px; }
+  .tag-blue   { background: rgba(116,185,255,0.12); color: var(--blue);   border: 1px solid rgba(116,185,255,0.25); }
+  .tag-green  { background: rgba(0,230,118,0.12);   color: var(--accent); border: 1px solid rgba(0,230,118,0.25); }
+  .tag-yellow { background: rgba(253,203,110,0.12); color: var(--yellow); border: 1px solid rgba(253,203,110,0.25); }
+  .tag-orange { background: rgba(225,112,85,0.12);  color: var(--orange); border: 1px solid rgba(225,112,85,0.25); }
+  .tag-purple { background: rgba(162,155,254,0.12); color: var(--purple); border: 1px solid rgba(162,155,254,0.25); }
+  .tag-red    { background: rgba(255,118,117,0.12); color: var(--red);    border: 1px solid rgba(255,118,117,0.25); }
+
+  .accent-blue   { border-color: rgba(116,185,255,0.3); }
+  .accent-green  { border-color: rgba(0,230,118,0.3); }
+  .accent-yellow { border-color: rgba(253,203,110,0.3); }
+  .accent-orange { border-color: rgba(225,112,85,0.3); }
+  .accent-red    { border-color: rgba(255,118,117,0.3); }
+  .accent-purple { border-color: rgba(162,155,254,0.3); }
+
+  table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  th { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--sub); text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  td { font-size: 13px; color: #ccc; padding: 9px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  tr:last-child td { border-bottom: none; }
+  td strong { color: var(--text); }
+  .td-accent { color: var(--accent); font-weight: 600; }
+  .td-yellow { color: var(--yellow); }
+
+  .note { background: rgba(253,203,110,0.06); border: 1px solid rgba(253,203,110,0.2); border-radius: 10px; padding: 16px 20px; font-size: 13px; color: #ccc; line-height: 1.65; margin-top: 12px; }
+  .note strong { color: var(--yellow); }
+
+  .note-green { background: rgba(0,230,118,0.06); border: 1px solid rgba(0,230,118,0.2); border-radius: 10px; padding: 16px 20px; font-size: 13px; color: #ccc; line-height: 1.65; margin-top: 12px; }
+  .note-green strong { color: var(--accent); }
+
+  .info-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: baseline; }
+  .info-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.7px; color: var(--sub); min-width: 130px; flex-shrink: 0; }
+  .info-val { font-size: 14px; color: #ddd; }
+
+  code { background: #252525; color: var(--accent); padding: 2px 7px; border-radius: 5px; font-size: 12px; font-family: monospace; }
+
+  @media (max-width: 640px) {
+    header, .content { padding-left: 20px; padding-right: 20px; }
+    .two-col, .three-col { grid-template-columns: 1fr; }
+    .info-row { flex-direction: column; gap: 2px; }
+    .info-label { min-width: unset; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="badge">Samarbetspartner — Tom</span>
+  <h1>ifPrint — Sammanställning</h1>
+  <p>Genomgång av ifPrint GmbH (ifprint.eu / ifprint.ch) — en schweizisk premiumtillverkare av NFC-visitkort i metall, trä och PVC. Tom driver ifPrint och täcker den tyska och schweiziska marknaden.</p>
+</header>
+
+<div class="content">
+
+  <!-- FÖRETAGSINFORMATION -->
+  <p class="section-label">Företagsinformation</p>
+  <div class="card accent-green">
+    <div class="info-row"><span class="info-label">Bolagsnamn</span><span class="info-val">ifPrint GmbH</span></div>
+    <div class="info-row"><span class="info-label">Adress</span><span class="info-val">Allmendstrasse 35, 6375 Beckenried, Schweiz</span></div>
+    <div class="info-row"><span class="info-label">Grundat</span><span class="info-val">2005 (20+ år i branschen)</span></div>
+    <div class="info-row"><span class="info-label">E-post</span><span class="info-val"><code>info@ifprint.eu</code></span></div>
+    <div class="info-row"><span class="info-label">Webbplatser</span><span class="info-val">ifprint.eu (EU) · ifprint.ch (Schweiz)</span></div>
+    <div class="info-row"><span class="info-label">Marknader</span><span class="info-val">Schweiz, Tyskland, Österrike, EU</span></div>
+    <div class="info-row"><span class="info-label">Positionering</span><span class="info-val">Premiumkvalitet, schweizisk precision, hållbarhet</span></div>
+    <div class="note-green">
+      <strong>Vår partner:</strong> Tom driver ifPrint och är expert på kundrelationer och produktens slutresultat. Han och Kristoffer är samarbetspartners — Tom täcker DE/CH, Kristoffer och Léa täcker SE/Skandinavien och FR. Marknadsföringsinvolvering från Toms sida är ännu ej bekräftad.
+    </div>
+  </div>
+
+  <!-- PRODUKTSORTIMENT -->
+  <p class="section-label">Produktsortiment</p>
+  <div class="three-col">
+    <div class="card accent-blue">
+      <span class="tag tag-blue">Metall</span>
+      <h2>Metallkort</h2>
+      <ul>
+        <li>Material: Rostfritt stål, aluminium, koppar, titan</li>
+        <li>Tjocklek: 0,3–1,0 mm (stål/koppar), 0,5 mm (aluminium)</li>
+        <li>Ytbehandlingar: Matt, blank, hairline, spegel</li>
+        <li>Plätering: Guld, svart, brons, roséguld, blå, röd, vit</li>
+        <li>Tryck: CMYK eller silktryck</li>
+        <li>Former: Rundade hörn, anpassade konturer</li>
+        <li>NFC: Möjligt (chip synligt pga metallskärmning), 0,3–0,8 mm</li>
+      </ul>
+    </div>
+    <div class="card accent-green">
+      <span class="tag tag-green">Trä</span>
+      <h2>Trä­kort</h2>
+      <ul>
+        <li>Konstruktion: 3-lagers konstruerat trä</li>
+        <li>Träslag: Bambu, valnöt, lönn, ek m.fl.</li>
+        <li>Hållbarhetsprofil: Aktivt marknadsförd som miljövänlig</li>
+        <li>Tryck: Lasergravyr eller färgtryck</li>
+        <li>NFC: Möjligt med osynlig chipintegrering</li>
+        <li>Obs: Ej för permanent fuktexponering</li>
+      </ul>
+    </div>
+    <div class="card accent-yellow">
+      <span class="tag tag-yellow">PVC / PET</span>
+      <h2>Plastkort</h2>
+      <ul>
+        <li>Material: PVC eller PET-G (återvinningsbar)</li>
+        <li>Tryck: Offset eller digitaltryck</li>
+        <li>Ytor: Frostad, klar, hologram, matt laminat</li>
+        <li>Tillägg: Magnetremsa, prägling, folietryck, streckkod</li>
+        <li>Anv.: Kundkort, medlemskort, event-biljetter, lojalitetskort</li>
+        <li>NFC/RFID: Blankkort med chip tillgängliga</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card accent-purple">
+    <span class="tag tag-purple">Deluxe</span>
+    <h2>Deluxe-kort — Ultrapremium</h2>
+    <p>Ädla material med avancerade ytbehandlingar: svart, guld, silver (0,3–1,5 mm), 3D-präglingseffekter med UV-högglans eller UV-matt, metallisk tryckning. Riktat mot designbyråer, arkitekter och lyxvarumärken.</p>
+  </div>
+
+  <!-- NFC & HOSTING -->
+  <p class="section-label">NFC-teknik &amp; Hosting</p>
+  <div class="card">
+    <h2>Hur NFC fungerar hos ifPrint</h2>
+    <ul>
+      <li>Chip: NTAG213 (iOS och Android kompatibel, ingen app krävs)</li>
+      <li>Räckvidd: upp till 10 cm</li>
+      <li>Inget persondata lagras på kortet — bara en säker länk till server</li>
+      <li>Fungerar på iPhone 7+ och de flesta moderna Android-telefoner</li>
+      <li>Kontaktinfo kan uppdateras utan att byta fysiskt kort (om hosting används)</li>
+    </ul>
+  </div>
+
+  <div class="two-col">
+    <div class="card accent-green">
+      <span class="tag tag-green">Alternativ A</span>
+      <h2>ifPrint Hosting-tjänst</h2>
+      <p>Krypterad databas på säkra servrar i Schweiz/EU (GDPR-kompatibel). Uppdateringar inom 24h via e-post till support.</p>
+      <table style="margin-top: 14px;">
+        <thead><tr><th>Antal anst.</th><th>Pris/person/år</th></tr></thead>
+        <tbody>
+          <tr><td>5</td><td class="td-yellow">EUR 25,00</td></tr>
+          <tr><td>10</td><td class="td-yellow">EUR 17,50</td></tr>
+          <tr><td>20</td><td class="td-yellow">EUR 12,50</td></tr>
+          <tr><td>30</td><td class="td-yellow">EUR 11,50</td></tr>
+          <tr><td>50+</td><td class="td-accent">EUR 10,00</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:10px; font-size:12px; color: var(--sub);">Rekommendation: 2 kort/person (ett primärt + ett vid förlust).</p>
+    </div>
+    <div class="card accent-blue">
+      <span class="tag tag-blue">Alternativ B</span>
+      <h2>Eget hosting (Self-hosted)</h2>
+      <p>Kunden lägger .vcf-fil på sin egen server. Uppdatering = ladda upp ny fil med samma filnamn. Inga löpande kostnader — full datakontroll.</p>
+      <ul style="margin-top: 12px;">
+        <li>Kräver kundens egen tekniska infrastruktur</li>
+        <li>Ingen koppling till ifPrint efter leverans</li>
+        <li>Passar tekniska kunder som vill ha full kontroll</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PRISER -->
+  <p class="section-label">Priser — NFC-kort (CHF, ex. moms, frakt inkluderad)</p>
+  <div class="card">
+    <p style="font-size:12px; color: var(--sub); margin-bottom: 14px;">Referenspriser från 50 st. Volymsrabatt tillgänglig. Ca 11,5 SEK/CHF (kontrollera aktuell kurs).</p>
+    <table>
+      <thead>
+        <tr><th>Produkt</th><th>Från (50 st)</th><th>Ca SEK/kort</th><th>Min. antal</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Metallkort NFC</strong></td><td class="td-yellow">ab CHF 12,20/kort</td><td class="td-accent">~140 kr/kort</td><td>5 st</td></tr>
+        <tr><td><strong>Trä­kort NFC</strong></td><td class="td-yellow">ab CHF 9,20/kort</td><td class="td-accent">~106 kr/kort</td><td>5 st</td></tr>
+        <tr><td><strong>PVC-kort NFC</strong></td><td class="td-yellow">ab CHF 6,20/kort</td><td class="td-accent">~71 kr/kort</td><td>3–5 st</td></tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <strong>Obs:</strong> Priser är "Richtwerte" (referensvärden) — slutpris sätts via offert. Betydande volymsrabatt vid större order. Frakt till Sverige ingår i priset (DHL för EU-leveranser).
+    </div>
+  </div>
+
+  <!-- LEDTIDER & ORDERPROCESS -->
+  <p class="section-label">Ledtider &amp; Orderprocess</p>
+  <div class="two-col">
+    <div class="card">
+      <span class="tag tag-orange">Tidsplan</span>
+      <h2>Produktion &amp; Leverans</h2>
+      <ul>
+        <li><strong>Offert:</strong> inom 24 timmar (uttalat löfte)</li>
+        <li><strong>Produktion:</strong> 2–3 veckor efter godkänd design</li>
+        <li><strong>Leverans:</strong> +10–16 dagar (totalt ~4–5 veckor)</li>
+        <li>Frakt: DHL till EU, ingår i priset</li>
+        <li>Förpackning: Individuella plastfickor (kan väljas bort)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="tag tag-purple">Orderflöde</span>
+      <h2>Steg för steg</h2>
+      <ul>
+        <li>Kontakt via <code>info@ifprint.eu</code> eller webbformulär</li>
+        <li>Skicka designfiler (CMYK, vektorgrafik, min. 5pt text)</li>
+        <li>ifPrint skickar "Gut zum Druck" (korrektur för godkännande)</li>
+        <li>Kunden godkänner → produktion startar</li>
+        <li>Betalning: Full betalning, äganderätt vid betalning</li>
+        <li>EU-import: EORI-nummer krävs för kunden</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- DESIGN & TRYCK -->
+  <p class="section-label">Design &amp; Tryckteknik</p>
+  <div class="card">
+    <div class="two-col">
+      <div>
+        <h2 style="margin-bottom:10px;">Tekniska krav på designfiler</h2>
+        <ul>
+          <li>Färgläge: CMYK (ej RGB)</li>
+          <li>Format: Vektorgrafik föredras</li>
+          <li>Minsta textstorlek: 5pt</li>
+          <li>Utfall (bleed): 2 mm utanför kortformat</li>
+          <li>Säkerhetszon: Viktiga element minst 1 mm från kant</li>
+          <li>Pantone-matchning tillgänglig på begäran</li>
+        </ul>
+      </div>
+      <div>
+        <h2 style="margin-bottom:10px;">Tillgängliga trycktekniker</h2>
+        <ul>
+          <li><strong>Offsettryck</strong> — Högst kvalitet, stora upplagor, CMYK + Pantone</li>
+          <li><strong>Digitaltryck</strong> — Snabbare, upp till 250 st, stöder personalisering</li>
+          <li><strong>Silktryck</strong> — Enfärgade applikationer, hög hållbarhet</li>
+          <li><strong>Lasergravyr</strong> — Träkort, precis detaljering</li>
+          <li><strong>UV-effekter</strong> — Högglans/matt, 3D-prägling</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note">
+      <strong>Designhjälp:</strong> ifPrint erbjuder ingen aktiv designtjänst — kunden ansvarar för färdiga filer. Teknisk konsultation via e-post finns. Detta är ett gap vi och Tom behöver diskutera för vår verksamhet.
+    </div>
+  </div>
+
+  <!-- VILLKOR & JURIDIK -->
+  <p class="section-label">Villkor &amp; Juridik</p>
+  <div class="two-col">
+    <div class="card accent-red">
+      <span class="tag tag-red">Viktigt</span>
+      <h2>Reklamation &amp; Garanti</h2>
+      <ul>
+        <li>Inga juridiska garantier utfärdas ("keine Garantien im Rechtssinne")</li>
+        <li>Reklamation: måste anmälas <strong>inom 2 veckor</strong> efter leverans</li>
+        <li>Naturliga variationer i trä (färg, åder) är ej defekter</li>
+        <li>Kvantitetstolerans: ±5 % accepterat utan kompensation</li>
+        <li>Returrätt gäller ej för kundanpassade produkter (EU-regel)</li>
+        <li>Godkänd "Gut zum Druck" = inget ansvar för designfel</li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="tag tag-blue">Jurisdiktion</span>
+      <h2>Avtal &amp; Lag</h2>
+      <ul>
+        <li>Schweizisk lag gäller alla avtal</li>
+        <li>Domstol: Beckenried, Schweiz</li>
+        <li>EU-import: Kunden ansvarar för EORI-nummer och tullavgifter</li>
+        <li>ifPrint hjälper operativt med tullhantering</li>
+        <li>Äganderätten övergår vid full betalning</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- RELEVANS FÖR OSS -->
+  <p class="section-label">Relevans för vår verksamhet</p>
+  <div class="card accent-green">
+    <h2>Styrkor i partnerskapet</h2>
+    <ul>
+      <li><strong>Schweizisk kvalitetsstandard</strong> — stark USP mot svenska kunder som förväntar sig precision</li>
+      <li><strong>20 års erfarenhet</strong> — etablerade processer, stabil leverantörskedja</li>
+      <li><strong>GDPR-kompatibel hosting</strong> — viktigt för svenska B2B-kunder</li>
+      <li><strong>Låga minimikvantiteter</strong> (3–5 st) — perfekt för uppstarten med mindre ordrar</li>
+      <li><strong>Frakt inkluderad</strong> till EU — inga dolda fraktkostnader</li>
+      <li><strong>Uttalat partnerskapsfokus</strong> — "sorgfältig ausgewählte Partnerschaften"</li>
+    </ul>
+  </div>
+
+  <div class="two-col">
+    <div class="card accent-red">
+      <span class="tag tag-red">Svagheter</span>
+      <h2>Begränsningar att känna till</h2>
+      <ul>
+        <li>4–5 veckors total ledtid — kräver god framförhållning</li>
+        <li>Ingen designtjänst — kunden måste ha klara filer</li>
+        <li>Priserna är referensvärden — offert krävs alltid</li>
+        <li>NFC-chip syns på metallkort (teknisk begränsning)</li>
+        <li>Schweizisk lag och domstol vid tvist</li>
+        <li>EORI-nummer krävs för EU-import</li>
+      </ul>
+    </div>
+    <div class="card accent-yellow">
+      <span class="tag tag-yellow">Frågor att stämma av</span>
+      <h2>Med Tom</h2>
+      <ul>
+        <li>Vilka partnerpriser/grossistpriser gäller för oss?</li>
+        <li>Kan vi märka produkterna med vårt eget varumärke (white-label)?</li>
+        <li>Vill/kan Tom hjälpa till med marknadsföring av vår verksamhet?</li>
+        <li>Hur hanterar vi designprocessen gemensamt för kunder utan filer?</li>
+        <li>Kan vi erbjuda Toms hosting-tjänst vidaresåld till svenska kunder?</li>
+        <li>Vem ansvarar för EORI och tullhantering — vi eller Tom?</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<footer style="text-align:center; font-size: 11px; color: #333; padding: 48px 32px 0;">
+  Internt — Sammanställt från ifprint.eu &amp; ifprint.ch · Ej publikt
+</footer>
+
+</body>
+</html>
