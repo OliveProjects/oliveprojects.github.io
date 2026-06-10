@@ -166,6 +166,9 @@
         <li><span class="check">✓</span> QR-kod — nedladdningsbar PNG i dashboarden</li>
         <li><span class="check">✓</span> Admin-panel: skapa, aktivera/inaktivera, radera kunder</li>
         <li><span class="check">✓</span> Lösenordsåterställning via admin</li>
+        <li><span class="check">✓</span> Lösenordsbyte för inloggade användare (i dashboarden)</li>
+        <li><span class="check">✓</span> Välkomstmail automatiskt vid kundregistrering (Resend)</li>
+        <li><span class="check">✓</span> Slug-stöd för specialtecken: å, ä, ö, é, ü m.m.</li>
         <li><span class="check">✓</span> GDPR: kund kan radera sitt konto själv</li>
         <li><span class="check">✓</span> Tre admin-användare: Kristoffer, Kris, Léa</li>
       </ul>
@@ -174,12 +177,12 @@
 
   <div class="two-col" style="margin-top:12px;">
     <div class="card accent-yellow">
-      <span class="tag tag-yellow">Saknas — snart</span>
+      <span class="tag tag-yellow">Nästa steg</span>
       <h2>Kort att åtgärda</h2>
       <ul class="status-list">
-        <li><span class="cross">✗</span> Välkomstmail till nya kunder (Resend, ~15 min)</li>
-        <li><span class="cross">✗</span> Lösenordsbyte för inloggade användare</li>
-        <li><span class="cross">✗</span> Eget varumärke på profilsidan</li>
+        <li><span class="cross">✗</span> Profilsidans design — matcha premium-känslan</li>
+        <li><span class="cross">✗</span> Profilvisningar — statistik för kunden</li>
+        <li><span class="cross">✗</span> Stripe-betalning (när 10+ kunder)</li>
       </ul>
     </div>
     <div class="card accent-blue">
@@ -200,57 +203,57 @@
   <p class="section-label">Priolista — vad vi gör härnäst</p>
 
   <div class="card">
+    <div class="prio-item" style="opacity:0.5;">
+      <span class="prio-num" style="background:#16a34a;">✓</span>
+      <div class="prio-body">
+        <h2>Byta admin-lösenord <span class="tag tag-green" style="font-size:10px; margin-left:4px;">Klart</span></h2>
+        <p>Admin-lösenordet är bytt. Plattformen är säker att dela med kunder.</p>
+      </div>
+    </div>
+    <div class="prio-item" style="opacity:0.5;">
+      <span class="prio-num" style="background:#16a34a;">✓</span>
+      <div class="prio-body">
+        <h2>Välkomstmail <span class="tag tag-green" style="font-size:10px; margin-left:4px;">Klart</span></h2>
+        <p>Nya kunder får automatiskt ett mail med inloggningsuppgifter via Resend när de skapas i admin-panelen.</p>
+      </div>
+    </div>
+    <div class="prio-item" style="opacity:0.5;">
+      <span class="prio-num" style="background:#16a34a;">✓</span>
+      <div class="prio-body">
+        <h2>Lösenordsbyte för användare <span class="tag tag-green" style="font-size:10px; margin-left:4px;">Klart</span></h2>
+        <p>Kunder kan byta sitt lösenord själva direkt i dashboarden utan att kontakta admin.</p>
+      </div>
+    </div>
     <div class="prio-item">
       <span class="prio-num now">1</span>
-      <div class="prio-body">
-        <h2>Byta admin-lösenord <span class="tag tag-red" style="font-size:10px; margin-left:4px;">Säkerhet</span></h2>
-        <p>Standard-lösenordet <code style="background:#252525; padding:1px 6px; border-radius:4px; font-size:12px;">admin123</code> är fortfarande aktivt. Måste bytas innan ni delar plattformen med kunder. Görs direkt i admin-panelen.</p>
-      </div>
-    </div>
-    <div class="prio-item">
-      <span class="prio-num now">2</span>
-      <div class="prio-body">
-        <h2>Välkomstmail <span class="tag tag-yellow" style="font-size:10px; margin-left:4px;">~15 min</span></h2>
-        <p>När ni skapar en ny kund ska de automatiskt få ett mail med inloggningsuppgifter. Kräver Resend (gratis t.o.m. 3 000 mail/mån). Utan detta måste ni skicka lösenord manuellt varje gång.</p>
-      </div>
-    </div>
-    <div class="prio-item">
-      <span class="prio-num now">3</span>
-      <div class="prio-body">
-        <h2>Lösenordsbyte för användare</h2>
-        <p>Idag kan en kund bara byta lösenord om en admin återställer det. Kunden borde själv kunna byta lösenord i dashboarden.</p>
-      </div>
-    </div>
-    <div class="prio-item">
-      <span class="prio-num soon">4</span>
       <div class="prio-body">
         <h2>Profilsidans design & varumärke</h2>
         <p>Profilsidan fungerar men ser generisk ut. Designen bör matcha era premium-kort — rätt typsnitt, färgpalett, logga. Första intrycket när kunden håller ett NFC-kort mot en telefon.</p>
       </div>
     </div>
     <div class="prio-item">
-      <span class="prio-num soon">5</span>
+      <span class="prio-num soon">2</span>
       <div class="prio-body">
         <h2>Profilvisningar — statistik</h2>
         <p>Kunden bör kunna se hur många gånger deras profil visats. Enkelt att lägga till, högt upplevt värde. "Ditt kort visades 47 gånger den här månaden."</p>
       </div>
     </div>
     <div class="prio-item">
-      <span class="prio-num soon">6</span>
+      <span class="prio-num soon">3</span>
       <div class="prio-body">
         <h2>Stripe-betalning</h2>
         <p>Automatisera faktureringen. Prioritera när ni passerar 10 aktiva betalande kunder — under det är manuell fakturering enklare.</p>
       </div>
     </div>
     <div class="prio-item">
-      <span class="prio-num later">7</span>
+      <span class="prio-num later">4</span>
       <div class="prio-body">
         <h2>Företagsfunktion — flera profiler under ett konto</h2>
         <p>Ett företag kan ha 10 anställda. Idag behöver varje person ett eget konto. Med en team-funktion hanterar en HR-admin alla sina anställdas kort från ett ställe.</p>
       </div>
     </div>
     <div class="prio-item">
-      <span class="prio-num later">8</span>
+      <span class="prio-num later">5</span>
       <div class="prio-body">
         <h2>Flerspråkigt — franska</h2>
         <p>Relevant om Léa driver den franska marknaden. Gränssnittet bör kunna visas på franska för kunder i Frankrike.</p>
