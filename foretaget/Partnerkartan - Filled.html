@@ -363,27 +363,50 @@
     <div class="risk-tag">Medelberoende — hanteras via Frank. Testa alltid NFC-funktion vid leverans.</div>
   </div>
 
-  <!-- Hosting / Techplattform -->
+  <!-- Bahnhof / VPS-hosting -->
   <div class="partner-card">
     <div class="header">
-      <div class="partner-avatar av-chan">☁️</div>
+      <div class="partner-avatar av-tech">🇸🇪</div>
       <div>
-        <h3>Hostingleverantör (vCard)</h3>
-        <span class="type-tag tt-chan">Teknisk infrastruktur</span>
+        <h3>Bahnhof VPS (Stockholm)</h3>
+        <span class="type-tag tt-tech">Teknisk infrastruktur</span>
       </div>
     </div>
-    <div class="desc">Moln- eller serverinfrastruktur för digitala vCard-sidor som NFC-korten pekar på. Kan byggas på en befintlig plattform (t.ex. Tapni, Popl API) eller byggas eget på WordPress/Webflow + plugin.</div>
+    <div class="desc">Svensk VPS-leverantör (158.174.210.254) som hostar vCard-plattformen vcard.oliveprojects.eu. Node.js/Express + PostgreSQL. Egenutvecklad lösning — ingen beroende av Tapni, Popl eller annan tredjepartsplattform. GDPR-kompatibel (data i Sverige). Driftkostnad ~100 kr/mån inkl. domän.</div>
     <div class="value-row">
       <div class="value-box">
         <div class="vb-label">Vi ger</div>
-        <p>Månadsavgift per kund, volymmålet</p>
+        <p>Månadsavgift ~100 kr/mån</p>
       </div>
       <div class="value-box">
         <div class="vb-label">Vi får</div>
-        <p>Stabil hosting, kundportal, URL-hantering</p>
+        <p>Stabil svensk hosting, full datakontroll, GDPR-kompatibilitet, ingen vendor lock-in</p>
       </div>
     </div>
-    <div class="risk-tag">Strategisk — vCard-hosting är en återkommande intäktskälla. Välj skalbar lösning.</div>
+    <div class="risk-tag">Låg risk — eget system, kan migreras. Svenska lagar gäller. Ingen tredjepartsrisk.</div>
+  </div>
+
+  <!-- Resend (e-post) -->
+  <div class="partner-card">
+    <div class="header">
+      <div class="partner-avatar av-pay">✉️</div>
+      <div>
+        <h3>Resend</h3>
+        <span class="type-tag tt-pay">E-postinfrastruktur</span>
+      </div>
+    </div>
+    <div class="desc">E-posttjänst för automatiska välkomstmail när admin skapar en ny kund. Domän: vcard.oliveprojects.eu. Mailet skickas automatiskt med inloggningsuppgifter. Används även för lösenordsåterställning via plattformen.</div>
+    <div class="value-row">
+      <div class="value-box">
+        <div class="vb-label">Vi ger</div>
+        <p>Volym, domänkonfiguration</p>
+      </div>
+      <div class="value-box">
+        <div class="vb-label">Vi får</div>
+        <p>Pålitlig transaktionell e-post, hög deliverabilitet, enkel API-integration</p>
+      </div>
+    </div>
+    <div class="risk-tag">Låg risk — lätt att byta leverantör. Håll koll på månadsgräns på fri plan.</div>
   </div>
 
 </div>
@@ -437,17 +460,24 @@
       <td>Frank hanterar — säkerställ att Frank har flera chipleverantörer</td>
     </tr>
     <tr>
-      <td>Hostingleverantör (vCard)</td>
-      <td>Digital vCard-hosting</td>
+      <td>Bahnhof VPS (Stockholm)</td>
+      <td>Hosting av vCard-plattformen (vcard.oliveprojects.eu)</td>
       <td class="dep-medium">Medel</td>
-      <td>Hosting-tjänsten faller bort → migrering krävs</td>
-      <td>Bygg eget om möjligt; välj hostingleverantör med datacenter i EU</td>
+      <td>Plattformen faller bort tills ny VPS konfigureras — max 1–2 dagars arbete</td>
+      <td>Egenutvecklad lösning — kan migreras till vilken VPS som helst. Backup nightly kl 03:00.</td>
+    </tr>
+    <tr>
+      <td>Resend</td>
+      <td>Automatiska välkomstmail och lösenordsåterställning</td>
+      <td class="dep-low">Låg</td>
+      <td>Välkomstmail skickas inte automatiskt — admin måste skicka manuellt</td>
+      <td>SendGrid, Postmark eller Mailgun som alternativ. Byte kräver 1–2 timmars konfiguration.</td>
     </tr>
   </tbody>
 </table>
 
 <p style="text-align:center; font-size: 11px; color: #bbb;">
-  Partnerkarta — Utkast v1 &nbsp;|&nbsp; Skandinavien &amp; Frankrike &nbsp;|&nbsp; Partners: Tom (ifPrint.eu), Frank (tillverkning, Kina)
+  Partnerkarta — v2 &nbsp;|&nbsp; Skandinavien &amp; Frankrike &nbsp;|&nbsp; Partners: Tom (ifPrint.eu), Frank (tillverkning, Kina), Bahnhof (VPS, Stockholm), Resend (e-post) &nbsp;|&nbsp; Juni 2026
 </p>
 
 </body>

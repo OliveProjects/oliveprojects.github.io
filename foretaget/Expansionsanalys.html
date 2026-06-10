@@ -202,7 +202,7 @@
     <div class="rm-cell">
       <div class="rm-phase">Nu — År 1</div>
       <div class="rm-title">Befäst kärnan</div>
-      <div class="rm-items">Visitkort SE + FI<br>RFID-blockerare (bundle)<br>Företagspaket<br>vCard-hosting</div>
+      <div class="rm-items">Visitkort SE + FI<br>RFID-blockerare (bundle)<br>Företagspaket<br>vCard-hosting ✓ LIVE</div>
     </div>
     <div class="rm-cell">
       <div class="rm-phase">År 2</div>
@@ -212,7 +212,7 @@
     <div class="rm-cell">
       <div class="rm-phase">År 3+</div>
       <div class="rm-title">Plattform och skala</div>
-      <div class="rm-items">Digital profilplattform<br>Event-badges<br>Frankrike (riktigt)<br>Vit­label API</div>
+      <div class="rm-items">Plattformsförbättringar (Stripe, teman)<br>Event-badges<br>Frankrike (riktigt)<br>Vit­label API</div>
     </div>
   </div>
 </div>
@@ -359,18 +359,18 @@
     <div class="section-num">05 — Det stora vadslagandet</div>
     <h2>Den digitala plattformen — här är era riktiga pengar på lång sikt</h2>
 
-    <p>Räkna med mig ett ögonblick. Om ni säljer ett kort för 70 kronor är det en engångsintäkt. Om ni dessutom erbjuder en hosted digital profil för 59 kronor per månad och tio procent av era kunder accepterar — vad händer?</p>
+    <p>Räkna med mig ett ögonblick. Om ni säljer ett kort för 70 kronor är det en engångsintäkt. Om ni dessutom erbjuder en hosted digital profil och tio procent av era kunder väljer att förnya — vad händer?</p>
 
-    <p>Med hundra kortkunder som betalande prenumeranter: 100 × 59 kr = 5 900 kronor per månad i återkommande intäkt. Det täcker er hosting, er administration och skapar ett ekonomiskt golv som gör bolaget hållbart även i månader med svag kortförsäljning. Med fem hundra prenumeranter är det nästan 30 000 kronor per månad — en heltidslön utan att sälja ett enda nytt kort.</p>
+    <p>Med hundra kortkunder som betalande prenumeranter: 100 × 99 kr/år = 9 900 kronor per år i återkommande intäkt. Det täcker er hosting, er administration och skapar ett ekonomiskt golv som gör bolaget hållbart även i månader med svag kortförsäljning.</p>
 
     <div class="callout callout-blue">
-      <strong>Vad plattformen måste innehålla (dag ett)</strong>
-      En unik URL per kort. Möjlighet för kunden att uppdatera sitt namn, titel, telefon, e-post och länk. En QR-kod som genereras automatiskt (fallback för gamla telefoner). Mobilanpassad visningssida. Det är allt. Det kan byggas på en helg med rätt verktyg — Notion, Carrd, eller ett enkelt Node-projekt.
+      <strong>Plattformen är live — vcard.oliveprojects.eu</strong>
+      Byggt juni 2026 på Bahnhof VPS i Stockholm. Node.js + PostgreSQL. Unik profilsida per kund (/slug), .vcf-nedladdning ("Spara kontakt"), QR-kod, redigerbar dashboard, fotouppladdning, sociala medier, välkomstmail via Resend, admin-panel med KPI-dashboard, organisationssystem för B2B-kunder, glömt-lösenord-flöde. Flerspråkig UI: svenska + engelska (auto-detekterat). Driftkostnad: ~100 kr/mån = 1 200 kr/år oavsett antal kunder. Går jämnt upp vid 2 betalande prenumeranter.
     </div>
 
-    <p>Vad ni lägger till sen, i den ordning det ger mest värde: statistik (hur många gånger kortet scannats), möjlighet att ha flera profiler per kort (jobbprofil på dagen, personlig profil på kvällen), och integration med LinkedIn och kalenderbokning. Ingen av dessa behövs dag ett. Dag ett behöver ni bara att länken fungerar och kunden kan uppdatera den.</p>
+    <p>Det viktigaste med att ha byggt plattformen själv: varje ny marknad ni öppnar kräver ingen ny IT-infrastruktur. En kund i Norge, Danmark eller Frankrike onboardas digitalt med samma system. Admin skapar konto, välkomstmailet skickas automatiskt, kunden redigerar sin profil. Expansion handlar om kortförsäljning — inte om att bygga om något. Det är ett genuint skalningsförsprång.</p>
 
-    <p>UniTAP i Danmark tar 129–199 DKK per månad för sin plattform. Det är uppemot 200 kronor. Ni kan prissätta er under det och fortfarande vara lönsamma, för er tillverkningskostnad för plattformen är nära noll när det väl är byggt. Det är en av de få situationer i affärslivet där marginalen faktiskt ökar ju mer ni säljer.</p>
+    <p>UniTAP i Danmark tar 129–199 DKK per månad för sin plattform. Det är uppemot 200 kronor. Ni erbjuder hosting gratis med kortet (år 1) och valfri förnyelse från 99 kr/år från år 2 — och ni äger hela stacken. Det är en av de få situationer i affärslivet där marginalen faktiskt ökar ju mer ni säljer.</p>
   </div>
 
   <!-- ============================================================
@@ -446,11 +446,11 @@
           </tr>
           <tr>
             <td>vCard-hosting (prenumeration)</td>
-            <td>1–3 mån</td>
-            <td><span class="dot-y">●</span> Medel</td>
+            <td><strong style="color:#1d6b3e;">Live ✓</strong></td>
+            <td><span class="dot-g">●</span> Klart</td>
             <td><span class="dot-g">●</span> Hög (recurring)</td>
             <td>Ja</td>
-            <td><strong style="color:#1d6b3e;">Prioritera år 1</strong></td>
+            <td><strong style="color:#1d6b3e;">Driftsatt — onboarda kunder nu</strong></td>
           </tr>
           <tr>
             <td>Hotell — personalkort</td>
@@ -494,11 +494,11 @@
           </tr>
           <tr>
             <td>Digital plattform (full SaaS)</td>
-            <td>12–24 mån</td>
-            <td><span class="dot-r">●</span> Hög</td>
+            <td><strong style="color:#1d6b3e;">Live ✓ (v1)</strong></td>
+            <td><span class="dot-g">●</span> Klart (v1)</td>
             <td><span class="dot-g">●</span> Mycket hög</td>
             <td>Ja</td>
-            <td>År 3 — bygg rätt från start</td>
+            <td><strong style="color:#1d6b3e;">Driftsatt — vidareutveckla med Stripe, teman m.m.</strong></td>
           </tr>
           <tr>
             <td>RFID-blockerare (fristående)</td>
@@ -551,7 +551,7 @@
       </li>
       <li>
         <span class="action-num">4</span>
-        <span><strong>Sätt upp en enkel vCard-sida för er egen räkning.</strong> Innan ni erbjuder det till kunder — testa det på er själva. Era egna visitkort ska leda till en hosted digital profil. Det är det bästa sättet att förstå vad produkten behöver, och ni kan använda det som en demonstration i kundmöten.</span>
+        <span><strong>Lägg upp era egna profiler på vcard.oliveprojects.eu.</strong> Plattformen är live — era egna kort ska leda till verkliga live-profiler. Använd dem som demonstration i kundmöten: knacka kortet mot en telefon, visa profilen, visa hur kontakten sparas. Det är det starkaste säljargumentet ni kan ha.</span>
       </li>
       <li>
         <span class="action-num">5</span>
