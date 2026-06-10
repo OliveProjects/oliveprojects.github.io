@@ -203,6 +203,7 @@
     line-height: 1.5;
   }
   .action-list li:last-child { border-bottom: none; }
+  .action-list li.done-item { opacity: 0.65; }
   .action-num {
     font-size: 11px;
     font-weight: 700;
@@ -216,6 +217,22 @@
   .action-num.prio-1 { background: #8b1c1c; }
   .action-num.prio-2 { background: #7a5200; }
   .action-num.prio-3 { background: #0b4d8a; }
+  .action-num.done   { background: #1d6b3e; }
+
+  .done-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: #f0faf4;
+    color: #1d6b3e;
+    border: 1px solid #27ae60;
+    border-radius: 4px;
+    padding: 1px 7px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
 
   /* ARTICLE BADGE */
   .article-ref {
@@ -252,11 +269,11 @@
 <div class="cover">
   <div class="cover-label">Intern analys · Konfidentiell</div>
   <h1>GDPR-granskning<br>vCard Hosting Platform</h1>
-  <div class="cover-meta">Vårt Företag · vcard.oliveprojects.eu · Juni 2026</div>
+  <div class="cover-meta">Vårt Företag · vcard.oliveprojects.eu · Juni 2026 · Uppdaterad efter implementation</div>
   <div class="cover-author">
     <strong>Sammanfattning</strong>
-    Vi hanterar personuppgifter för kunder som väljer att publicera kontaktinfo.<br>
-    Grunden är god — men tre saker måste åtgärdas innan vi växer vidare.
+    Alla P1- och de flesta P2-åtgärder är implementerade.<br>
+    Plattformen uppfyller nu de grundläggande GDPR-kraven. Återstående punkter är administrativa.
   </div>
 </div>
 
@@ -274,24 +291,24 @@
       <div class="verdict-value v-go">Stark grund ✓</div>
     </div>
     <div class="verdict-cell">
-      <div class="verdict-flag">🟡</div>
+      <div class="verdict-flag">🟢</div>
       <div class="verdict-label">Transparens</div>
-      <div class="verdict-value v-hold">Saknas policy</div>
+      <div class="verdict-value v-go">Policy live ✓</div>
     </div>
     <div class="verdict-cell">
-      <div class="verdict-flag">🟡</div>
+      <div class="verdict-flag">🟢</div>
       <div class="verdict-label">URL-integritet</div>
-      <div class="verdict-value v-hold">Kan förbättras</div>
+      <div class="verdict-value v-go">UUID live ✓</div>
     </div>
     <div class="verdict-cell">
-      <div class="verdict-flag">🔴</div>
+      <div class="verdict-flag">🟢</div>
       <div class="verdict-label">Integritetspolicy</div>
-      <div class="verdict-value v-stop">Saknas — lag krav</div>
+      <div class="verdict-value v-go">Live ✓</div>
     </div>
     <div class="verdict-cell">
       <div class="verdict-flag">🟡</div>
       <div class="verdict-label">Tredjeparter</div>
-      <div class="verdict-value v-hold">DPA behövs</div>
+      <div class="verdict-value v-hold">DPA kvarstår</div>
     </div>
   </div>
 
@@ -315,7 +332,7 @@
     <div class="section-num">02 — Vad vi gör rätt</div>
     <h2>En stark teknisk och organisatorisk grund</h2>
 
-    <p>Plattformen är byggd med genomtänkt säkerhet. Flera GDPR-krav är redan uppfyllda i koden, utan att vi aktivt planerat för det.</p>
+    <p>Plattformen är byggd med genomtänkt säkerhet. Flera GDPR-krav är uppfyllda i koden — och efter senaste uppdateringen täcker vi nu även informationsskyldigheten och dataportabiliteten.</p>
 
     <div class="callout callout-green">
       <strong>✓ Hosting inom EU/Sverige</strong>
@@ -348,69 +365,89 @@
     </div>
 
     <div class="callout callout-green">
-      <strong>✓ Tvåfaktors-skydd på känsliga åtgärder</strong>
-      Lösenordsbyte kräver bekräftelse av nuvarande lösenord. Radering av konto kräver explicit bekräftelse. Återställningslänkar gäller i 1 timme och markeras som använda.
+      <strong>✓ Integritetspolicy publicerad (artikel 13)</strong>
+      En fullständig integritetspolicy finns på <code>/privacy</code> och är länkad från footer på alla sidor, alla autentiseringssidor och välkomstmailet. Täcker: personuppgiftsansvarig, datakategorier, ändamål, rättslig grund, lagringstider, mottagare (Bahnhof + Resend/SCC), alla registrerades rättigheter och rätten att klaga till IMY.
+    </div>
+
+    <div class="callout callout-green">
+      <strong>✓ UUID-baserade privata NFC-URL:er (artikel 25 — Privacy by Design)</strong>
+      Varje profil har ett unikt <code>private_slug</code> (UUID v4) vid sidan om det namnbaserade sluget. NFC-chipet programmeras med UUID-URL:en (<code>/p/uuid</code>). Personens namn syns inte i URL:en. Befintliga profiler har fått UUID:n backfyllda automatiskt vid uppstart.
+    </div>
+
+    <div class="callout callout-green">
+      <strong>✓ Noindex-alternativ för profiler (artikel 25)</strong>
+      Kunden kan under Inställningar aktivera "Dölj min sida från sökmotorer". Lägger till <code>&lt;meta name="robots" content="noindex,nofollow"&gt;</code> på profilsidan. Ger kunden kontroll utan att påverka NFC-funktionen.
+    </div>
+
+    <div class="callout callout-green">
+      <strong>✓ Dataportabilitet (artikel 20)</strong>
+      Under Inställningar kan kunden ladda ner alla sina uppgifter (konto + profil) som JSON med ett klick. Uppfyller rätten till dataportabilitet i maskinläsbart format.
+    </div>
+
+    <div class="callout callout-green">
+      <strong>✓ Automatisk rensning av återställningstokens (artikel 5.1.e)</strong>
+      Utgångna och använda lösenordsåterställningstokens rensas automatiskt vid uppstart: <code>DELETE FROM password_resets WHERE expires_at &lt; NOW() - INTERVAL '7 days'</code>. Uppfyller lagringsminimeringsprincipen.
     </div>
   </div>
 
   <!-- SEKTION 3 -->
   <div class="section">
-    <div class="section-num">03 — Risker och brister</div>
-    <h2>Vad som behöver ses över</h2>
+    <div class="section-num">03 — Risker och status</div>
+    <h2>Ursprungliga risker — uppdaterad status</h2>
 
     <table class="risk-table">
       <thead>
         <tr>
           <th>Risk</th>
           <th>GDPR-artikel</th>
-          <th>Nivå</th>
+          <th>Status</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong>Integritetspolicy saknas helt</strong><br>Det finns ingen sida som förklarar för kunden hur vi behandlar deras personuppgifter.</td>
+          <td><strong>Integritetspolicy saknas</strong><br>Ingen sida förklarar hur vi behandlar personuppgifter.</td>
           <td>Art. 13–14</td>
-          <td><span class="risk-level rl-high">Hög — lagkrav</span></td>
+          <td><span class="risk-level rl-done">Åtgärdat ✓</span></td>
         </tr>
         <tr>
-          <td><strong>Personnamn i URL:en</strong><br>Slogen /lea-fontaine innehåller personuppgifter och indexeras av Google. Sökning på personens namn kan leda direkt till profilen.</td>
-          <td>Art. 25 (inbyggd integritet)</td>
-          <td><span class="risk-level rl-medium">Medel</span></td>
-        </tr>
-        <tr>
-          <td><strong>Inget DPA med Resend</strong><br>Vi skickar e-postadresser (personuppgifter) till Resend, ett amerikanskt bolag. Utan ett DPA bryter vi mot kraven för personuppgiftsbiträden.</td>
-          <td>Art. 28, Art. 46</td>
-          <td><span class="risk-level rl-high">Hög — lagkrav</span></td>
-        </tr>
-        <tr>
-          <td><strong>Foton är publikt tillgängliga via direktlänk</strong><br>Foton lagras på /uploads/user-{id}-{ts}.ext. Länken är gissningsbar om man känner till mönstret och ger tillgång utan att besöka profilen.</td>
-          <td>Art. 32</td>
-          <td><span class="risk-level rl-medium">Medel</span></td>
-        </tr>
-        <tr>
-          <td><strong>Ingen datalagringspolicy</strong><br>Inaktiva konton och utgångna återställningstokens rensas inte automatiskt. Data ska inte sparas längre än nödvändigt.</td>
-          <td>Art. 5.1.e (lagringsminimering)</td>
-          <td><span class="risk-level rl-medium">Medel</span></td>
-        </tr>
-        <tr>
-          <td><strong>Ingen rätt till dataportabilitet</strong><br>Kunden kan redigera och radera sin data, men kan inte ladda ner den som strukturerat format (JSON/CSV).</td>
-          <td>Art. 20</td>
-          <td><span class="risk-level rl-low">Låg (tillvämplig vid behov)</span></td>
-        </tr>
-        <tr>
-          <td><strong>Ingen rutin vid dataintrång</strong><br>Om databasen komprometteras finns ingen dokumenterad plan för notifiering av Integritetsskyddsmyndigheten (IMY) inom 72 timmar.</td>
-          <td>Art. 33–34</td>
-          <td><span class="risk-level rl-medium">Medel</span></td>
-        </tr>
-        <tr>
-          <td><strong>B2B-scenario saknar biträdesavtal</strong><br>När ett företag (organisation) köper kort till anställda behöver vi ett DPA med det företaget — de är personuppgiftsansvariga för sina anställdas data.</td>
-          <td>Art. 28</td>
-          <td><span class="risk-level rl-medium">Medel (vid B2B-tillväxt)</span></td>
-        </tr>
-        <tr>
-          <td><strong>Sökmotorindexering av personuppgifter</strong><br>Publika profiler (namn, foto, telefon, e-post) är indexerbara av Google om inte en noindex-tagg används.</td>
+          <td><strong>Personnamn i URL:en</strong><br>/lea-fontaine innehåller personuppgifter och indexeras.</td>
           <td>Art. 25</td>
-          <td><span class="risk-level rl-low">Låg (kunden väljer att publicera)</span></td>
+          <td><span class="risk-level rl-done">Åtgärdat ✓</span></td>
+        </tr>
+        <tr>
+          <td><strong>Inget DPA med Resend</strong><br>E-postadresser skickas till ett amerikanskt bolag utan biträdesavtal.</td>
+          <td>Art. 28, Art. 46</td>
+          <td><span class="risk-level rl-high">Kvarstår — lagkrav</span></td>
+        </tr>
+        <tr>
+          <td><strong>Foton är publikt tillgängliga via direktlänk</strong><br>/uploads/user-{id}-{ts}.ext är åtkomligt utan autentisering.</td>
+          <td>Art. 32</td>
+          <td><span class="risk-level rl-medium">Kvarstår — låg risk</span></td>
+        </tr>
+        <tr>
+          <td><strong>Ingen datalagringspolicy</strong><br>Utgångna återställningstokens rensas inte automatiskt.</td>
+          <td>Art. 5.1.e</td>
+          <td><span class="risk-level rl-done">Åtgärdat ✓</span></td>
+        </tr>
+        <tr>
+          <td><strong>Ingen rätt till dataportabilitet</strong><br>Kunden kan inte ladda ner sina uppgifter i strukturerat format.</td>
+          <td>Art. 20</td>
+          <td><span class="risk-level rl-done">Åtgärdat ✓</span></td>
+        </tr>
+        <tr>
+          <td><strong>Ingen rutin vid dataintrång</strong><br>Ingen dokumenterad plan för IMY-notifiering inom 72 timmar.</td>
+          <td>Art. 33–34</td>
+          <td><span class="risk-level rl-medium">Kvarstår — intern dok.</span></td>
+        </tr>
+        <tr>
+          <td><strong>B2B-scenario saknar biträdesavtal</strong><br>Organisationskunder behöver ett DPA med oss som biträde.</td>
+          <td>Art. 28</td>
+          <td><span class="risk-level rl-medium">Kvarstår — vid B2B-tillväxt</span></td>
+        </tr>
+        <tr>
+          <td><strong>Sökmotorindexering av personuppgifter</strong><br>Profiler indexerbara om inte noindex-tagg används.</td>
+          <td>Art. 25</td>
+          <td><span class="risk-level rl-done">Åtgärdat ✓</span></td>
         </tr>
       </tbody>
     </table>
@@ -418,66 +455,54 @@
 
   <!-- SEKTION 4 -->
   <div class="section">
-    <div class="section-num">04 — Den scramlade URL-idén</div>
-    <h2>UUID-slug som integritetshöjande åtgärd</h2>
+    <div class="section-num">04 — UUID-implementation</div>
+    <h2>Privacy by Design — hur det är löst i koden</h2>
 
-    <p>Idén om att ersätta /lea-fontaine med en slumpmässig identifierare — t.ex. /a3f2-b9d4-77e1-c8a2 — är ett konkret exempel på <strong>Privacy by Design</strong> (artikel 25). Det är väl värt att implementera.</p>
+    <p>UUID-sluggen är nu i drift. Varje profil har ett <code>private_slug</code> (UUID v4) i databasen som genereras med Node.js inbyggda <code>crypto.randomUUID()</code> direkt vid skapande — utan extern beroende.</p>
 
     <div class="pull">
       <p>"Profilen är offentlig för den som har kortet — men inte för den som googlar på personens namn."</p>
     </div>
 
-    <p>Nuläget med namnbaserade slugar skapar ett problem som kunden sällan tänker på: deras privata kontaktuppgifter indexeras under deras namn i Google. En UUID-slug löser detta utan att förändra upplevelsen för NFC-användaren — de ser aldrig URL:en.</p>
+    <p>NFC-chipet programmeras med <code>https://vcard.oliveprojects.eu/p/{uuid}</code>. Profilen är åtkomlig via UUID-URL:en utan att personens namn syns. Det namnbaserade sluget (<code>/lea-fontaine</code>) finns kvar som sekundär "vanity URL" för manuell delning — kunden väljer själv om den vill använda det.</p>
 
     <div class="callout callout-green">
-      <strong>Fördelar med UUID-slug</strong>
+      <strong>Teknisk implementation — klar</strong>
       <ul>
-        <li>URL:en i sig innehåller inga personuppgifter</li>
-        <li>Profilen är oåtkomlig utan den fysiska kortet (eller en delad länk)</li>
-        <li>Sökmotorer kan inte associera URL:en med personens namn</li>
-        <li>Profilen "försvinner" naturligt ur indexet om kortet inte delas</li>
-        <li>Fungerar lika bra med NFC — chipet lagrar UUID:n, inte ett namn</li>
-        <li>Kunden slipper bekymra sig om att deras namn syns i Google</li>
+        <li><code>private_slug VARCHAR(36) UNIQUE</code> i profiles-tabellen</li>
+        <li>Genereras automatiskt vid admin-skapande och vid kundens första profilsparning</li>
+        <li>Befintliga profiler backfylldes automatiskt vid uppstart</li>
+        <li>Rutt <code>GET /p/:uuid</code> och <code>GET /p/:uuid/vcard.vcf</code> är live</li>
+        <li>Private slug visas i dashboarden under "Privat NFC-länk (UUID)"</li>
       </ul>
     </div>
-
-    <div class="callout callout-amber">
-      <strong>Överväganden</strong>
-      <ul>
-        <li>Kunden kan inte längre dela en "snygg" länk via SMS (t.ex. vcard.eu/lea)</li>
-        <li>Befintliga kunder med NFC-chips behöver omprogrammeras om vi byter slug-format (engångskostnad)</li>
-        <li>Rekommendation: behåll valfri namnbaserad vanity-URL som sekundär länk för manuell delning, men använd UUID som primär NFC-URL</li>
-      </ul>
-    </div>
-
-    <p><strong>Teknisk implementation:</strong> Lägg till kolumn <code>private_slug VARCHAR(36)</code> i profiles-tabellen, populera med <code>crypto.randomUUID()</code> vid skapande. NFC-kortet programmeras med UUID-URL:en. Det befintliga namnbaserade slug-fältet kan behållas som opt-in vanity-URL.</p>
   </div>
 
   <!-- SEKTION 5 -->
   <div class="section">
-    <div class="section-num">05 — Måste åtgärdas</div>
-    <h2>Prioritet 1 — Lagkrav som inte är valfria</h2>
+    <div class="section-num">05 — Genomförda åtgärder</div>
+    <h2>Prioritet 1 — Lagkrav — alla klara utom ett</h2>
 
     <ul class="action-list">
-      <li>
-        <span class="action-num prio-1">P1</span>
+      <li class="done-item">
+        <span class="action-num done">✓</span>
         <div>
-          <strong>Skapa en integritetspolicy-sida</strong><br>
-          Enligt GDPR artikel 13 måste den registrerade informeras om behandlingen vid insamlingstillfället. Minimikrav: vem vi är (personuppgiftsansvarig), vilka uppgifter vi behandlar, varför (ändamål och rättslig grund), hur länge vi sparar data, vilka rättigheter de har (radering, portabilitet, rättelse) och hur de kontaktar oss. Sidan ska vara länkad från välkomstmailet och från footer på alla sidor. En enkel statisk sida räcker.
+          <strong>Integritetspolicy-sida<span class="done-badge">Klar</span></strong><br>
+          Publicerad på <code>/privacy</code>. Täcker alla artikelkrav (art. 13): personuppgiftsansvarig, datakategorier, ändamål, rättslig grund, lagringstider, mottagare (Bahnhof + Resend med SCC-referens), sex registrerades rättigheter och IMY-klagomålsrätt.
         </div>
       </li>
       <li>
         <span class="action-num prio-1">P1</span>
         <div>
           <strong>Teckna DPA med Resend</strong><br>
-          Resend är ett personuppgiftsbiträde (vi skickar e-postadresser till dem). Artikel 28 kräver ett skriftligt biträdesavtal. Resend erbjuder ett färdigt DPA på resend.com/legal/dpa — skriv under det. Som US-baserat bolag använder de Standard Contractual Clauses (SCC) för EES-överföringar, vilket är tillräckligt. Det tar 10 minuter.
+          Resend är ett personuppgiftsbiträde (vi skickar e-postadresser till dem). Artikel 28 kräver ett skriftligt biträdesavtal. Resend erbjuder ett färdigt DPA på resend.com/legal/dpa — skriv under det. Som US-baserat bolag använder de Standard Contractual Clauses (SCC) för EES-överföringar, vilket är tillräckligt. Det tar 10 minuter. <strong>Enda återstående P1.</strong>
         </div>
       </li>
-      <li>
-        <span class="action-num prio-1">P1</span>
+      <li class="done-item">
+        <span class="action-num done">✓</span>
         <div>
-          <strong>Länka integritetspolicyn i välkomstmailet</strong><br>
-          Kunden informeras om databehandlingen i samband med att deras konto skapas (artikel 13 — information vid insamling). Välkomstmailet är rätt tillfälle. Lägg till en kort rad: "Läs vår integritetspolicy: [länk]".
+          <strong>Integritetspolicyn länkad i välkomstmailet<span class="done-badge">Klar</span></strong><br>
+          Footen i både välkomst- och återställningsmailet innehåller en länk till <code>/privacy</code>. Informationsskyldigheten vid insamlingstillfället (artikel 13) är uppfylld.
         </div>
       </li>
     </ul>
@@ -485,43 +510,43 @@
 
   <!-- SEKTION 6 -->
   <div class="section">
-    <div class="section-num">06 — Bör förbättras</div>
-    <h2>Prioritet 2 — Förstärker skyddet och minskar framtida risk</h2>
+    <div class="section-num">06 — Genomförda förbättringar</div>
+    <h2>Prioritet 2 — Alla tekniska punkter klara</h2>
 
     <ul class="action-list">
-      <li>
-        <span class="action-num prio-2">P2</span>
+      <li class="done-item">
+        <span class="action-num done">✓</span>
         <div>
-          <strong>Implementera UUID-slug för NFC-URL:er</strong><br>
-          Lägg till <code>private_slug</code> i profiles-tabellen. Genereras med <code>crypto.randomUUID()</code>. NFC-chip programmeras med UUID-URL. Namnbaserad slug behålls som valfri delningslänk. Ny rutt: <code>GET /:uuid</code> parallellt med <code>GET /:slug</code>.
+          <strong>UUID-slug för NFC-URL:er<span class="done-badge">Klar</span></strong><br>
+          <code>private_slug</code> genereras med <code>crypto.randomUUID()</code> vid profilskapande. NFC-chip programmeras med UUID-URL. Namnbaserad slug finns kvar som valfri delningslänk. Rutt <code>GET /p/:uuid</code> och <code>GET /p/:uuid/vcard.vcf</code> är live.
         </div>
       </li>
-      <li>
-        <span class="action-num prio-2">P2</span>
+      <li class="done-item">
+        <span class="action-num done">✓</span>
         <div>
-          <strong>Automatisk rensning av utgångna återställningstokens</strong><br>
-          Tabellen password_resets fylls med använda/utgångna tokens som aldrig tas bort. Lägg till ett cron-jobb (eller rensa vid login) som kör: <code>DELETE FROM password_resets WHERE expires_at &lt; NOW() - INTERVAL '7 days'</code>. Uppfyller lagringsminimeringsprincipen (artikel 5.1.e).
+          <strong>Automatisk rensning av utgångna återställningstokens<span class="done-badge">Klar</span></strong><br>
+          Körs vid serveruppstart: <code>DELETE FROM password_resets WHERE expires_at &lt; NOW() - INTERVAL '7 days'</code>. Uppfyller lagringsminimeringsprincipen (artikel 5.1.e).
         </div>
       </li>
-      <li>
-        <span class="action-num prio-2">P2</span>
+      <li class="done-item">
+        <span class="action-num done">✓</span>
         <div>
-          <strong>Noindex-alternativ för profiler</strong><br>
-          Lägg till ett kryssval i dashboarden: "Hindra sökmotorer från att indexera min sida". Lägger till <code>&lt;meta name="robots" content="noindex"&gt;</code> på profilsidan om aktiverat. Ger kunden kontroll utan att det påverkar NFC-funktionen.
+          <strong>Noindex-alternativ för profiler<span class="done-badge">Klar</span></strong><br>
+          Kryssruta under Inställningar i dashboarden. Om aktiverat läggs <code>&lt;meta name="robots" content="noindex,nofollow"&gt;</code> till på profilsidan. Värdet lagras som <code>noindex BOOLEAN</code> i profiles-tabellen.
         </div>
       </li>
       <li>
         <span class="action-num prio-2">P2</span>
         <div>
           <strong>Dokumentera datalagringstider</strong><br>
-          Definiera och dokumentera: aktiva konton sparas tills radering begärs, inaktiva konton (ej förnyard plan efter X månader) aviseras och raderas efter Y dagar. Dokumentera detta i integritetspolicyn.
+          Lagringstider finns beskrivna i integritetspolicyn, men en intern policy för inaktiva konton (aviseringsflöde → radering) behöver fortfarande definieras och dokumenteras.
         </div>
       </li>
       <li>
         <span class="action-num prio-2">P2</span>
         <div>
           <strong>DPA-mall för B2B-kunder (organisationer)</strong><br>
-          När ett företag köper kort till anställda är de personuppgiftsansvariga för sina anställdas data — vi blir biträde. Skapa en enkel DPA-mall att skicka till organisationskunder. Behövs innan organisationsfunktionen används aktivt.
+          När ett företag köper kort till anställda är de personuppgiftsansvariga — vi blir biträde. En enkel DPA-mall behöver skapas för organisationskunder. Behövs innan organisations­funktionen används aktivt.
         </div>
       </li>
     </ul>
@@ -529,15 +554,15 @@
 
   <!-- SEKTION 7 -->
   <div class="section">
-    <div class="section-num">07 — Nice-to-have</div>
-    <h2>Prioritet 3 — Professionaliserar vidare</h2>
+    <div class="section-num">07 — Genomförda förbättringar</div>
+    <h2>Prioritet 3 — Dataportabilitet klar</h2>
 
     <ul class="action-list">
-      <li>
-        <span class="action-num prio-3">P3</span>
+      <li class="done-item">
+        <span class="action-num done">✓</span>
         <div>
-          <strong>Dataexport (rätt till portabilitet, artikel 20)</strong><br>
-          Knapp i dashboardens inställningar: "Ladda ner min data som JSON". Exporterar profil och kontouppgifter i maskinläsbart format. Relevant om vi någonsin migrerar plattform eller om en kund begär det formellt.
+          <strong>Dataexport (rätt till portabilitet, artikel 20)<span class="done-badge">Klar</span></strong><br>
+          Under Inställningar finns knappen "Ladda ner som JSON". Exporterar konto (e-post, skapelsedatum) och fullständig profildata i maskinläsbart format. Uppfyller artikel 20 utan att kräva manuell hantering.
         </div>
       </li>
       <li>
@@ -558,7 +583,7 @@
         <span class="action-num prio-3">P3</span>
         <div>
           <strong>Register över behandlingar (artikel 30)</strong><br>
-          GDPR kräver att organisationer med fler än 250 anställda — eller som behandlar känsliga uppgifter — för ett register. Vi är under gränsen, men ett enkelt kalkylark som dokumenterar vilka uppgifter vi behandlar, varför och hur länge är god praxis och underlättar vid eventuell IMY-granskning.
+          GDPR kräver register för organisationer med fler än 250 anställda. Vi är under gränsen, men ett enkelt kalkylark som dokumenterar vilka uppgifter vi behandlar, varför och hur länge är god praxis och underlättar vid eventuell IMY-granskning.
         </div>
       </li>
     </ul>
@@ -567,27 +592,34 @@
   <!-- SEKTION 8 -->
   <div class="section">
     <div class="section-num">08 — Sammanfattning</div>
-    <h2>Läget i korthet</h2>
+    <h2>Nuläget efter implementation</h2>
 
-    <p>Plattformens tekniska grund är god. Vi lagrar data i Sverige, använder stark kryptering, ger kunden full kontroll och samlar inte in mer än nödvändigt. Det är mer än vad de flesta små SaaS-plattformar gör vid lansering.</p>
+    <p>Plattformen uppfyller nu de grundläggande GDPR-kraven. Informationsskyldigheten (art. 13) täcks av integritetspolicyn och välkomstmailet. Kunden har rätt till radering, rättelse, portabilitet och kontroll över sökmotorindexering. Tekniken är EU-baserad, krypterad och dataminimerad.</p>
 
-    <p>Det som saknas är framförallt <em>dokumentation</em> och <em>kommunikation</em> — en integritetspolicy och ett DPA med Resend. Dessa är lagkrav och tar sammanlagt ett par timmar att fixa. Resten är förbättringar som stärker positionen men inte är akuta.</p>
-
-    <div class="callout callout-amber">
-      <strong>Viktigt att komma ihåg</strong>
-      Kunden delar frivilligt den information som syns på profilen — de väljer själva vad de publicerar. Det är ett starkt argument för att behandlingen är laglig och proportionerlig. Men det befriar oss inte från skyldigheten att informera om hur vi behandlar uppgifterna (artikel 13) och att ha avtal på plats med tredjeparter vi anlitar (artikel 28).
+    <div class="pull">
+      <p>"Sex av nio identifierade risker är åtgärdade. Det som återstår är administrativt, inte tekniskt."</p>
     </div>
 
-    <div class="callout callout-red">
-      <strong>Gör detta nu (under 3 timmar totalt)</strong>
-      1. Teckna DPA med Resend på resend.com/legal/dpa — 10 min.<br>
-      2. Skriv en enkel integritetspolicy-sida och länka från välkomstmailet — 2 tim.<br>
-      3. Resten kan planeras in när plattformen börjar växa.
+    <div class="callout callout-amber">
+      <strong>Enda återstående lagkravet</strong>
+      Teckna DPA med Resend på resend.com/legal/dpa. Det tar 10 minuter och kräver inget i koden — bara att logga in på Resend-kontot och skriva under. Utan detta skickar vi e-postadresser till ett tredjelandsföretag utan laglig grund (art. 28 + 46).
+    </div>
+
+    <div class="callout callout-green">
+      <strong>Implementerade åtgärder — sammanfattning</strong>
+      <ul>
+        <li>Integritetspolicy live på /privacy, länkad från footer och e-post</li>
+        <li>UUID-baserade NFC-URL:er — namn syns inte i länken</li>
+        <li>Noindex-alternativ — kunden väljer om profilen ska indexeras</li>
+        <li>Dataexport som JSON (GDPR art. 20 — dataportabilitet)</li>
+        <li>Automatisk rensning av utgångna lösenordsåterställningstokens</li>
+        <li>Privacylänk i välkomst- och återställningsmailet</li>
+      </ul>
     </div>
   </div>
 
   <div class="footer-note">
-    Intern analys · Vårt Företag · Juni 2026 · Ej juridisk rådgivning — vid tveksamheter, konsultera GDPR-jurist.
+    Intern analys · Vårt Företag · Juni 2026 · Uppdaterad efter implementation · Ej juridisk rådgivning — vid tveksamheter, konsultera GDPR-jurist.
   </div>
 
 </div>
