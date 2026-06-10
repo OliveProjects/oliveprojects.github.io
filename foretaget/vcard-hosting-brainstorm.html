@@ -345,60 +345,181 @@
   </div>
 
   <!-- PRISMODELL -->
-  <p class="section-label">Prismodell — vad ni tar betalt</p>
+  <p class="section-label">Prismodell — tre alternativ att välja mellan</p>
 
   <div class="card" style="margin-bottom:16px;">
-    <h2>Grundprincipen — reviderad</h2>
-    <p style="margin-bottom:12px;">Pengarna sitter i <strong>kortförsäljningen</strong>, inte hosting. Kunden sköter sin profil själv — allt ni gör är att lägga till deras mejl i systemet. Hostingkostnaden är ~24 kr/kund/år (vid 50 kunder). Det motiverar inte en hög prenumeration.</p>
+    <h2>Grundprincipen</h2>
+    <p style="margin-bottom:10px;">Pengarna sitter i <strong>kortförsäljningen</strong> — hosting är infrastruktur, inte vinstmotor. Kunden sköter profilen själv. Hostingkostnaden: ~24 kr/kund/år vid 50 kunder.</p>
     <table>
       <thead><tr><th>Komponent</th><th>Vad kunden betalar</th><th>Er kostnad</th><th>Marginal</th></tr></thead>
       <tbody>
         <tr>
           <td><strong>Fysiskt kort</strong></td>
           <td>499–1 499 kr (engång)</td>
-          <td>~100–300 kr (tillverkning + vinstdelning)</td>
+          <td>~100–300 kr (tillverkning + vinstdelning %)</td>
           <td class="td-green">~300–1 200 kr per kort</td>
         </tr>
         <tr>
-          <td><strong>Hosting</strong></td>
-          <td>Ingår i kortpriset — för alltid</td>
-          <td>~24 kr/kund/år (fast VPS-kostnad)</td>
+          <td><strong>Hosting år 1</strong></td>
+          <td>Ingår i kortpriset</td>
+          <td>~24 kr/år</td>
           <td class="td-yellow">Täcks av kortmarginalen</td>
         </tr>
         <tr>
-          <td><strong>Reorder / nya kort</strong></td>
+          <td><strong>Reorder</strong></td>
           <td>499–1 499 kr (engång)</td>
           <td>~100–300 kr</td>
           <td class="td-green">Återkommande intäkt utan ny marknadsföring</td>
         </tr>
       </tbody>
     </table>
-    <div class="note-green">
-      <strong>Varför gratis hosting?</strong> Kunden köper kortet och behöver aldrig tänka på en extra faktura. Lojaliteten och reordrar är värda mer än 299 kr/år i subscriptionintäkt. Enkelt budskap: <em>"Köp ett kort — profilen sköts av oss, för alltid."</em>
+  </div>
+
+  <p style="font-size:12px; color:var(--sub); margin-bottom:14px; padding: 0 2px;">Tre modeller — välj en. De skiljer sig på vad som händer om kunden <em>inte</em> betalar.</p>
+
+  <!-- MODELL A -->
+  <div class="card" style="margin-bottom:12px; border-color: rgba(0,230,118,0.3);">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+      <span class="tag tag-green">Modell A</span>
+      <h2 style="margin:0;">Enkel — ett pris, allt ingår</h2>
     </div>
+    <div class="three-col" style="margin-bottom:14px;">
+      <div class="price-card">
+        <span class="tag" style="background:rgba(255,255,255,0.05);color:var(--sub);border-color:var(--border);">År 1</span>
+        <h2>Gratis</h2>
+        <div class="amount">0 <span>kr</span></div>
+        <div class="per-year">ingår i kortpriset</div>
+        <ul>
+          <li>Aktiv profil</li>
+          <li>Full redigering</li>
+          <li>QR-kod + .vcf</li>
+        </ul>
+      </div>
+      <div class="price-card recommended">
+        <span class="tag tag-green">År 2+</span>
+        <h2>Aktiv</h2>
+        <div class="amount">99 <span>kr/år</span></div>
+        <div class="per-year">= 8 kr/mån</div>
+        <ul>
+          <li>Aktiv profil</li>
+          <li>Full redigering</li>
+          <li>QR-kod + .vcf</li>
+        </ul>
+      </div>
+      <div class="price-card" style="border-color:#ff767540; background:#1a0a0a;">
+        <span class="tag tag-red">Betalar inte</span>
+        <h2>Pausad</h2>
+        <div class="amount" style="color:var(--red);">0 kr</div>
+        <div class="per-year" style="color:var(--red);">efter 12 månader</div>
+        <ul style="color:#ff7675aa;">
+          <li>Profilen visas ej</li>
+          <li>NFC-kortet slutar fungera</li>
+          <li>Data sparas 30 dagar sedan raderas</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note-green"><strong>Fördel:</strong> Extremt enkelt att kommunicera. 99 kr/år är en no-brainer — ingen churnar för det. Hotet om att NFC-kortet slutar fungera är stark motivation att betala.</div>
+    <div class="note-blue" style="margin-top:8px;"><strong>Risk:</strong> Låg intäktspotential. Men lojaliteten och reordrar kompenserar.</div>
+  </div>
+
+  <!-- MODELL B -->
+  <div class="card" style="margin-bottom:12px; border-color: rgba(116,185,255,0.3);">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+      <span class="tag tag-blue">Modell B</span>
+      <h2 style="margin:0;">Fryst — din idé</h2>
+    </div>
+    <div class="three-col" style="margin-bottom:14px;">
+      <div class="price-card" style="border-color:#ff767540; background:#1a0a0a;">
+        <span class="tag tag-red">Betalar inte</span>
+        <h2>Raderad</h2>
+        <div class="amount" style="color:var(--red);">0 kr</div>
+        <div class="per-year" style="color:var(--red);">efter 12 månader</div>
+        <ul style="color:#ff7675aa;">
+          <li>Konto raderas</li>
+          <li>NFC slutar fungera</li>
+        </ul>
+      </div>
+      <div class="price-card">
+        <span class="tag tag-blue">Bas</span>
+        <h2>Fryst</h2>
+        <div class="amount">99 <span>kr/år</span></div>
+        <div class="per-year">profil synlig, ej redigerbar</div>
+        <ul>
+          <li>Profilen visas</li>
+          <li>NFC fungerar</li>
+          <li>Kan ej redigera</li>
+          <li>QR-kod fungerar</li>
+        </ul>
+      </div>
+      <div class="price-card recommended">
+        <span class="tag tag-green">Full access <span class="rec-badge">Rekommenderas</span></span>
+        <h2>Aktiv</h2>
+        <div class="amount">149 <span>kr/år</span></div>
+        <div class="per-year">= 12 kr/mån</div>
+        <ul>
+          <li>Allt i Fryst</li>
+          <li>Full redigering</li>
+          <li>.vcf-nedladdning</li>
+          <li>Uppdatera när som helst</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note-green"><strong>Fördel:</strong> "Fryst" är ett smart mellanting — kortet är inte värdelöst men det skapar frustration när man inte kan uppdatera sin telefon. Det är en naturlig drivkraft att uppgradera.</div>
+    <div class="note-blue" style="margin-top:8px;"><strong>Risk:</strong> En kund som betalar 99 kr/år och sedan byter telefonnummer kommer klaga. Kommunikationen måste vara kristallklar vid köpet.</div>
+  </div>
+
+  <!-- MODELL C -->
+  <div class="card" style="margin-bottom:12px; border-color: rgba(162,155,254,0.3);">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+      <span class="tag tag-purple">Modell C</span>
+      <h2 style="margin:0;">Tiers — med mervärde</h2>
+    </div>
+    <div class="three-col" style="margin-bottom:14px;">
+      <div class="price-card">
+        <span class="tag tag-blue">Bas</span>
+        <h2>Standard</h2>
+        <div class="amount">99 <span>kr/år</span></div>
+        <div class="per-year">ingår år 1 med kort</div>
+        <ul>
+          <li>Aktiv profil</li>
+          <li>Full redigering</li>
+          <li>QR-kod + .vcf</li>
+          <li>Foto + sociala medier</li>
+        </ul>
+      </div>
+      <div class="price-card recommended">
+        <span class="tag tag-green">Pro <span class="rec-badge">Rekommenderas</span></span>
+        <h2>Pro</h2>
+        <div class="amount">199 <span>kr/år</span></div>
+        <div class="per-year">= 17 kr/mån</div>
+        <ul>
+          <li>Allt i Standard</li>
+          <li>Profilsidans tema (färg, stil)</li>
+          <li>E-postsignatur-generator</li>
+          <li>Bokningsknapp (Calendly m.fl.)</li>
+        </ul>
+      </div>
+      <div class="price-card">
+        <span class="tag tag-purple">Företag</span>
+        <h2>Team</h2>
+        <div class="amount">149 <span>kr/pers/år</span></div>
+        <div class="per-year">min 3 personer</div>
+        <ul>
+          <li>Allt i Pro</li>
+          <li>En admin för hela företaget</li>
+          <li>Enhetlig design för alla</li>
+          <li>Samlad faktura</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note-green"><strong>Fördel:</strong> Skapar utrymme för merförsäljning. Pro-planen motiveras av teman och e-postsignatur — funktioner som är lätta att bygga och har högt upplevt värde.</div>
+    <div class="note-blue" style="margin-top:8px;"><strong>Risk:</strong> Kräver att ni faktiskt bygger Pro-funktionerna. Sälj inte Pro förrän det finns.</div>
   </div>
 
   <div class="card" style="margin-bottom:16px;">
-    <h2>Alternativ: liten årsavgift</h2>
-    <p style="margin-bottom:12px;">Om ni vill ha en löpande intäkt och ett naturligt tillfälle att ta kontakt med kunden varje år kan ni ta ut en symbolisk avgift efter år 3:</p>
-    <table>
-      <thead><tr><th>År</th><th>Vad kunden betalar</th><th>Syfte</th></tr></thead>
-      <tbody>
-        <tr>
-          <td><strong>År 1–2</strong></td>
-          <td>Gratis (ingår i kortpriset)</td>
-          <td>Sänkt köptröskel, lojalitet</td>
-        </tr>
-        <tr>
-          <td><strong>År 3+</strong></td>
-          <td>99 kr/år</td>
-          <td>Täcker kostnad + naturlig kontaktpunkt ("dags att förnya — vill du uppdatera kortet?")</td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="note-blue" style="margin-top:12px;">
-      99 kr/år är inte en vinstmotor — det är ett verktyg för att hålla kontakten och öppna dörren för reordrar.
-    </div>
+    <h2>Rekommendation</h2>
+    <p style="margin-bottom:10px;color:#ccc;">Starta med <strong>Modell A</strong> — 99 kr/år, allt ingår, NFC slutar fungera om man inte betalar. Det är enkelt att kommunicera, enkelt att administrera manuellt utan Stripe, och tillräckligt billigt för att ingen ska churna.</p>
+    <p style="color:#ccc;">När ni har 20+ kunder och vill skapa merförsäljning: byt till <strong>Modell C</strong> och lägg till Pro-funktioner (teman, e-postsignatur). Modell B (fryst) är kreativ men riskerar kundklagomål och rekommenderas inte som startpunkt.</p>
   </div>
 
   <!-- INTÄKTSPROGNOS -->
