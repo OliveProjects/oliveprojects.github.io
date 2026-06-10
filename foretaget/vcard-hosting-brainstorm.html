@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>vCard Hosting — Brainstorm & Guide</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:      #0a0a0a;
+    --surface: #141414;
+    --card:    #1a1a1a;
+    --border:  rgba(255,255,255,0.07);
+    --text:    #f0f0f0;
+    --sub:     #777;
+    --accent:  #00E676;
+    --yellow:  #fdcb6e;
+    --blue:    #74b9ff;
+    --red:     #ff7675;
+    --orange:  #e17055;
+  }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 0 0 80px;
+  }
+  header {
+    padding: 48px 32px 36px;
+    max-width: 900px;
+    margin: 0 auto;
+    border-bottom: 1px solid var(--border);
+  }
+  .badge {
+    display: inline-block;
+    font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+    background: rgba(0,230,118,0.12); color: var(--accent);
+    border: 1px solid rgba(0,230,118,0.3);
+    padding: 3px 9px; border-radius: 20px; margin-bottom: 12px;
+  }
+  header h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; }
+  header p { font-size: 14px; color: var(--sub); line-height: 1.65; max-width: 600px; }
+
+  .content { max-width: 900px; margin: 0 auto; padding: 0 32px; }
+
+  .section-label {
+    font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px;
+    color: var(--sub); padding: 40px 0 14px;
+  }
+
+  h2 { font-size: 17px; font-weight: 600; margin-bottom: 10px; }
+  h3 { font-size: 13px; font-weight: 600; color: var(--sub); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 12px;
+  }
+  .card p, .card li { font-size: 14px; color: #ccc; line-height: 1.7; }
+  .card ul { padding-left: 18px; margin-top: 8px; }
+  .card ul li { margin-bottom: 6px; }
+
+  .tag {
+    display: inline-block; font-size: 11px; font-weight: 600;
+    padding: 3px 10px; border-radius: 20px; margin-right: 6px; margin-bottom: 6px;
+  }
+  .tag-green  { background: rgba(0,230,118,0.12); color: var(--accent); border: 1px solid rgba(0,230,118,0.25); }
+  .tag-yellow { background: rgba(253,203,110,0.12); color: var(--yellow); border: 1px solid rgba(253,203,110,0.25); }
+  .tag-blue   { background: rgba(116,185,255,0.12); color: var(--blue); border: 1px solid rgba(116,185,255,0.25); }
+  .tag-red    { background: rgba(255,118,117,0.12); color: var(--red); border: 1px solid rgba(255,118,117,0.25); }
+  .tag-orange { background: rgba(225,112,85,0.12); color: var(--orange); border: 1px solid rgba(225,112,85,0.25); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+  .accent-border-green  { border-color: rgba(0,230,118,0.3); }
+  .accent-border-yellow { border-color: rgba(253,203,110,0.3); }
+  .accent-border-blue   { border-color: rgba(116,185,255,0.3); }
+  .accent-border-red    { border-color: rgba(255,118,117,0.3); }
+
+  .step-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(0,230,118,0.15); color: var(--accent);
+    font-size: 13px; font-weight: 700; flex-shrink: 0; margin-right: 12px;
+  }
+  .step { display: flex; align-items: flex-start; margin-bottom: 16px; }
+  .step-body h2 { font-size: 15px; margin-bottom: 4px; }
+  .step-body p  { font-size: 13px; color: var(--sub); line-height: 1.6; }
+
+  .note {
+    background: rgba(253,203,110,0.06);
+    border: 1px solid rgba(253,203,110,0.2);
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-size: 13px; color: #ccc; line-height: 1.65;
+    margin-top: 12px;
+  }
+  .note strong { color: var(--yellow); }
+
+  code {
+    background: #252525; color: var(--accent);
+    padding: 2px 7px; border-radius: 5px; font-size: 12px; font-family: monospace;
+  }
+
+  @media (max-width: 640px) {
+    header, .content { padding-left: 20px; padding-right: 20px; }
+    .two-col, .three-col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="badge">Internt — Brainstorm</span>
+  <h1>vCard Hosting</h1>
+  <p>Vad är det, hur fungerar det, vad kan vi bygga, och hur levererar vi det till kunder? En gemensam genomgång för Léa och Kristoffer.</p>
+</header>
+
+<div class="content">
+
+  <!-- VAD ÄR VCARD HOSTING -->
+  <p class="section-label">Vad är vCard Hosting?</p>
+
+  <div class="card">
+    <h2>Konceptet i korthet</h2>
+    <p>När kunden håller sitt NFC-kort mot en telefon händer en av två saker:</p>
+    <ul>
+      <li><strong>Utan hosting:</strong> Kortet är programmerat med fast information (namn, telefon, e-post) som skrivs direkt i NFC-chippet. Kunden kan inte ändra något efteråt utan att skicka kortet till oss för omprogrammering.</li>
+      <li><strong>Med hosting:</strong> Kortet är programmerat med en URL till en webbsida vi hostar (t.ex. <code>vcard.företaget.se/erik</code>). Kunden kan logga in och uppdatera sin information när som helst — kortet ser alltid aktuellt ut.</li>
+    </ul>
+    <div class="note">
+      <strong>Enkel tumregel:</strong> Utan hosting = visitkortet är statiskt, som en tatuering. Med hosting = visitkortet är dynamiskt, som en hemsida.
+    </div>
+  </div>
+
+  <!-- ALTERNATIV -->
+  <p class="section-label">Tre vägar framåt</p>
+
+  <div class="three-col">
+    <div class="card accent-border-green">
+      <span class="tag tag-green">Alternativ 1</span>
+      <h2>Färdig SaaS-plattform</h2>
+      <p>Använd en befintlig tjänst (t.ex. Tapni, HiHello, Blinq) som vit-märkning eller vidaresälj.</p>
+      <ul>
+        <li>✅ Snabbast att komma igång</li>
+        <li>✅ Ingen teknik att bygga</li>
+        <li>❌ Låg kontroll, svårt att sätta eget pris</li>
+        <li>❌ Varumärket tillhör dem</li>
+      </ul>
+    </div>
+
+    <div class="card accent-border-blue">
+      <span class="tag tag-blue">Alternativ 2</span>
+      <h2>Öppen källkod + eget hosting</h2>
+      <p>Bygg på ett befintligt ramverk (t.ex. Cardlink, open-source vCard-projekt) på en VPS.</p>
+      <ul>
+        <li>✅ Eget varumärke och domän</li>
+        <li>✅ Full kontroll</li>
+        <li>✅ Låg löpande kostnad</li>
+        <li>❌ Kräver teknisk setup</li>
+        <li>❌ Underhåll på oss</li>
+      </ul>
+    </div>
+
+    <div class="card accent-border-yellow">
+      <span class="tag tag-yellow">Alternativ 3</span>
+      <h2>Bygg från grunden</h2>
+      <p>Skapa en egen plattform med inloggning, redigeringsverktyg och vCard-sidor.</p>
+      <ul>
+        <li>✅ 100 % skräddarsytt</li>
+        <li>✅ Kan växa med oss</li>
+        <li>❌ Störst investering i tid</li>
+        <li>❌ Kräver webbutveckling</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>Rekommendation för uppstarten:</strong> Börja med Alternativ 1 (SaaS) för att testa marknaden och förstå vad kunder faktiskt vill ha. Byt till Alternativ 2 eller 3 när ni vet att det finns efterfrågan och ni har tid att investera i teknik.
+  </div>
+
+  <!-- HUR DET FUNGERAR TEKNISKT -->
+  <p class="section-label">Hur fungerar det tekniskt?</p>
+
+  <div class="card">
+    <h2>Flödet steg för steg</h2>
+    <div style="margin-top: 16px;">
+      <div class="step">
+        <span class="step-num">1</span>
+        <div class="step-body">
+          <h2>NFC-chip programmeras</h2>
+          <p>Vi skriver en URL till chippet — t.ex. <code>https://vcard.företaget.se/eriksson</code>. Detta görs en gång vid leverans med en NFC-skrivare (app på telefon räcker, t.ex. NFC Tools).</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">2</span>
+        <div class="step-body">
+          <h2>Webbsidan hostar profilen</h2>
+          <p>På den URL:en finns en enkel webbsida med kundens information: namn, titel, telefon, e-post, LinkedIn, foto. Sidan är optimerad för mobil och laddas snabbt.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">3</span>
+        <div class="step-body">
+          <h2>Kunden loggar in och uppdaterar</h2>
+          <p>Via en inloggningssida (t.ex. <code>vcard.företaget.se/login</code>) kan kunden ändra sin information när som helst. Ändringen syns direkt — kortet behöver inte bytas ut.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">4</span>
+        <div class="step-body">
+          <h2>Mottagaren sparar kontakten</h2>
+          <p>Den som håller telefonen mot kortet ser vCard-sidan och kan med ett klick ladda ner kontaktkortet (.vcf-fil) direkt till sin kontaktlista.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VAD BEHÖVER VI -->
+  <p class="section-label">Vad behöver vi för att komma igång?</p>
+
+  <div class="two-col">
+    <div class="card">
+      <h3>Teknik</h3>
+      <ul>
+        <li><strong>Domän</strong> — t.ex. <code>vcard.företaget.se</code> eller en separat domän</li>
+        <li><strong>Hosting</strong> — en enkel VPS (t.ex. Hetzner ~50 kr/mån) eller Vercel/Netlify (gratis för liten trafik)</li>
+        <li><strong>NFC-skrivare</strong> — en app på telefonen räcker (NFC Tools, gratis)</li>
+        <li><strong>Databas</strong> — lagrar kundernas profiler; SQLite eller Supabase (gratis-tier)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Process mot kund</h3>
+      <ul>
+        <li>Kunden fyller i ett formulär med sin info vid beställning</li>
+        <li>Vi skapar profilen och programmerar chippet innan leverans</li>
+        <li>Kunden får inloggningsuppgifter med kortet</li>
+        <li>Vi fakturerar månads- eller årsvis för hosting</li>
+        <li>Vi skickar påminnelse inför förnyelse</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PRISSÄTTNING -->
+  <p class="section-label">Prissättning — idéer</p>
+
+  <div class="three-col">
+    <div class="card">
+      <span class="tag tag-green">Bas</span>
+      <h2>~99 kr/mån</h2>
+      <p>En profil, grundläggande info (namn, kontakt, länk), standard-design på vCard-sidan.</p>
+    </div>
+    <div class="card">
+      <span class="tag tag-blue">Pro</span>
+      <h2>~149 kr/mån</h2>
+      <p>Upp till 3 profiler (t.ex. ett litet team), anpassad logga på vCard-sidan, statistik (hur många klick kortet fått).</p>
+    </div>
+    <div class="card">
+      <span class="tag tag-yellow">Företag</span>
+      <h2>Offert</h2>
+      <p>Hotell, byråer och företag med många kort. Volymrabatt, gemensam design, admin-panel för att hantera alla profiler.</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>Årsbetalning:</strong> Erbjud rabatt vid årsbetalning (t.ex. 10 mån pris för 12 mån). Det ger er bättre kassaflöde och minskar churn.
+  </div>
+
+  <!-- RISKER OCH FRÅGOR -->
+  <p class="section-label">Öppna frågor &amp; risker</p>
+
+  <div class="card accent-border-red">
+    <h3 style="color: var(--red);">Frågor att besvara innan lansering</h3>
+    <ul>
+      <li>Vad händer om en kund slutar betala? Ska sidan fortfarande vara aktiv (men låst) eller gå ner helt?</li>
+      <li>Behöver vi GDPR-hantering för lagrade kontaktuppgifter? (Ja — vi lagrar personuppgifter.)</li>
+      <li>Ska hosting vara obligatoriskt eller valfritt vid kortköp?</li>
+      <li>Vad är vår minsta tech-investering för att testa konceptet med de första 10 kunderna?</li>
+      <li>Ska vCard-sidan ha vår logga synlig (white-label problem) eller vara helt neutral?</li>
+    </ul>
+  </div>
+
+  <!-- NÄSTA STEG -->
+  <p class="section-label">Föreslagna nästa steg</p>
+
+  <div class="card">
+    <div class="step">
+      <span class="step-num">1</span>
+      <div class="step-body">
+        <h2>Testa med SaaS (vecka 1)</h2>
+        <p>Skapa ett konto på t.ex. Blinq eller Tapni. Programmera ett eget NFC-kort och testa hela flödet som om ni vore kunden. Förstå vad som fungerar och vad som saknas.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">2</span>
+      <div class="step-body">
+        <h2>Bestäm om ni vill ha eget varumärke</h2>
+        <p>Om SaaS-lösningen känns rätt för uppstarten — kör på det. Om ni absolut vill ha eget varumärke redan från start — planera en enkel egen lösning (statiska HTML-sidor på en VPS som vi uppdaterar manuellt i början).</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">3</span>
+      <div class="step-body">
+        <h2>Dokumentera er interna process</h2>
+        <p>Skriv ner steg-för-steg vad som händer från att kunden beställer till att de har ett fungerande NFC-kort med aktiv hosting. Det dokumentet hjälper er att leverera konsekvent även när det är bråttom.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer style="text-align:center; font-size: 11px; color: #333; padding: 48px 32px 0;">
+  Internt brainstorm-dokument — ej publikt
+</footer>
+
+</body>
+</html>

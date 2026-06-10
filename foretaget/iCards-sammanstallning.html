@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iCARDS — Tillverkningspartner Sammanställning</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:      #0a0a0a;
+    --surface: #141414;
+    --card:    #1a1a1a;
+    --border:  rgba(255,255,255,0.07);
+    --text:    #f0f0f0;
+    --sub:     #777;
+    --accent:  #00E676;
+    --yellow:  #fdcb6e;
+    --blue:    #74b9ff;
+    --red:     #ff7675;
+    --orange:  #e17055;
+    --purple:  #a29bfe;
+  }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 0 0 80px; }
+
+  header { padding: 48px 32px 36px; max-width: 960px; margin: 0 auto; border-bottom: 1px solid var(--border); }
+  .badge { display: inline-block; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; background: rgba(116,185,255,0.12); color: var(--blue); border: 1px solid rgba(116,185,255,0.3); padding: 3px 9px; border-radius: 20px; margin-bottom: 12px; }
+  header h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; }
+  header p { font-size: 14px; color: var(--sub); line-height: 1.65; max-width: 640px; }
+
+  .content { max-width: 960px; margin: 0 auto; padding: 0 32px; }
+
+  .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; color: var(--sub); padding: 40px 0 14px; }
+
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 12px; }
+  .card h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+  .card p, .card li { font-size: 14px; color: #ccc; line-height: 1.7; }
+  .card ul { padding-left: 18px; margin-top: 6px; }
+  .card ul li { margin-bottom: 5px; }
+
+  .two-col   { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+  .tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; margin-right: 6px; margin-bottom: 8px; }
+  .tag-blue   { background: rgba(116,185,255,0.12); color: var(--blue);   border: 1px solid rgba(116,185,255,0.25); }
+  .tag-green  { background: rgba(0,230,118,0.12);   color: var(--accent); border: 1px solid rgba(0,230,118,0.25); }
+  .tag-yellow { background: rgba(253,203,110,0.12); color: var(--yellow); border: 1px solid rgba(253,203,110,0.25); }
+  .tag-orange { background: rgba(225,112,85,0.12);  color: var(--orange); border: 1px solid rgba(225,112,85,0.25); }
+  .tag-purple { background: rgba(162,155,254,0.12); color: var(--purple); border: 1px solid rgba(162,155,254,0.25); }
+  .tag-red    { background: rgba(255,118,117,0.12); color: var(--red);    border: 1px solid rgba(255,118,117,0.25); }
+
+  .accent-blue   { border-color: rgba(116,185,255,0.3); }
+  .accent-green  { border-color: rgba(0,230,118,0.3); }
+  .accent-yellow { border-color: rgba(253,203,110,0.3); }
+  .accent-orange { border-color: rgba(225,112,85,0.3); }
+  .accent-red    { border-color: rgba(255,118,117,0.3); }
+
+  table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  th { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--sub); text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  td { font-size: 13px; color: #ccc; padding: 9px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  tr:last-child td { border-bottom: none; }
+  td strong { color: var(--text); }
+  .td-accent { color: var(--accent); font-weight: 600; }
+  .td-yellow { color: var(--yellow); }
+
+  .note { background: rgba(253,203,110,0.06); border: 1px solid rgba(253,203,110,0.2); border-radius: 10px; padding: 16px 20px; font-size: 13px; color: #ccc; line-height: 1.65; margin-top: 12px; }
+  .note strong { color: var(--yellow); }
+
+  .info-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: baseline; }
+  .info-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.7px; color: var(--sub); min-width: 130px; flex-shrink: 0; }
+  .info-val { font-size: 14px; color: #ddd; }
+
+  code { background: #252525; color: var(--accent); padding: 2px 7px; border-radius: 5px; font-size: 12px; font-family: monospace; }
+
+  @media (max-width: 640px) {
+    header, .content { padding-left: 20px; padding-right: 20px; }
+    .two-col, .three-col { grid-template-columns: 1fr; }
+    .info-row { flex-direction: column; gap: 2px; }
+    .info-label { min-width: unset; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="badge">Tillverkningspartner</span>
+  <h1>iCARDS — Sammanställning</h1>
+  <p>Genomgång av iCARDS (icard.jp) — en japansk kortillverkare baserad i Chiba med produktion i Kina. Sannolikt Frank's bolag eller direkt kopplad till honom.</p>
+</header>
+
+<div class="content">
+
+  <!-- FÖRETAGSINFORMATION -->
+  <p class="section-label">Företagsinformation</p>
+  <div class="card accent-blue">
+    <div class="info-row"><span class="info-label">Bolagsnamn</span><span class="info-val">株式会社 センスライン (Senseline Co., Ltd.)</span></div>
+    <div class="info-row"><span class="info-label">Varumärke</span><span class="info-val">iCARDS (アイカード)</span></div>
+    <div class="info-row"><span class="info-label">Adress</span><span class="info-val">〒263-0043 Chiba City, Inage Ward, Enooki-cho 972-21-102, Japan</span></div>
+    <div class="info-row"><span class="info-label">Representant</span><span class="info-val">根本 佳代子 (Yoshiko Nemoto)</span></div>
+    <div class="info-row"><span class="info-label">E-post</span><span class="info-val"><code>info@icards.jp</code></span></div>
+    <div class="info-row"><span class="info-label">Telefon</span><span class="info-val">050-3578-6611</span></div>
+    <div class="info-row"><span class="info-label">Webbplats</span><span class="info-val">www.icard.jp</span></div>
+    <div class="info-row"><span class="info-label">Produktion</span><span class="info-val">Kina (bolaget registrerat i Japan)</span></div>
+    <div class="note" style="margin-top:16px;">
+      <strong>Koppling till Frank:</strong> Kristoffer har uppgett att Frank äger 40 % i tillverkningsbolaget och att ägaren är Japan-baserad. iCARDS stämmer med den beskrivningen — notera att den registrerade representanten är Yoshiko Nemoto, ej Frank. Bekräfta kopplingen direkt med Frank.
+    </div>
+  </div>
+
+  <!-- PRODUKTER -->
+  <p class="section-label">Produktsortiment</p>
+
+  <div class="three-col">
+    <div class="card accent-blue">
+      <span class="tag tag-blue">Metall</span>
+      <h2>Metallkort</h2>
+      <ul>
+        <li>Rostfritt stål (0,3–1,0 mm)</li>
+        <li>Koppar som bas</li>
+        <li>Färger: Guld, Svart, Roséguld, Brons</li>
+        <li>Ytor: Spegel, Hairline, Blank svart, Matt svart</li>
+        <li>Dubbelsidigt guld möjligt</li>
+        <li>Lasergravyr för design</li>
+        <li>NFC/IC-chip inbyggt (Ntag, Mifare m.fl.)</li>
+      </ul>
+    </div>
+    <div class="card accent-green">
+      <span class="tag tag-green">Trä</span>
+      <h2>Trä­kort</h2>
+      <ul>
+        <li><strong>Fanér/plywood</strong> — Shina, Bambu (2 mm)</li>
+        <li><strong>Massivt trä</strong> — Bok, Lönn, Körsbär, Valnöt (1–6 mm)</li>
+        <li>Storlekar: Standard visitkort (90×50 mm) eller vykort</li>
+        <li>Laserskärning för anpassade former</li>
+        <li>Tryckteknik: Bränning (fanér) eller tryck (massivt)</li>
+        <li>NFC/IC-chip inbyggt möjligt</li>
+      </ul>
+    </div>
+    <div class="card accent-yellow">
+      <span class="tag tag-yellow">Plast</span>
+      <h2>Plastkort (PVC/PET)</h2>
+      <ul>
+        <li>Standard PVC 0,76 mm (CR80-format)</li>
+        <li>Tunnare varianter: 0,3 / 0,5 / 1,0 mm</li>
+        <li>PET-G (miljövänligare, 0,19–0,25 mm)</li>
+        <li>Ytor: Hairline, Regnbåge, Spegel, UV-skulptur, Hologram, VIP matte</li>
+        <li>Tillägg: Magnetremsa, streckkod, numrering, folietryck, textur</li>
+        <li>Papperskort / visitkort (300 kg kartong)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PRISER METALLKORT -->
+  <p class="section-label">Priser — Metallkort (JPY)</p>
+  <div class="card">
+    <p style="font-size:12px; color: var(--sub); margin-bottom: 14px;">Lasergraveringsdesign, 50×85 mm. Ca 0,067 SEK/JPY (kontrollera aktuell kurs).</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Antal</th>
+          <th>Rostfritt</th>
+          <th>Spegel</th>
+          <th>Hairline</th>
+          <th>Dubbelsidigt guld</th>
+          <th>Svart (blank/matt)</th>
+          <th>Ca SEK (rostfritt)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>100 st</strong></td><td>18 000 ¥</td><td>28 000 ¥</td><td>19 000 ¥</td><td>19 000 ¥</td><td>19 000 ¥</td><td class="td-yellow">~1 200 kr</td></tr>
+        <tr><td><strong>200 st</strong></td><td>21 000 ¥</td><td>34 000 ¥</td><td>22 000 ¥</td><td>24 000 ¥</td><td>22 000 ¥</td><td class="td-yellow">~1 400 kr</td></tr>
+        <tr><td><strong>500 st</strong></td><td>32 000 ¥</td><td>52 000 ¥</td><td>35 000 ¥</td><td>39 000 ¥</td><td>36 000 ¥</td><td class="td-yellow">~2 150 kr</td></tr>
+        <tr><td><strong>1 000 st</strong></td><td>53 000 ¥</td><td>76 000 ¥</td><td>58 000 ¥</td><td>65 000 ¥</td><td>59 000 ¥</td><td class="td-yellow">~3 550 kr</td></tr>
+        <tr><td><strong>2 000 st</strong></td><td>65 000 ¥</td><td>98 000 ¥</td><td>71 000 ¥</td><td>81 000 ¥</td><td>73 000 ¥</td><td class="td-yellow">~4 350 kr</td></tr>
+        <tr><td><strong>5 000 st</strong></td><td>65–126 000 ¥</td><td>86–138 000 ¥</td><td>—</td><td>—</td><td>—</td><td class="td-yellow">~4 350–8 450 kr</td></tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <strong>Tillägg metallkort:</strong> Strass-inbäddning +3 000 ¥ grundavgift + 90 ¥/st. Lagerhållning av förtryckt stock möjlig (3 månaders standard, förlängning mot avgift). Lagergravyr i efterhand: +3 500 ¥ + 1 000 ¥/st minimiavgift.
+    </div>
+  </div>
+
+  <!-- PRISER TRÄKORT -->
+  <p class="section-label">Priser — Trä­kort (JPY, fanérplywood)</p>
+  <div class="card">
+    <table>
+      <thead>
+        <tr><th>Antal</th><th>Visitkortstorlek (90×50 mm)</th><th>Vykortstorlek (100×148 mm)</th><th>Ca SEK (visitkort)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>100 st</strong></td><td>15 000 ¥</td><td>25 000 ¥</td><td class="td-yellow">~1 000 kr</td></tr>
+        <tr><td><strong>300 st</strong></td><td>32 000 ¥</td><td>58 000 ¥</td><td class="td-yellow">~2 150 kr</td></tr>
+        <tr><td><strong>500 st</strong></td><td>46 000 ¥</td><td>88 000 ¥</td><td class="td-yellow">~3 100 kr</td></tr>
+        <tr><td><strong>1 000 st</strong></td><td>98 000 ¥</td><td>185 000 ¥</td><td class="td-yellow">~6 600 kr</td></tr>
+      </tbody>
+    </table>
+    <div class="note"><strong>Obs:</strong> Massivt trä (bok, valnöt, körsbär) prissätts på offert — kostnad är högre. Laserskärning tillkommer: 2 000 ¥ (100 st) – 6 800 ¥ (1 000 st).</div>
+  </div>
+
+  <!-- PRISER PLASTKORT -->
+  <p class="section-label">Priser — Plastkort, standard PVC (JPY)</p>
+  <div class="card">
+    <table>
+      <thead>
+        <tr><th>Antal</th><th>Pris</th><th>Ca SEK</th><th>SEK/kort</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>200 st</strong></td><td>29 800 ¥</td><td class="td-yellow">~2 000 kr</td><td class="td-accent">~10 kr/kort</td></tr>
+        <tr><td><strong>500 st</strong></td><td>32 000 ¥</td><td class="td-yellow">~2 150 kr</td><td class="td-accent">~4,3 kr/kort</td></tr>
+        <tr><td><strong>1 000 st</strong></td><td>39 000 ¥</td><td class="td-yellow">~2 600 kr</td><td class="td-accent">~2,6 kr/kort</td></tr>
+        <tr><td><strong>2 000 st</strong></td><td>68 000 ¥</td><td class="td-yellow">~4 600 kr</td><td class="td-accent">~2,3 kr/kort</td></tr>
+        <tr><td><strong>5 000 st</strong></td><td>118 000 ¥</td><td class="td-yellow">~7 900 kr</td><td class="td-accent">~1,6 kr/kort</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- LEVERANS OCH PROCESS -->
+  <p class="section-label">Ledtider &amp; Orderprocess</p>
+  <div class="two-col">
+    <div class="card">
+      <span class="tag tag-orange">Ledtid</span>
+      <h2>Produktion &amp; Leverans</h2>
+      <ul>
+        <li><strong>Standard:</strong> ~2 veckor från orderbekräftelse till avsändning</li>
+        <li>Specialbehandling: +1–5 dagar</li>
+        <li>Stora volymer: ytterligare dagar möjligt</li>
+        <li>Frakt inom Japan: 800 ¥ flat rate</li>
+        <li>Internationell frakt: ej listad — kontakta direkt</li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="tag tag-purple">Process</span>
+      <h2>Beställningsflöde</h2>
+      <ul>
+        <li>Kontakt <strong>enbart via e-post</strong> (info@icards.jp)</li>
+        <li>Offert levereras normalt inom 1 arbetsdag</li>
+        <li>Betalning: Banköverföring i förskott (Rakuten Bank)</li>
+        <li>Produktion startar efter betalning</li>
+        <li>Gratis provexemplar möjliga (beroende på produkt)</li>
+        <li>Designhjälp tillgänglig för kunder utan tryckmaterial</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ANPASSNING -->
+  <p class="section-label">Anpassningsmöjligheter</p>
+  <div class="card">
+    <h2>Tryckteknik &amp; tillägg</h2>
+    <div class="two-col" style="margin-top: 12px;">
+      <ul>
+        <li>CMYK offsettryck (obegränsade färger, båda sidor)</li>
+        <li>Silktryck (guld/silver specialbläck)</li>
+        <li>Lasergravyr (metall, anpassade former)</li>
+        <li>UV-skulptur / 3D-tjockbeläggning</li>
+        <li>Folietryck (varm stämpel, guld/silver)</li>
+        <li>Bränntryck (trä)</li>
+      </ul>
+      <ul>
+        <li>Serienumrering &amp; variabel streckkod</li>
+        <li>Magnetremsa inbyggd</li>
+        <li>Hologramöverdrag</li>
+        <li>Prägling / relief</li>
+        <li>Laserskärning (anpassade former)</li>
+        <li>Pantone/DIC spotfärger</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- EXPORT / INTERNATIONELLT -->
+  <p class="section-label">Export &amp; Internationellt</p>
+  <div class="card accent-red">
+    <h2>Viktig notering</h2>
+    <p>iCARDS' webbplats nämner <strong>ingen internationell frakt</strong> — allt är riktat mot den japanska marknaden. Deras positionering är "lägsta priser i Japan". Fraktsätt är japanska aktörer (Japan Post, Yamato).</p>
+    <ul style="margin-top: 12px;">
+      <li>Exportmöjligheter till EU/Sverige: <strong>okänt — måste frågas direkt</strong></li>
+      <li>Grossist-/återförsäljarpriser: <strong>ej publicerade</strong></li>
+      <li>Tull och moms vid import till Sverige tillkommer</li>
+    </ul>
+    <div class="note">
+      <strong>Att fråga Frank:</strong> Sker leverans till er direkt från Kina (kringgår Japan-steget) eller via Japan? Vilket är er inköpspris som partner — inte det publicerade japanska detaljhandelspriset?
+    </div>
+  </div>
+
+  <!-- NÄSTA STEG -->
+  <p class="section-label">Nästa steg med Frank</p>
+  <div class="card accent-green">
+    <h2>Frågor att stämma av</h2>
+    <ul>
+      <li>Bekräfta: Är iCARDS faktiskt Franks bolag / det bolag han äger 40 % i?</li>
+      <li>Vilket inköpspris får ni som partners — hur förhåller det sig till listpriserna ovan?</li>
+      <li>Levereras korten direkt från tillverkningsfabriken i Kina till er i Sverige?</li>
+      <li>Vilka minsta orderkvantiteter gäller för <em>er</em> som partners?</li>
+      <li>Vilka produkter är mest relevanta för er marknad (metall, trä, PVC)?</li>
+      <li>Hur hanteras NFC-programmering — gör ni det själva eller levererar Frank förkodade kort?</li>
+      <li>Ledtid för er: samma 2 veckor eller annan tidsram från Kina till Sverige?</li>
+    </ul>
+  </div>
+
+</div>
+
+<footer style="text-align:center; font-size: 11px; color: #333; padding: 48px 32px 0;">
+  Internt — Sammanställt från icard.jp · Ej publikt
+</footer>
+
+</body>
+</html>
