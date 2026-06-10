@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GDPR-granskning — vCard Hosting Platform</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:      #fafaf8;
+    --surface: #fff;
+    --border:  #e8e8e4;
+    --text:    #1a1a18;
+    --sub:     #666;
+    --green:   #1d6b3e;
+    --red:     #8b1c1c;
+    --amber:   #7a5200;
+    --blue:    #0b4d8a;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 0 0 80px;
+  }
+
+  .cover {
+    background: var(--text);
+    color: #f0f0ec;
+    padding: 64px 32px 52px;
+    text-align: center;
+  }
+  .cover-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #aaa;
+    margin-bottom: 18px;
+  }
+  .cover h1 {
+    font-family: 'Lora', Georgia, serif;
+    font-size: clamp(26px, 4vw, 40px);
+    font-weight: 600;
+    line-height: 1.25;
+    margin-bottom: 16px;
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .cover-meta { font-size: 13px; color: #888; margin-top: 10px; }
+  .cover-author {
+    display: inline-block;
+    margin-top: 28px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 12px 22px;
+    font-size: 12px;
+    color: #ccc;
+    line-height: 1.6;
+  }
+  .cover-author strong { color: #f0f0ec; display: block; font-size: 13px; }
+
+  .article {
+    max-width: 740px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* VERDICT STRIP */
+  .verdict-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0;
+    border: 1.5px solid var(--border);
+    margin: 40px 0 0;
+    overflow: hidden;
+    background: #fff;
+  }
+  .verdict-cell {
+    padding: 18px 20px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .verdict-cell:last-child { border-right: none; }
+  .verdict-flag { font-size: 20px; margin-bottom: 4px; }
+  .verdict-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--sub); margin-bottom: 4px; }
+  .verdict-value { font-size: 13px; font-weight: 600; }
+  .v-go   { color: var(--green); }
+  .v-hold { color: var(--amber); }
+  .v-stop { color: var(--red); }
+
+  /* SECTIONS */
+  .section {
+    margin-top: 52px;
+    padding-top: 28px;
+    border-top: 1.5px solid var(--border);
+  }
+  .section-num {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--sub);
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-family: 'Lora', Georgia, serif;
+    font-size: clamp(20px, 2.5vw, 26px);
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+  p { margin-bottom: 18px; font-size: 15px; color: #2a2a28; }
+  p:last-child { margin-bottom: 0; }
+
+  .pull {
+    border-left: 3px solid var(--text);
+    margin: 28px 0;
+    padding: 4px 0 4px 22px;
+  }
+  .pull p {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 17px;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  /* CALLOUT BOXES */
+  .callout {
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 14px;
+    line-height: 1.6;
+    border-left: 3px solid;
+  }
+  .callout strong { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .callout ul { padding-left: 16px; margin-top: 6px; }
+  .callout ul li { margin-bottom: 4px; }
+  .callout-green  { background: #f0faf4; border-color: #27ae60; color: #1a4a2e; }
+  .callout-green  strong { color: #1d6b3e; }
+  .callout-red    { background: #fdf3f3; border-color: #c0392b; color: #4a1a1a; }
+  .callout-red    strong { color: #8b1c1c; }
+  .callout-amber  { background: #fdf8f0; border-color: #e67e22; color: #4a3200; }
+  .callout-amber  strong { color: #7a5200; }
+  .callout-blue   { background: #f0f6fd; border-color: #2980b9; color: #0a2a4a; }
+  .callout-blue   strong { color: #0b4d8a; }
+  .callout-grey   { background: #f5f5f5; border-color: #999; color: #333; }
+  .callout-grey   strong { color: #555; }
+
+  /* RISK TABLE */
+  .risk-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 20px 0; }
+  .risk-table th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--sub);
+    padding: 8px 12px;
+    border-bottom: 1.5px solid var(--border);
+  }
+  .risk-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .risk-table tr:last-child td { border-bottom: none; }
+  .risk-level {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .rl-high   { background: #fdf3f3; color: #8b1c1c; }
+  .rl-medium { background: #fdf8f0; color: #7a5200; }
+  .rl-low    { background: #f0faf4; color: #1d6b3e; }
+  .rl-done   { background: #f0f6fd; color: #0b4d8a; }
+
+  /* ACTION LIST */
+  .action-list { list-style: none; margin: 20px 0; }
+  .action-list li {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    align-items: flex-start;
+    line-height: 1.5;
+  }
+  .action-list li:last-child { border-bottom: none; }
+  .action-num {
+    font-size: 11px;
+    font-weight: 700;
+    background: var(--text);
+    color: #fff;
+    border-radius: 4px;
+    padding: 2px 7px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .action-num.prio-1 { background: #8b1c1c; }
+  .action-num.prio-2 { background: #7a5200; }
+  .action-num.prio-3 { background: #0b4d8a; }
+
+  /* ARTICLE BADGE */
+  .article-ref {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 7px;
+    color: var(--sub);
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  .footer-note {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--sub);
+    text-align: center;
+  }
+
+  @media (max-width: 600px) {
+    .verdict-strip { grid-template-columns: 1fr 1fr; }
+    .risk-table { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="cover-label">Intern analys · Konfidentiell</div>
+  <h1>GDPR-granskning<br>vCard Hosting Platform</h1>
+  <div class="cover-meta">Vårt Företag · vcard.oliveprojects.eu · Juni 2026</div>
+  <div class="cover-author">
+    <strong>Sammanfattning</strong>
+    Vi hanterar personuppgifter för kunder som väljer att publicera kontaktinfo.<br>
+    Grunden är god — men tre saker måste åtgärdas innan vi växer vidare.
+  </div>
+</div>
+
+<div class="article">
+
+  <div class="verdict-strip">
+    <div class="verdict-cell">
+      <div class="verdict-flag">🟢</div>
+      <div class="verdict-label">Hosting</div>
+      <div class="verdict-value v-go">EU/Sverige ✓</div>
+    </div>
+    <div class="verdict-cell">
+      <div class="verdict-flag">🟢</div>
+      <div class="verdict-label">Datasäkerhet</div>
+      <div class="verdict-value v-go">Stark grund ✓</div>
+    </div>
+    <div class="verdict-cell">
+      <div class="verdict-flag">🟡</div>
+      <div class="verdict-label">Transparens</div>
+      <div class="verdict-value v-hold">Saknas policy</div>
+    </div>
+    <div class="verdict-cell">
+      <div class="verdict-flag">🟡</div>
+      <div class="verdict-label">URL-integritet</div>
+      <div class="verdict-value v-hold">Kan förbättras</div>
+    </div>
+    <div class="verdict-cell">
+      <div class="verdict-flag">🔴</div>
+      <div class="verdict-label">Integritetspolicy</div>
+      <div class="verdict-value v-stop">Saknas — lag krav</div>
+    </div>
+    <div class="verdict-cell">
+      <div class="verdict-flag">🟡</div>
+      <div class="verdict-label">Tredjeparter</div>
+      <div class="verdict-value v-hold">DPA behövs</div>
+    </div>
+  </div>
+
+  <!-- SEKTION 1 -->
+  <div class="section">
+    <div class="section-num">01 — Kontext</div>
+    <h2>Vad vi faktiskt behandlar och varför GDPR gäller</h2>
+
+    <p>Plattformen lagrar och publicerar personuppgifter på uppdrag av kunder som köpt NFC-visitkort. Uppgifterna är: namn, titel, företag, telefon, e-post, webbplats, sociala medier och profilfoto. Alla dessa är <em>personuppgifter</em> enligt GDPR artikel 4.</p>
+
+    <p>Vi agerar som <strong>personuppgiftsansvarig</strong> gentemot kunden (kortinnehavaren) — vi bestämmer ändamål och medel för behandlingen. I B2B-scenariot, där ett företag köper kort till sina anställda, är vi troligtvis <strong>personuppgiftsbiträde</strong> åt det köpande företaget, som då är personuppgiftsansvarig för sina anställdas data.</p>
+
+    <div class="callout callout-blue">
+      <strong>Rättslig grund (artikel 6)</strong>
+      Den starkaste rättsliga grunden för vår behandling är <strong>fullgörande av avtal</strong> (art. 6.1.b) — kunden köper ett kort och tjänsten inkluderar en digital profil. En alternativ grund är <strong>berättigat intresse</strong> (art. 6.1.f) — att driva en NFC-visitkortstjänst är ett legitimt affärssyfte. Samtycke (art. 6.1.a) är <em>inte</em> rätt primär grund för en kontraktsbaserad tjänst och bör undvikas som huvudgrund.
+    </div>
+  </div>
+
+  <!-- SEKTION 2 -->
+  <div class="section">
+    <div class="section-num">02 — Vad vi gör rätt</div>
+    <h2>En stark teknisk och organisatorisk grund</h2>
+
+    <p>Plattformen är byggd med genomtänkt säkerhet. Flera GDPR-krav är redan uppfyllda i koden, utan att vi aktivt planerat för det.</p>
+
+    <div class="callout callout-green">
+      <strong>✓ Hosting inom EU/Sverige</strong>
+      All data lagras på Bahnhof VPS i Sverige. Inga överföringar till länder utanför EES för primärdata. Artikel 44–49 (tredjelandsöverföringar) är uppfyllda för lagringen i sig.
+    </div>
+
+    <div class="callout callout-green">
+      <strong>✓ Stark lösenordssäkerhet</strong>
+      Bcrypt med kostnadsfaktor 10–12. Klartext-lösenord lagras aldrig. Tillfälliga lösenord skickas en gång och kan återställas. Artikel 32 (lämpliga tekniska åtgärder) är uppfyllt.
+    </div>
+
+    <div class="callout callout-green">
+      <strong>✓ Rätten att bli raderad (artikel 17)</strong>
+      Kunden kan radera sitt konto från dashboarden. Radering tar bort: användarkonto, profil, profilfoto (från disk) och session. Admin kan radera kunder inklusive foto. CASCADE i databasen säkerställer att inga orphan-poster lämnas kvar.
+    </div>
+
+    <div class="callout callout-green">
+      <strong>✓ Dataminimering (artikel 5.1.c)</strong>
+      Plattformen lagrar bara det kunden själv anger. Inga dolda fält, inga spårningsdata, ingen beteendeanalys. Profilstatistik (sidvisningar) togs aktivt bort från roadmapen av denna anledning.
+    </div>
+
+    <div class="callout callout-green">
+      <strong>✓ Inga tredjepartsskript på publika profiler</strong>
+      Ingen Google Analytics, inga Meta-pixlar, inga reklamskript. Den publika profilsidan laddar ingen extern kod. Besökarens data lämnar inte plattformen.
+    </div>
+
+    <div class="callout callout-green">
+      <strong>✓ Sessionshantering</strong>
+      Sessioner lagras i PostgreSQL (inte i osäkra klient-cookies), med 30 dagars livslängd och ett slumpmässigt SESSION_SECRET. Sessionscookies är tekniskt nödvändiga och undantagna från samtyckeskravet.
+    </div>
+
+    <div class="callout callout-green">
+      <strong>✓ Tvåfaktors-skydd på känsliga åtgärder</strong>
+      Lösenordsbyte kräver bekräftelse av nuvarande lösenord. Radering av konto kräver explicit bekräftelse. Återställningslänkar gäller i 1 timme och markeras som använda.
+    </div>
+  </div>
+
+  <!-- SEKTION 3 -->
+  <div class="section">
+    <div class="section-num">03 — Risker och brister</div>
+    <h2>Vad som behöver ses över</h2>
+
+    <table class="risk-table">
+      <thead>
+        <tr>
+          <th>Risk</th>
+          <th>GDPR-artikel</th>
+          <th>Nivå</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Integritetspolicy saknas helt</strong><br>Det finns ingen sida som förklarar för kunden hur vi behandlar deras personuppgifter.</td>
+          <td>Art. 13–14</td>
+          <td><span class="risk-level rl-high">Hög — lagkrav</span></td>
+        </tr>
+        <tr>
+          <td><strong>Personnamn i URL:en</strong><br>Slogen /lea-fontaine innehåller personuppgifter och indexeras av Google. Sökning på personens namn kan leda direkt till profilen.</td>
+          <td>Art. 25 (inbyggd integritet)</td>
+          <td><span class="risk-level rl-medium">Medel</span></td>
+        </tr>
+        <tr>
+          <td><strong>Inget DPA med Resend</strong><br>Vi skickar e-postadresser (personuppgifter) till Resend, ett amerikanskt bolag. Utan ett DPA bryter vi mot kraven för personuppgiftsbiträden.</td>
+          <td>Art. 28, Art. 46</td>
+          <td><span class="risk-level rl-high">Hög — lagkrav</span></td>
+        </tr>
+        <tr>
+          <td><strong>Foton är publikt tillgängliga via direktlänk</strong><br>Foton lagras på /uploads/user-{id}-{ts}.ext. Länken är gissningsbar om man känner till mönstret och ger tillgång utan att besöka profilen.</td>
+          <td>Art. 32</td>
+          <td><span class="risk-level rl-medium">Medel</span></td>
+        </tr>
+        <tr>
+          <td><strong>Ingen datalagringspolicy</strong><br>Inaktiva konton och utgångna återställningstokens rensas inte automatiskt. Data ska inte sparas längre än nödvändigt.</td>
+          <td>Art. 5.1.e (lagringsminimering)</td>
+          <td><span class="risk-level rl-medium">Medel</span></td>
+        </tr>
+        <tr>
+          <td><strong>Ingen rätt till dataportabilitet</strong><br>Kunden kan redigera och radera sin data, men kan inte ladda ner den som strukturerat format (JSON/CSV).</td>
+          <td>Art. 20</td>
+          <td><span class="risk-level rl-low">Låg (tillvämplig vid behov)</span></td>
+        </tr>
+        <tr>
+          <td><strong>Ingen rutin vid dataintrång</strong><br>Om databasen komprometteras finns ingen dokumenterad plan för notifiering av Integritetsskyddsmyndigheten (IMY) inom 72 timmar.</td>
+          <td>Art. 33–34</td>
+          <td><span class="risk-level rl-medium">Medel</span></td>
+        </tr>
+        <tr>
+          <td><strong>B2B-scenario saknar biträdesavtal</strong><br>När ett företag (organisation) köper kort till anställda behöver vi ett DPA med det företaget — de är personuppgiftsansvariga för sina anställdas data.</td>
+          <td>Art. 28</td>
+          <td><span class="risk-level rl-medium">Medel (vid B2B-tillväxt)</span></td>
+        </tr>
+        <tr>
+          <td><strong>Sökmotorindexering av personuppgifter</strong><br>Publika profiler (namn, foto, telefon, e-post) är indexerbara av Google om inte en noindex-tagg används.</td>
+          <td>Art. 25</td>
+          <td><span class="risk-level rl-low">Låg (kunden väljer att publicera)</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SEKTION 4 -->
+  <div class="section">
+    <div class="section-num">04 — Den scramlade URL-idén</div>
+    <h2>UUID-slug som integritetshöjande åtgärd</h2>
+
+    <p>Idén om att ersätta /lea-fontaine med en slumpmässig identifierare — t.ex. /a3f2-b9d4-77e1-c8a2 — är ett konkret exempel på <strong>Privacy by Design</strong> (artikel 25). Det är väl värt att implementera.</p>
+
+    <div class="pull">
+      <p>"Profilen är offentlig för den som har kortet — men inte för den som googlar på personens namn."</p>
+    </div>
+
+    <p>Nuläget med namnbaserade slugar skapar ett problem som kunden sällan tänker på: deras privata kontaktuppgifter indexeras under deras namn i Google. En UUID-slug löser detta utan att förändra upplevelsen för NFC-användaren — de ser aldrig URL:en.</p>
+
+    <div class="callout callout-green">
+      <strong>Fördelar med UUID-slug</strong>
+      <ul>
+        <li>URL:en i sig innehåller inga personuppgifter</li>
+        <li>Profilen är oåtkomlig utan den fysiska kortet (eller en delad länk)</li>
+        <li>Sökmotorer kan inte associera URL:en med personens namn</li>
+        <li>Profilen "försvinner" naturligt ur indexet om kortet inte delas</li>
+        <li>Fungerar lika bra med NFC — chipet lagrar UUID:n, inte ett namn</li>
+        <li>Kunden slipper bekymra sig om att deras namn syns i Google</li>
+      </ul>
+    </div>
+
+    <div class="callout callout-amber">
+      <strong>Överväganden</strong>
+      <ul>
+        <li>Kunden kan inte längre dela en "snygg" länk via SMS (t.ex. vcard.eu/lea)</li>
+        <li>Befintliga kunder med NFC-chips behöver omprogrammeras om vi byter slug-format (engångskostnad)</li>
+        <li>Rekommendation: behåll valfri namnbaserad vanity-URL som sekundär länk för manuell delning, men använd UUID som primär NFC-URL</li>
+      </ul>
+    </div>
+
+    <p><strong>Teknisk implementation:</strong> Lägg till kolumn <code>private_slug VARCHAR(36)</code> i profiles-tabellen, populera med <code>crypto.randomUUID()</code> vid skapande. NFC-kortet programmeras med UUID-URL:en. Det befintliga namnbaserade slug-fältet kan behållas som opt-in vanity-URL.</p>
+  </div>
+
+  <!-- SEKTION 5 -->
+  <div class="section">
+    <div class="section-num">05 — Måste åtgärdas</div>
+    <h2>Prioritet 1 — Lagkrav som inte är valfria</h2>
+
+    <ul class="action-list">
+      <li>
+        <span class="action-num prio-1">P1</span>
+        <div>
+          <strong>Skapa en integritetspolicy-sida</strong><br>
+          Enligt GDPR artikel 13 måste den registrerade informeras om behandlingen vid insamlingstillfället. Minimikrav: vem vi är (personuppgiftsansvarig), vilka uppgifter vi behandlar, varför (ändamål och rättslig grund), hur länge vi sparar data, vilka rättigheter de har (radering, portabilitet, rättelse) och hur de kontaktar oss. Sidan ska vara länkad från välkomstmailet och från footer på alla sidor. En enkel statisk sida räcker.
+        </div>
+      </li>
+      <li>
+        <span class="action-num prio-1">P1</span>
+        <div>
+          <strong>Teckna DPA med Resend</strong><br>
+          Resend är ett personuppgiftsbiträde (vi skickar e-postadresser till dem). Artikel 28 kräver ett skriftligt biträdesavtal. Resend erbjuder ett färdigt DPA på resend.com/legal/dpa — skriv under det. Som US-baserat bolag använder de Standard Contractual Clauses (SCC) för EES-överföringar, vilket är tillräckligt. Det tar 10 minuter.
+        </div>
+      </li>
+      <li>
+        <span class="action-num prio-1">P1</span>
+        <div>
+          <strong>Länka integritetspolicyn i välkomstmailet</strong><br>
+          Kunden informeras om databehandlingen i samband med att deras konto skapas (artikel 13 — information vid insamling). Välkomstmailet är rätt tillfälle. Lägg till en kort rad: "Läs vår integritetspolicy: [länk]".
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- SEKTION 6 -->
+  <div class="section">
+    <div class="section-num">06 — Bör förbättras</div>
+    <h2>Prioritet 2 — Förstärker skyddet och minskar framtida risk</h2>
+
+    <ul class="action-list">
+      <li>
+        <span class="action-num prio-2">P2</span>
+        <div>
+          <strong>Implementera UUID-slug för NFC-URL:er</strong><br>
+          Lägg till <code>private_slug</code> i profiles-tabellen. Genereras med <code>crypto.randomUUID()</code>. NFC-chip programmeras med UUID-URL. Namnbaserad slug behålls som valfri delningslänk. Ny rutt: <code>GET /:uuid</code> parallellt med <code>GET /:slug</code>.
+        </div>
+      </li>
+      <li>
+        <span class="action-num prio-2">P2</span>
+        <div>
+          <strong>Automatisk rensning av utgångna återställningstokens</strong><br>
+          Tabellen password_resets fylls med använda/utgångna tokens som aldrig tas bort. Lägg till ett cron-jobb (eller rensa vid login) som kör: <code>DELETE FROM password_resets WHERE expires_at &lt; NOW() - INTERVAL '7 days'</code>. Uppfyller lagringsminimeringsprincipen (artikel 5.1.e).
+        </div>
+      </li>
+      <li>
+        <span class="action-num prio-2">P2</span>
+        <div>
+          <strong>Noindex-alternativ för profiler</strong><br>
+          Lägg till ett kryssval i dashboarden: "Hindra sökmotorer från att indexera min sida". Lägger till <code>&lt;meta name="robots" content="noindex"&gt;</code> på profilsidan om aktiverat. Ger kunden kontroll utan att det påverkar NFC-funktionen.
+        </div>
+      </li>
+      <li>
+        <span class="action-num prio-2">P2</span>
+        <div>
+          <strong>Dokumentera datalagringstider</strong><br>
+          Definiera och dokumentera: aktiva konton sparas tills radering begärs, inaktiva konton (ej förnyard plan efter X månader) aviseras och raderas efter Y dagar. Dokumentera detta i integritetspolicyn.
+        </div>
+      </li>
+      <li>
+        <span class="action-num prio-2">P2</span>
+        <div>
+          <strong>DPA-mall för B2B-kunder (organisationer)</strong><br>
+          När ett företag köper kort till anställda är de personuppgiftsansvariga för sina anställdas data — vi blir biträde. Skapa en enkel DPA-mall att skicka till organisationskunder. Behövs innan organisationsfunktionen används aktivt.
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- SEKTION 7 -->
+  <div class="section">
+    <div class="section-num">07 — Nice-to-have</div>
+    <h2>Prioritet 3 — Professionaliserar vidare</h2>
+
+    <ul class="action-list">
+      <li>
+        <span class="action-num prio-3">P3</span>
+        <div>
+          <strong>Dataexport (rätt till portabilitet, artikel 20)</strong><br>
+          Knapp i dashboardens inställningar: "Ladda ner min data som JSON". Exporterar profil och kontouppgifter i maskinläsbart format. Relevant om vi någonsin migrerar plattform eller om en kund begär det formellt.
+        </div>
+      </li>
+      <li>
+        <span class="action-num prio-3">P3</span>
+        <div>
+          <strong>Intern rutin vid dataintrång</strong><br>
+          Skriv ett enkelt intern dokument (1 sida): om VPS:en komprometteras, vad gör vi? IMY ska notifieras inom 72 timmar (artikel 33). Berörda kunder notifieras utan onödigt dröjsmål (artikel 34) om intrånget sannolikt medför hög risk för dem.
+        </div>
+      </li>
+      <li>
+        <span class="action-num prio-3">P3</span>
+        <div>
+          <strong>Åtkomstkontroll på uppladdade foton</strong><br>
+          Foton är idag publikt tillgängliga via /uploads/user-{id}-{ts}.ext. Tekniskt lösbart genom att flytta uppladdningar utanför public/-mappen och servera dem via en autentiserad rutt — men komplexiteten vs. risken är låg eftersom filnamnet inte är gissningsbart i praktiken.
+        </div>
+      </li>
+      <li>
+        <span class="action-num prio-3">P3</span>
+        <div>
+          <strong>Register över behandlingar (artikel 30)</strong><br>
+          GDPR kräver att organisationer med fler än 250 anställda — eller som behandlar känsliga uppgifter — för ett register. Vi är under gränsen, men ett enkelt kalkylark som dokumenterar vilka uppgifter vi behandlar, varför och hur länge är god praxis och underlättar vid eventuell IMY-granskning.
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- SEKTION 8 -->
+  <div class="section">
+    <div class="section-num">08 — Sammanfattning</div>
+    <h2>Läget i korthet</h2>
+
+    <p>Plattformens tekniska grund är god. Vi lagrar data i Sverige, använder stark kryptering, ger kunden full kontroll och samlar inte in mer än nödvändigt. Det är mer än vad de flesta små SaaS-plattformar gör vid lansering.</p>
+
+    <p>Det som saknas är framförallt <em>dokumentation</em> och <em>kommunikation</em> — en integritetspolicy och ett DPA med Resend. Dessa är lagkrav och tar sammanlagt ett par timmar att fixa. Resten är förbättringar som stärker positionen men inte är akuta.</p>
+
+    <div class="callout callout-amber">
+      <strong>Viktigt att komma ihåg</strong>
+      Kunden delar frivilligt den information som syns på profilen — de väljer själva vad de publicerar. Det är ett starkt argument för att behandlingen är laglig och proportionerlig. Men det befriar oss inte från skyldigheten att informera om hur vi behandlar uppgifterna (artikel 13) och att ha avtal på plats med tredjeparter vi anlitar (artikel 28).
+    </div>
+
+    <div class="callout callout-red">
+      <strong>Gör detta nu (under 3 timmar totalt)</strong>
+      1. Teckna DPA med Resend på resend.com/legal/dpa — 10 min.<br>
+      2. Skriv en enkel integritetspolicy-sida och länka från välkomstmailet — 2 tim.<br>
+      3. Resten kan planeras in när plattformen börjar växa.
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Intern analys · Vårt Företag · Juni 2026 · Ej juridisk rådgivning — vid tveksamheter, konsultera GDPR-jurist.
+  </div>
+
+</div>
+</body>
+</html>
