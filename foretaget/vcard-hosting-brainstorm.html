@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>vCard Hosting — Brainstorm & Guide</title>
+<title>vCard Hosting — Djupanalys av de tre alternativen</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -21,92 +21,73 @@
     --blue:    #74b9ff;
     --red:     #ff7675;
     --orange:  #e17055;
+    --purple:  #a29bfe;
   }
-  body {
-    font-family: 'Inter', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    padding: 0 0 80px;
-  }
-  header {
-    padding: 48px 32px 36px;
-    max-width: 900px;
-    margin: 0 auto;
-    border-bottom: 1px solid var(--border);
-  }
-  .badge {
-    display: inline-block;
-    font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
-    background: rgba(0,230,118,0.12); color: var(--accent);
-    border: 1px solid rgba(0,230,118,0.3);
-    padding: 3px 9px; border-radius: 20px; margin-bottom: 12px;
-  }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 0 0 80px; }
+
+  header { padding: 48px 32px 36px; max-width: 960px; margin: 0 auto; border-bottom: 1px solid var(--border); }
+  .badge { display: inline-block; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; background: rgba(0,230,118,0.12); color: var(--accent); border: 1px solid rgba(0,230,118,0.3); padding: 3px 9px; border-radius: 20px; margin-bottom: 12px; }
   header h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; }
-  header p { font-size: 14px; color: var(--sub); line-height: 1.65; max-width: 600px; }
+  header p { font-size: 14px; color: var(--sub); line-height: 1.65; max-width: 640px; }
 
-  .content { max-width: 900px; margin: 0 auto; padding: 0 32px; }
+  .content { max-width: 960px; margin: 0 auto; padding: 0 32px; }
+  .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; color: var(--sub); padding: 40px 0 14px; }
 
-  .section-label {
-    font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px;
-    color: var(--sub); padding: 40px 0 14px;
-  }
-
-  h2 { font-size: 17px; font-weight: 600; margin-bottom: 10px; }
-  h3 { font-size: 13px; font-weight: 600; color: var(--sub); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
-
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 24px;
-    margin-bottom: 12px;
-  }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 12px; }
+  .card h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+  .card h3 { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--sub); margin: 18px 0 8px; }
   .card p, .card li { font-size: 14px; color: #ccc; line-height: 1.7; }
-  .card ul { padding-left: 18px; margin-top: 8px; }
-  .card ul li { margin-bottom: 6px; }
+  .card ul { padding-left: 18px; margin-top: 6px; }
+  .card ul li { margin-bottom: 5px; }
 
-  .tag {
-    display: inline-block; font-size: 11px; font-weight: 600;
-    padding: 3px 10px; border-radius: 20px; margin-right: 6px; margin-bottom: 6px;
-  }
-  .tag-green  { background: rgba(0,230,118,0.12); color: var(--accent); border: 1px solid rgba(0,230,118,0.25); }
-  .tag-yellow { background: rgba(253,203,110,0.12); color: var(--yellow); border: 1px solid rgba(253,203,110,0.25); }
-  .tag-blue   { background: rgba(116,185,255,0.12); color: var(--blue); border: 1px solid rgba(116,185,255,0.25); }
-  .tag-red    { background: rgba(255,118,117,0.12); color: var(--red); border: 1px solid rgba(255,118,117,0.25); }
-  .tag-orange { background: rgba(225,112,85,0.12); color: var(--orange); border: 1px solid rgba(225,112,85,0.25); }
-
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .two-col   { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
 
-  .accent-border-green  { border-color: rgba(0,230,118,0.3); }
-  .accent-border-yellow { border-color: rgba(253,203,110,0.3); }
-  .accent-border-blue   { border-color: rgba(116,185,255,0.3); }
-  .accent-border-red    { border-color: rgba(255,118,117,0.3); }
+  .tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; margin-right: 6px; margin-bottom: 8px; }
+  .tag-blue   { background: rgba(116,185,255,0.12); color: var(--blue);   border: 1px solid rgba(116,185,255,0.25); }
+  .tag-green  { background: rgba(0,230,118,0.12);   color: var(--accent); border: 1px solid rgba(0,230,118,0.25); }
+  .tag-yellow { background: rgba(253,203,110,0.12); color: var(--yellow); border: 1px solid rgba(253,203,110,0.25); }
+  .tag-orange { background: rgba(225,112,85,0.12);  color: var(--orange); border: 1px solid rgba(225,112,85,0.25); }
+  .tag-purple { background: rgba(162,155,254,0.12); color: var(--purple); border: 1px solid rgba(162,155,254,0.25); }
+  .tag-red    { background: rgba(255,118,117,0.12); color: var(--red);    border: 1px solid rgba(255,118,117,0.25); }
 
-  .step-num {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 28px; height: 28px; border-radius: 50%;
-    background: rgba(0,230,118,0.15); color: var(--accent);
-    font-size: 13px; font-weight: 700; flex-shrink: 0; margin-right: 12px;
-  }
-  .step { display: flex; align-items: flex-start; margin-bottom: 16px; }
-  .step-body h2 { font-size: 15px; margin-bottom: 4px; }
-  .step-body p  { font-size: 13px; color: var(--sub); line-height: 1.6; }
+  .accent-blue   { border-color: rgba(116,185,255,0.3); }
+  .accent-green  { border-color: rgba(0,230,118,0.3); }
+  .accent-yellow { border-color: rgba(253,203,110,0.3); }
+  .accent-orange { border-color: rgba(225,112,85,0.3); }
+  .accent-red    { border-color: rgba(255,118,117,0.3); }
+  .accent-purple { border-color: rgba(162,155,254,0.3); }
 
-  .note {
-    background: rgba(253,203,110,0.06);
-    border: 1px solid rgba(253,203,110,0.2);
-    border-radius: 10px;
-    padding: 16px 20px;
-    font-size: 13px; color: #ccc; line-height: 1.65;
-    margin-top: 12px;
-  }
+  table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  th { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--sub); text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  td { font-size: 13px; color: #ccc; padding: 9px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  td strong { color: var(--text); }
+  .td-green  { color: var(--accent); font-weight: 600; }
+  .td-yellow { color: var(--yellow); }
+  .td-red    { color: var(--red); }
+
+  .note { background: rgba(253,203,110,0.06); border: 1px solid rgba(253,203,110,0.2); border-radius: 10px; padding: 16px 20px; font-size: 13px; color: #ccc; line-height: 1.65; margin-top: 12px; }
   .note strong { color: var(--yellow); }
+  .note-green { background: rgba(0,230,118,0.06); border: 1px solid rgba(0,230,118,0.2); border-radius: 10px; padding: 16px 20px; font-size: 13px; color: #ccc; line-height: 1.65; margin-top: 12px; }
+  .note-green strong { color: var(--accent); }
+  .note-blue { background: rgba(116,185,255,0.06); border: 1px solid rgba(116,185,255,0.2); border-radius: 10px; padding: 16px 20px; font-size: 13px; color: #ccc; line-height: 1.65; margin-top: 12px; }
+  .note-blue strong { color: var(--blue); }
 
-  code {
-    background: #252525; color: var(--accent);
-    padding: 2px 7px; border-radius: 5px; font-size: 12px; font-family: monospace;
-  }
+  .step { display: flex; align-items: flex-start; margin-bottom: 20px; }
+  .step-num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; background: rgba(0,230,118,0.15); color: var(--accent); font-size: 13px; font-weight: 700; flex-shrink: 0; margin-right: 14px; margin-top: 2px; }
+  .step-body h2 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .step-body p  { font-size: 13px; color: var(--sub); line-height: 1.65; }
+  .step-body ul { padding-left: 16px; margin-top: 6px; }
+  .step-body ul li { font-size: 13px; color: #bbb; margin-bottom: 4px; line-height: 1.6; }
+
+  code { background: #252525; color: var(--accent); padding: 2px 7px; border-radius: 5px; font-size: 12px; font-family: monospace; }
+  .pill { display: inline-block; background: #252525; color: #bbb; font-size: 11px; padding: 2px 8px; border-radius: 12px; margin: 2px 3px 2px 0; font-family: monospace; }
+
+  .verdict { background: rgba(0,230,118,0.08); border: 2px solid rgba(0,230,118,0.35); border-radius: 14px; padding: 24px 28px; margin-top: 12px; }
+  .verdict h2 { font-size: 18px; font-weight: 700; color: var(--accent); margin-bottom: 10px; }
+  .verdict p, .verdict li { font-size: 14px; color: #ddd; line-height: 1.7; }
+  .verdict ul { padding-left: 18px; margin-top: 8px; }
 
   @media (max-width: 640px) {
     header, .content { padding-left: 20px; padding-right: 20px; }
@@ -117,206 +98,449 @@
 <body>
 
 <header>
-  <span class="badge">Internt — Brainstorm</span>
-  <h1>vCard Hosting</h1>
-  <p>Vad är det, hur fungerar det, vad kan vi bygga, och hur levererar vi det till kunder? En gemensam genomgång för Léa och Kristoffer.</p>
+  <span class="badge">Internt — Teknisk analys</span>
+  <h1>vCard Hosting — De tre alternativen</h1>
+  <p>En utförlig genomgång av vad varje alternativ kräver i teknik, tid, kompetens och kostnad. Dokument för Léa och Kristoffer.</p>
 </header>
 
 <div class="content">
 
-  <!-- VAD ÄR VCARD HOSTING -->
-  <p class="section-label">Vad är vCard Hosting?</p>
-
+  <!-- SNABBJÄMFÖRELSE -->
+  <p class="section-label">Snabbjämförelse</p>
   <div class="card">
-    <h2>Konceptet i korthet</h2>
-    <p>När kunden håller sitt NFC-kort mot en telefon händer en av två saker:</p>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Alt 1 — SaaS</th>
+          <th>Alt 2 — Öppen källkod</th>
+          <th>Alt 3 — Bygg själv</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Tid till lansering</strong></td><td class="td-green">Dagar</td><td class="td-yellow">1–3 veckor</td><td class="td-red">2–4 månader</td></tr>
+        <tr><td><strong>Teknisk kunskap</strong></td><td class="td-green">Ingen</td><td class="td-yellow">Medel (server, Linux)</td><td class="td-red">Hög (webbutveckling)</td></tr>
+        <tr><td><strong>Startkostnad</strong></td><td class="td-green">0 kr</td><td class="td-yellow">~500 kr</td><td class="td-red">Tid = huvudkostnad</td></tr>
+        <tr><td><strong>Löpande kostnad / 10 kunder</strong></td><td class="td-red">~1 200 kr/mån</td><td class="td-green">~70 kr/mån</td><td class="td-green">~70 kr/mån</td></tr>
+        <tr><td><strong>Löpande kostnad / 100 kunder</strong></td><td class="td-red">~12 000 kr/mån</td><td class="td-green">~150 kr/mån</td><td class="td-green">~150 kr/mån</td></tr>
+        <tr><td><strong>Eget varumärke</strong></td><td class="td-red">Nej / begränsat</td><td class="td-yellow">Ja (med anpassning)</td><td class="td-green">Ja, 100 %</td></tr>
+        <tr><td><strong>Kontroll</strong></td><td class="td-red">Låg</td><td class="td-yellow">Medel</td><td class="td-green">Full</td></tr>
+        <tr><td><strong>GDPR-kontroll</strong></td><td class="td-red">Beroende av leverantör</td><td class="td-yellow">Ni väljer server</td><td class="td-green">Ni äger allt</td></tr>
+        <tr><td><strong>Skalbarhet</strong></td><td class="td-red">Kostnad ökar med kunder</td><td class="td-yellow">God</td><td class="td-green">Utmärkt</td></tr>
+        <tr><td><strong>Bryta ut</strong></td><td class="td-red">Svårt (vendor lock-in)</td><td class="td-yellow">Enkelt</td><td class="td-green">Ni äger koden</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ALTERNATIV 1 -->
+  <p class="section-label">Alternativ 1 — Färdig SaaS-plattform</p>
+  <div class="card accent-orange">
+    <span class="tag tag-orange">Snabbast</span>
+    <h2>Exempel: Tapni, HiHello, Blinq, Popl</h2>
+    <p>Ni skapar konton på en befintlig plattform och antingen vidaresäljer åtkomst eller använder deras white-label-erbjudande (om det finns).</p>
+
+    <h3>Vad krävs</h3>
     <ul>
-      <li><strong>Utan hosting:</strong> Kortet är programmerat med fast information (namn, telefon, e-post) som skrivs direkt i NFC-chippet. Kunden kan inte ändra något efteråt utan att skicka kortet till oss för omprogrammering.</li>
-      <li><strong>Med hosting:</strong> Kortet är programmerat med en URL till en webbsida vi hostar (t.ex. <code>vcard.företaget.se/erik</code>). Kunden kan logga in och uppdatera sin information när som helst — kortet ser alltid aktuellt ut.</li>
+      <li>Skapa ett konto och välj en plan</li>
+      <li>Programmera NFC-chippet med plattformens URL (t.ex. <code>app.tapni.co/kundnamn</code>)</li>
+      <li>Kunden skapar sin profil via plattformens gränssnitt</li>
+      <li>Ingen teknisk setup från er sida</li>
     </ul>
+
+    <h3>Kostnader (typiska intervall)</h3>
+    <ul>
+      <li>Gratisnivå: 1 profil, begränsade funktioner</li>
+      <li>Pro: ~100–150 kr/användare/månad</li>
+      <li>Team-plan: ~50–80 kr/användare/månad (volymrabatt)</li>
+      <li>White-label: Ofta separat avtal, ~500–2 000 kr/månad fast avgift</li>
+    </ul>
+
+    <h3>Risker och begränsningar</h3>
+    <ul>
+      <li>Plattformens logga och URL syns hos kunden — svårt att bygga eget varumärke</li>
+      <li>Kostnaden ökar linjärt med antalet kunder — skalas illa</li>
+      <li>Plattformen kan ändra pris, villkor eller lägga ner</li>
+      <li>Ni äger inte kunddata — den sitter hos en tredje part</li>
+      <li>Svårt att byta senare utan att förlora alla kunders data och NFC-URL:er</li>
+    </ul>
+
     <div class="note">
-      <strong>Enkel tumregel:</strong> Utan hosting = visitkortet är statiskt, som en tatuering. Med hosting = visitkortet är dynamiskt, som en hemsida.
+      <strong>Slutsats:</strong> Bra för att testa konceptet med de första 3–5 kunderna. Inte en långsiktig lösning om ni vill bygga ett eget varumärke och hålla nere kostnader.
     </div>
   </div>
 
-  <!-- ALTERNATIV -->
-  <p class="section-label">Tre vägar framåt</p>
+  <!-- ALTERNATIV 2 -->
+  <p class="section-label">Alternativ 2 — Öppen källkod + eget hosting</p>
+  <div class="card accent-blue">
+    <span class="tag tag-blue">Mellanalternativ</span>
+    <h2>Exempel: Rallly, LinkStack, egna vCard-skript</h2>
+    <p>Ni installerar ett befintligt open source-projekt på en VPS och anpassar det. Ni äger infrastrukturen men bygger inte logiken från grunden.</p>
 
-  <div class="three-col">
-    <div class="card accent-border-green">
-      <span class="tag tag-green">Alternativ 1</span>
-      <h2>Färdig SaaS-plattform</h2>
-      <p>Använd en befintlig tjänst (t.ex. Tapni, HiHello, Blinq) som vit-märkning eller vidaresälj.</p>
-      <ul>
-        <li>✅ Snabbast att komma igång</li>
-        <li>✅ Ingen teknik att bygga</li>
-        <li>❌ Låg kontroll, svårt att sätta eget pris</li>
-        <li>❌ Varumärket tillhör dem</li>
-      </ul>
-    </div>
-
-    <div class="card accent-border-blue">
-      <span class="tag tag-blue">Alternativ 2</span>
-      <h2>Öppen källkod + eget hosting</h2>
-      <p>Bygg på ett befintligt ramverk (t.ex. Cardlink, open-source vCard-projekt) på en VPS.</p>
-      <ul>
-        <li>✅ Eget varumärke och domän</li>
-        <li>✅ Full kontroll</li>
-        <li>✅ Låg löpande kostnad</li>
-        <li>❌ Kräver teknisk setup</li>
-        <li>❌ Underhåll på oss</li>
-      </ul>
-    </div>
-
-    <div class="card accent-border-yellow">
-      <span class="tag tag-yellow">Alternativ 3</span>
-      <h2>Bygg från grunden</h2>
-      <p>Skapa en egen plattform med inloggning, redigeringsverktyg och vCard-sidor.</p>
-      <ul>
-        <li>✅ 100 % skräddarsytt</li>
-        <li>✅ Kan växa med oss</li>
-        <li>❌ Störst investering i tid</li>
-        <li>❌ Kräver webbutveckling</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="note">
-    <strong>Rekommendation för uppstarten:</strong> Börja med Alternativ 1 (SaaS) för att testa marknaden och förstå vad kunder faktiskt vill ha. Byt till Alternativ 2 eller 3 när ni vet att det finns efterfrågan och ni har tid att investera i teknik.
-  </div>
-
-  <!-- HUR DET FUNGERAR TEKNISKT -->
-  <p class="section-label">Hur fungerar det tekniskt?</p>
-
-  <div class="card">
-    <h2>Flödet steg för steg</h2>
-    <div style="margin-top: 16px;">
-      <div class="step">
-        <span class="step-num">1</span>
-        <div class="step-body">
-          <h2>NFC-chip programmeras</h2>
-          <p>Vi skriver en URL till chippet — t.ex. <code>https://vcard.företaget.se/eriksson</code>. Detta görs en gång vid leverans med en NFC-skrivare (app på telefon räcker, t.ex. NFC Tools).</p>
-        </div>
-      </div>
-      <div class="step">
-        <span class="step-num">2</span>
-        <div class="step-body">
-          <h2>Webbsidan hostar profilen</h2>
-          <p>På den URL:en finns en enkel webbsida med kundens information: namn, titel, telefon, e-post, LinkedIn, foto. Sidan är optimerad för mobil och laddas snabbt.</p>
-        </div>
-      </div>
-      <div class="step">
-        <span class="step-num">3</span>
-        <div class="step-body">
-          <h2>Kunden loggar in och uppdaterar</h2>
-          <p>Via en inloggningssida (t.ex. <code>vcard.företaget.se/login</code>) kan kunden ändra sin information när som helst. Ändringen syns direkt — kortet behöver inte bytas ut.</p>
-        </div>
-      </div>
-      <div class="step">
-        <span class="step-num">4</span>
-        <div class="step-body">
-          <h2>Mottagaren sparar kontakten</h2>
-          <p>Den som håller telefonen mot kortet ser vCard-sidan och kan med ett klick ladda ner kontaktkortet (.vcf-fil) direkt till sin kontaktlista.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- VAD BEHÖVER VI -->
-  <p class="section-label">Vad behöver vi för att komma igång?</p>
-
-  <div class="two-col">
-    <div class="card">
-      <h3>Teknik</h3>
-      <ul>
-        <li><strong>Domän</strong> — t.ex. <code>vcard.företaget.se</code> eller en separat domän</li>
-        <li><strong>Hosting</strong> — en enkel VPS (t.ex. Hetzner ~50 kr/mån) eller Vercel/Netlify (gratis för liten trafik)</li>
-        <li><strong>NFC-skrivare</strong> — en app på telefonen räcker (NFC Tools, gratis)</li>
-        <li><strong>Databas</strong> — lagrar kundernas profiler; SQLite eller Supabase (gratis-tier)</li>
-      </ul>
-    </div>
-    <div class="card">
-      <h3>Process mot kund</h3>
-      <ul>
-        <li>Kunden fyller i ett formulär med sin info vid beställning</li>
-        <li>Vi skapar profilen och programmerar chippet innan leverans</li>
-        <li>Kunden får inloggningsuppgifter med kortet</li>
-        <li>Vi fakturerar månads- eller årsvis för hosting</li>
-        <li>Vi skickar påminnelse inför förnyelse</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- PRISSÄTTNING -->
-  <p class="section-label">Prissättning — idéer</p>
-
-  <div class="three-col">
-    <div class="card">
-      <span class="tag tag-green">Bas</span>
-      <h2>~99 kr/mån</h2>
-      <p>En profil, grundläggande info (namn, kontakt, länk), standard-design på vCard-sidan.</p>
-    </div>
-    <div class="card">
-      <span class="tag tag-blue">Pro</span>
-      <h2>~149 kr/mån</h2>
-      <p>Upp till 3 profiler (t.ex. ett litet team), anpassad logga på vCard-sidan, statistik (hur många klick kortet fått).</p>
-    </div>
-    <div class="card">
-      <span class="tag tag-yellow">Företag</span>
-      <h2>Offert</h2>
-      <p>Hotell, byråer och företag med många kort. Volymrabatt, gemensam design, admin-panel för att hantera alla profiler.</p>
-    </div>
-  </div>
-
-  <div class="note">
-    <strong>Årsbetalning:</strong> Erbjud rabatt vid årsbetalning (t.ex. 10 mån pris för 12 mån). Det ger er bättre kassaflöde och minskar churn.
-  </div>
-
-  <!-- RISKER OCH FRÅGOR -->
-  <p class="section-label">Öppna frågor &amp; risker</p>
-
-  <div class="card accent-border-red">
-    <h3 style="color: var(--red);">Frågor att besvara innan lansering</h3>
+    <h3>Vad krävs — teknik</h3>
     <ul>
-      <li>Vad händer om en kund slutar betala? Ska sidan fortfarande vara aktiv (men låst) eller gå ner helt?</li>
-      <li>Behöver vi GDPR-hantering för lagrade kontaktuppgifter? (Ja — vi lagrar personuppgifter.)</li>
-      <li>Ska hosting vara obligatoriskt eller valfritt vid kortköp?</li>
-      <li>Vad är vår minsta tech-investering för att testa konceptet med de första 10 kunderna?</li>
-      <li>Ska vCard-sidan ha vår logga synlig (white-label problem) eller vara helt neutral?</li>
+      <li><strong>VPS (Virtual Private Server)</strong> — t.ex. Hetzner CX22 (~55 kr/mån), DigitalOcean Droplet (~70 kr/mån)</li>
+      <li><strong>Domän</strong> — t.ex. <code>vcard.ert-foretagsnamn.se</code> (~150 kr/år)</li>
+      <li><strong>SSL-certifikat</strong> — gratis via Let's Encrypt (automatisk förnyelse)</li>
+      <li><strong>Linux-grundkunskaper</strong> — SSH-inloggning, installera paket, starta/stoppa tjänster</li>
+      <li><strong>Docker eller manuell installation</strong> beroende på vilket projekt ni väljer</li>
     </ul>
+
+    <h3>Vad krävs — kompetens</h3>
+    <ul>
+      <li>Sätta upp en Linux-server (Ubuntu 22.04 är standard)</li>
+      <li>Installera och konfigurera ett webbramverk</li>
+      <li>Peka en domän mot servern (DNS-inställningar)</li>
+      <li>Grundläggande förståelse för hur webbapplikationer fungerar</li>
+      <li>Enklare anpassningar av HTML/CSS för eget utseende</li>
+    </ul>
+
+    <h3>Kostnader</h3>
+    <ul>
+      <li>VPS: ~55–100 kr/mån (oavsett antal kunder)</li>
+      <li>Domän: ~150 kr/år</li>
+      <li>Mjukvara: Gratis (öppen källkod)</li>
+      <li>Total löpande: ~700–1 350 kr/år</li>
+    </ul>
+
+    <h3>Begränsningar</h3>
+    <ul>
+      <li>Begränsat med open source-projekt som är specifikt byggda för NFC-visitkort</li>
+      <li>Anpassning till ert varumärke kräver tid och viss koderfarenhet</li>
+      <li>Ni är beroende av ett externt projekts aktivitet och uppdateringar</li>
+      <li>Inbyggt admingränssnitt kanske inte passar er arbetsprocess exakt</li>
+    </ul>
+
+    <div class="note">
+      <strong>Slutsats:</strong> Bra mellanalternativ om ni vill ha kontroll och låg kostnad snabbt, men inte lägga tid på att bygga. Tekniskt lättare än alternativ 3 men ger mindre kontroll på lång sikt.
+    </div>
   </div>
 
-  <!-- NÄSTA STEG -->
-  <p class="section-label">Föreslagna nästa steg</p>
+  <!-- ALTERNATIV 3 -->
+  <p class="section-label">Alternativ 3 — Bygg från grunden</p>
+
+  <div class="verdict">
+    <h2>Varför alternativ 3 vinner på lång sikt</h2>
+    <p>Med 100 kunder betalar ni ~150 kr/mån i driftkostnad oavsett om ni väljer alt 2 eller 3. Skillnaden är att med alt 3 äger ni varje rad kod, kan bygga precis de funktioner ni behöver, och är aldrig beroende av någon annans beslut. Investering är tid — inte pengar.</p>
+  </div>
+
+  <!-- VADS SOM BEHÖVS -->
+  <p class="section-label" style="padding-top: 28px;">Vad alternativ 3 kräver — fullständig genomgång</p>
+
+  <div class="card accent-green">
+    <span class="tag tag-green">Infrastruktur</span>
+    <h2>Servrar och domäner</h2>
+    <div class="two-col" style="margin-top: 12px;">
+      <div>
+        <h3>VPS-hosting (rekommendation)</h3>
+        <ul>
+          <li><strong>Hetzner CX22</strong> — 2 vCPU, 4 GB RAM, 40 GB SSD (~55 kr/mån). Räcker för hundratals aktiva vCard-profiler utan problem.</li>
+          <li>Alternativt: <strong>Supabase + Vercel</strong> (gratis-tier räcker länge) — men kräver lite mer arkitekturkunskap</li>
+          <li>Lokation: Välj EU-server (Frankfurt eller Helsinki) för GDPR-compliance</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Domän och SSL</h3>
+        <ul>
+          <li>Exempel: <code>vcard.foretagsnamn.se</code> — pekas mot er VPS</li>
+          <li>SSL: Let's Encrypt + Certbot (gratis, automatisk förnyelse)</li>
+          <li>DNS: Sätt en A-record som pekar domänen mot serverns IP</li>
+          <li>Kostnad domän: ~150–300 kr/år</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card accent-blue">
+    <span class="tag tag-blue">Teknikstack</span>
+    <h2>Vad ni faktiskt bygger — rekommenderad stack</h2>
+    <p style="margin-bottom: 14px;">Det finns många sätt att bygga detta. Här är den enklaste stacken för er situation (Kristoffer har teknisk bakgrund, Léa behöver kunna förstå och ev. hjälpa till):</p>
+
+    <div class="two-col">
+      <div>
+        <h3>Backend (servern)</h3>
+        <ul>
+          <li><strong>Node.js + Express</strong> — JavaScript, lätt att lära, enormt community, massor av hjälp att hitta online</li>
+          <li>Alternativ: <strong>Python + FastAPI</strong> — om ni hellre skriver Python</li>
+          <li>Hanterar: Inloggning, spara/läsa profiler, generera vCard-filer, hantera prenumerationer</li>
+        </ul>
+        <h3 style="margin-top: 16px;">Databas</h3>
+        <ul>
+          <li><strong>PostgreSQL</strong> — industristandard, gratis, robust</li>
+          <li>Lagrar: Kundkonton, profildata (namn, titel, telefon, e-post, foto-URL), prenumerationsstatus</li>
+          <li>Alternativ: <strong>SQLite</strong> — ännu enklare för liten skala i början</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Frontend (vad kunden ser)</h3>
+        <ul>
+          <li><strong>Enkel HTML/CSS/JavaScript</strong> — ingen tung ramverk behövs i början</li>
+          <li>Två sidor som kunden ser: (1) Redigeringssida (inloggad), (2) Profilsida (publikt, öppnas via NFC)</li>
+          <li>Alternativ: <strong>React</strong> om ni vill ha mer interaktivitet</li>
+        </ul>
+        <h3 style="margin-top: 16px;">Betalning</h3>
+        <ul>
+          <li><strong>Stripe</strong> — de-facto standard för prenumerationer</li>
+          <li>Hanterar fakturering, kortdebitering, prenumerationshantering automatiskt</li>
+          <li>Kostnad: 1,5 % + 1,80 kr per transaktion (EU-kort)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note-blue" style="margin-top: 16px;">
+      <strong>Tech stack i ett nötskal:</strong>
+      <span class="pill">Node.js</span>
+      <span class="pill">Express</span>
+      <span class="pill">PostgreSQL</span>
+      <span class="pill">HTML/CSS/JS</span>
+      <span class="pill">Stripe</span>
+      <span class="pill">Let's Encrypt</span>
+      <span class="pill">Hetzner VPS</span>
+    </div>
+  </div>
+
+  <div class="card accent-purple">
+    <span class="tag tag-purple">Funktioner</span>
+    <h2>Vad systemet behöver kunna göra</h2>
+    <div class="two-col" style="margin-top:12px;">
+      <div>
+        <h3>Kundsidan</h3>
+        <ul>
+          <li>Inloggning med e-post + lösenord</li>
+          <li>Redigera profil: namn, titel, företag, telefon, e-post, webbplats, LinkedIn, foto</li>
+          <li>Se hur profilen ser ut (förhandsvisning)</li>
+          <li>Ladda ner sin egen QR-kod (alternativ till NFC)</li>
+          <li>Hantera sin prenumeration (uppgradera, avsluta)</li>
+        </ul>
+        <h3 style="margin-top: 16px;">Profilsidan (publik)</h3>
+        <ul>
+          <li>Öppnas via NFC-tapp: <code>vcard.er.se/kristoffer</code></li>
+          <li>Visar foto, namn, titel, kontaktinfo</li>
+          <li>Knapp: "Spara kontakt" — genererar och laddar ner en .vcf-fil</li>
+          <li>Snabblänkar: Ring, e-posta, LinkedIn-knapp</li>
+          <li>Mobiloptimerad, laddas på under 1 sekund</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Adminsidan (för er)</h3>
+        <ul>
+          <li>Lista alla kunder och deras status</li>
+          <li>Skapa ny kund manuellt (vid kortleverans)</li>
+          <li>Skicka inloggningslänk till kund</li>
+          <li>Se vilka prenumerationer som snart löper ut</li>
+          <li>Pausa eller avsluta ett konto</li>
+        </ul>
+        <h3 style="margin-top: 16px;">Systemnivå</h3>
+        <ul>
+          <li>HTTPS på alla sidor (SSL)</li>
+          <li>Automatisk säkerhetskopiering av databasen</li>
+          <li>GDPR: Kund kan begära radering av all sin data</li>
+          <li>Lösenord krypterade (bcrypt) — aldrig i klartext</li>
+          <li>E-postutskick för välkomst och påminnelse om förnyelse</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- BYGGFASER -->
+  <p class="section-label">Byggplan — fas för fas</p>
 
   <div class="card">
     <div class="step">
       <span class="step-num">1</span>
       <div class="step-body">
-        <h2>Testa med SaaS (vecka 1)</h2>
-        <p>Skapa ett konto på t.ex. Blinq eller Tapni. Programmera ett eget NFC-kort och testa hela flödet som om ni vore kunden. Förstå vad som fungerar och vad som saknas.</p>
+        <h2>Fas 1 — Grundstruktur (2–3 veckor)</h2>
+        <p>Sätt upp servern, databasen och de allra enklaste sidorna. Inget snyggt, men fungerar.</p>
+        <ul>
+          <li>Hyr en VPS, installera Node.js och PostgreSQL</li>
+          <li>Skapa databastabellen för profiler (namn, kontaktinfo, slug)</li>
+          <li>Bygg en enkel profilsida: <code>/kristoffer</code> visar profildata från databasen</li>
+          <li>Bygg .vcf-generatorn: klick på "Spara kontakt" laddar ner en korrekt formaterad vCard-fil</li>
+          <li>Testa med ett eget NFC-chip: programmera det med er URL och verifiera att det fungerar</li>
+        </ul>
+        <p style="margin-top: 8px;"><strong>Resultat:</strong> Ni kan leverera ett fungerande NFC-visitkort till er första kund — även om de inte kan redigera profilen själva ännu.</p>
       </div>
     </div>
+
     <div class="step">
       <span class="step-num">2</span>
       <div class="step-body">
-        <h2>Bestäm om ni vill ha eget varumärke</h2>
-        <p>Om SaaS-lösningen känns rätt för uppstarten — kör på det. Om ni absolut vill ha eget varumärke redan från start — planera en enkel egen lösning (statiska HTML-sidor på en VPS som vi uppdaterar manuellt i början).</p>
+        <h2>Fas 2 — Inloggning och självbetjäning (2–3 veckor)</h2>
+        <p>Kunder kan logga in och uppdatera sin egen profil utan att kontakta er.</p>
+        <ul>
+          <li>Användarsystem: registrering, inloggning, lösenordsåterställning</li>
+          <li>Redigeringssida med formulär för alla profilfält</li>
+          <li>Fotouppladdning (spara bild på servern eller via Cloudflare R2/S3)</li>
+          <li>Adminsida för er: lista kunder, skapa nya manuellt</li>
+        </ul>
+        <p style="margin-top: 8px;"><strong>Resultat:</strong> Kunden är självständig. Ni behöver inte göra något när en kund byter telefonnummer eller titel.</p>
       </div>
     </div>
+
     <div class="step">
       <span class="step-num">3</span>
       <div class="step-body">
-        <h2>Dokumentera er interna process</h2>
-        <p>Skriv ner steg-för-steg vad som händer från att kunden beställer till att de har ett fungerande NFC-kort med aktiv hosting. Det dokumentet hjälper er att leverera konsekvent även när det är bråttom.</p>
+        <h2>Fas 3 — Betalning och prenumerationer (2–3 veckor)</h2>
+        <p>Automatisera faktureringen så att ingenting sköts manuellt.</p>
+        <ul>
+          <li>Integrera Stripe: skapa prenumerationsplaner (Bas, Pro, Företag)</li>
+          <li>Koppla betalningsstatus till kontots aktivitet (obetald = låst profil)</li>
+          <li>Automatiska e-postpåminnelser inför förnyelse</li>
+          <li>Stripe-webhook: lyssnar på betalningshändelser och uppdaterar databasen automatiskt</li>
+        </ul>
+        <p style="margin-top: 8px;"><strong>Resultat:</strong> Pengar kommer in automatiskt. Ni behöver inte jaga fakturor.</p>
       </div>
     </div>
+
+    <div class="step">
+      <span class="step-num">4</span>
+      <div class="step-body">
+        <h2>Fas 4 — Design och slutpolish (1–2 veckor)</h2>
+        <p>Gör det snyggt, mobiloptimerat och med ert varumärke.</p>
+        <ul>
+          <li>Profilsidan: er logga, er färgpalett, en design som matchar premium-kortet</li>
+          <li>Mobiloptimering (de flesta öppnar via telefon direkt efter NFC-tapp)</li>
+          <li>Laddningstid under 1 sekund (viktigt för första intrycket)</li>
+          <li>Anpassade felmeddelanden (t.ex. "Prenumeration inaktiv")</li>
+        </ul>
+        <p style="margin-top: 8px;"><strong>Resultat:</strong> En produkt ni kan vara stolta över att visa för kunder.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- KOSTNADSJÄMFÖRELSE ÖVER TID -->
+  <p class="section-label">Kostnadsjämförelse över tid</p>
+  <div class="card">
+    <p style="font-size: 13px; color: var(--sub); margin-bottom: 16px;">Baserat på 99 kr/kund/mån som ni tar betalt. Jämför era kostnader vid alt 1 (SaaS) vs alt 3 (bygg själv).</p>
+    <table>
+      <thead>
+        <tr><th>Antal kunder</th><th>Alt 1 — SaaS-kostnad/mån</th><th>Alt 3 — Driftkostnad/mån</th><th>Er marginal alt 3</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>10 kunder</strong></td>
+          <td class="td-red">~1 000 kr/mån</td>
+          <td class="td-green">~70 kr/mån</td>
+          <td class="td-green">~920 kr mer/mån</td>
+        </tr>
+        <tr>
+          <td><strong>50 kunder</strong></td>
+          <td class="td-red">~5 000 kr/mån</td>
+          <td class="td-green">~100 kr/mån</td>
+          <td class="td-green">~4 800 kr mer/mån</td>
+        </tr>
+        <tr>
+          <td><strong>100 kunder</strong></td>
+          <td class="td-red">~10 000 kr/mån</td>
+          <td class="td-green">~150 kr/mån</td>
+          <td class="td-green">~9 700 kr mer/mån</td>
+        </tr>
+        <tr>
+          <td><strong>500 kunder</strong></td>
+          <td class="td-red">~50 000 kr/mån</td>
+          <td class="td-yellow">~300 kr/mån</td>
+          <td class="td-green">~49 500 kr mer/mån</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="note-green">
+      <strong>Break-even på investerad tid:</strong> Om alternativ 3 tar 80 timmar att bygga och ni hade lagt 200 kr/timme i alternativkostnad = 16 000 kr investering. Med 50 kunder tjänar ni in det på under 4 månader jämfört med SaaS. Med 100 kunder på under 2 månader.
+    </div>
+  </div>
+
+  <!-- KOMPETENSKRAV -->
+  <p class="section-label">Kompetenskrav — vad ni behöver kunna</p>
+  <div class="two-col">
+    <div class="card accent-green">
+      <h2>Kristoffer (teknisk bakgrund)</h2>
+      <h3>Sannolikt redan bekant</h3>
+      <ul>
+        <li>Hur webbapplikationer fungerar (request/response, HTTP)</li>
+        <li>Grundläggande programmering (logik, loopar, funktioner)</li>
+        <li>Git för versionshantering</li>
+      </ul>
+      <h3 style="margin-top: 14px;">Behöver lära / repetera</h3>
+      <ul>
+        <li>Node.js och Express om ni inte gjort backend förut</li>
+        <li>SQL-grunderna (CREATE TABLE, SELECT, INSERT, UPDATE)</li>
+        <li>Serveradministration: SSH, Nginx som reverse proxy, PM2 för att hålla appen igång</li>
+        <li>Stripe API (väldokumenterat, relativt enkelt)</li>
+        <li>vCard-formatet (.vcf) — enkelt textformat, lärt på en timme</li>
+      </ul>
+    </div>
+    <div class="card accent-blue">
+      <h2>Léa (ej teknisk bakgrund antagen)</h2>
+      <h3>Behöver förstå (inte bygga)</h3>
+      <ul>
+        <li>Hur systemet används för att lägga till/hantera kunder</li>
+        <li>Vad admingränssnittet visar och hur det används</li>
+        <li>Hur man kontrollerar att en betalning gått igenom</li>
+        <li>Grundläggande felsökning: "profilen visas inte" — varför?</li>
+      </ul>
+      <h3 style="margin-top: 14px;">Behöver inte kunna</h3>
+      <ul>
+        <li>Koda</li>
+        <li>Administrera servern</li>
+        <li>Förstå databasen i detalj</li>
+      </ul>
+      <div class="note-blue" style="margin-top: 12px;">
+        <strong>Rekommendation:</strong> Bygg admingränssnittet enkelt och tydligt — som ett internt verktyg designat för Léa.
+      </div>
+    </div>
+  </div>
+
+  <!-- RISKER -->
+  <p class="section-label">Risker med alternativ 3</p>
+  <div class="card accent-red">
+    <h2>Vad som kan gå fel — och hur ni hanterar det</h2>
+    <table>
+      <thead><tr><th>Risk</th><th>Sannolikhet</th><th>Hantering</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Tar längre tid än planerat</strong></td>
+          <td class="td-yellow">Hög</td>
+          <td>Bygg fas 1 och börja leverera till kunder redan då. Ni behöver inte vara klara för att generera intäkter.</td>
+        </tr>
+        <tr>
+          <td><strong>Säkerhetshål (hackad databas)</strong></td>
+          <td class="td-yellow">Medel</td>
+          <td>Använd etablerade bibliotek för auth (Passport.js), kryptera lösenord (bcrypt), håll servern uppdaterad.</td>
+        </tr>
+        <tr>
+          <td><strong>Servern går ner</strong></td>
+          <td class="td-green">Låg</td>
+          <td>Hetzner har 99,9 % uptime. Sätt upp monitoring (gratis via UptimeRobot) och få SMS om något går ner.</td>
+        </tr>
+        <tr>
+          <td><strong>GDPR-problem</strong></td>
+          <td class="td-green">Låg om ni gör rätt</td>
+          <td>EU-server (Frankfurt), integritetspolicy, möjlighet för kund att radera konto. Registrera behandling hos IMY.</td>
+        </tr>
+        <tr>
+          <td><strong>Kristoffer slutar / byter fokus</strong></td>
+          <td class="td-yellow">Medel</td>
+          <td>Dokumentera koden löpande. Välj en välkänd stack (Node/Express) så att en frilansare enkelt kan ta över.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- REKOMMENDATION -->
+  <p class="section-label">Rekommendation</p>
+  <div class="verdict">
+    <h2>Bygg alternativ 3 — men börja med fas 1 nu</h2>
+    <p>Kristoffers bedömning att långsiktiga kostnader är lägre med alternativ 3 stämmer. Men det avgörande argumentet är <strong>kontroll</strong>: ni äger koden, ni äger kunddata, ni kan bygga exakt det kunder frågar efter och ni är aldrig beroende av en extern leverantörs prisnivå eller beslut.</p>
+    <ul style="margin-top: 12px;">
+      <li><strong>Börja nu:</strong> Sätt upp en VPS och bygg fas 1. Ni kan leverera det första kortet med NFC-hosting inom 2–3 veckor.</li>
+      <li><strong>Dela upp arbetet:</strong> Kristoffer bygger, Léa designar kundupplevelsen och testar flödet som kund.</li>
+      <li><strong>Fake it smart:</strong> Innan admingränssnittet finns — skapa profiler manuellt i databasen. Det tar 5 minuter per kund och fungerar perfekt för de första 10–20 kunderna.</li>
+      <li><strong>Stripe sist:</strong> Ta betalning via vanlig faktura tills ni har 10+ aktiva kunder. Då är Stripe-integrationen värd investeringstiden.</li>
+    </ul>
   </div>
 
 </div>
 
 <footer style="text-align:center; font-size: 11px; color: #333; padding: 48px 32px 0;">
-  Internt brainstorm-dokument — ej publikt
+  Internt — ej publikt
 </footer>
 
 </body>
