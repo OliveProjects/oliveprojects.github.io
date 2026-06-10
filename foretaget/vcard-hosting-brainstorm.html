@@ -266,7 +266,7 @@
         <li>Varifrån besökarna kommer (land, enhet)</li>
       </ul>
       <div class="note-blue" style="margin-top:12px; padding:10px 14px;">
-        <strong>Värde:</strong> Ger kunden ett konkret svar på "fungerar mitt kort?". Starkt säljargument.
+        <strong>OBS:</strong> Kan bli negativ upplevelse — om kortet visats 2 gånger på en månad är det deprimerande info. Implementeras inte. Finns kvar som idé.
       </div>
     </div>
     <div class="card accent-blue">
@@ -348,123 +348,102 @@
   <p class="section-label">Prismodell — vad ni tar betalt</p>
 
   <div class="card" style="margin-bottom:16px;">
-    <h2>Grundprincipen</h2>
-    <p style="margin-bottom:12px;">Ni säljer ett <strong>premium fysiskt kort</strong> (engångspris) + en <strong>hosting-prenumeration</strong> (löpande). Det är hosting-prenumerationen som är den riktiga affären på sikt — passiv intäkt som skalas utan extra arbete.</p>
+    <h2>Grundprincipen — reviderad</h2>
+    <p style="margin-bottom:12px;">Pengarna sitter i <strong>kortförsäljningen</strong>, inte hosting. Kunden sköter sin profil själv — allt ni gör är att lägga till deras mejl i systemet. Hostingkostnaden är ~24 kr/kund/år (vid 50 kunder). Det motiverar inte en hög prenumeration.</p>
     <table>
       <thead><tr><th>Komponent</th><th>Vad kunden betalar</th><th>Er kostnad</th><th>Marginal</th></tr></thead>
       <tbody>
         <tr>
           <td><strong>Fysiskt kort</strong></td>
           <td>499–1 499 kr (engång)</td>
-          <td>~100–300 kr (tillverkning)</td>
+          <td>~100–300 kr (tillverkning + vinstdelning)</td>
           <td class="td-green">~300–1 200 kr per kort</td>
         </tr>
         <tr>
-          <td><strong>Hosting — år 1</strong></td>
-          <td>Ingår i kortpriset</td>
-          <td>~8 kr/kund/mån</td>
-          <td class="td-yellow">Kostnad täcks av kortmarginalen</td>
+          <td><strong>Hosting</strong></td>
+          <td>Ingår i kortpriset — för alltid</td>
+          <td>~24 kr/kund/år (fast VPS-kostnad)</td>
+          <td class="td-yellow">Täcks av kortmarginalen</td>
         </tr>
         <tr>
-          <td><strong>Hosting — år 2+</strong></td>
-          <td>299–599 kr/år</td>
-          <td>~8 kr/kund/mån (~96 kr/år)</td>
-          <td class="td-green">~200–500 kr/år per kund</td>
+          <td><strong>Reorder / nya kort</strong></td>
+          <td>499–1 499 kr (engång)</td>
+          <td>~100–300 kr</td>
+          <td class="td-green">Återkommande intäkt utan ny marknadsföring</td>
         </tr>
       </tbody>
     </table>
     <div class="note-green">
-      <strong>Varför inkludera år 1?</strong> Kunden slipper en extra faktura direkt vid köpet. Det sänker tröskeln att köpa kortet. Ni täcker hosting-kostnaden med kortmarginalen — och år 2 är ren vinst.
+      <strong>Varför gratis hosting?</strong> Kunden köper kortet och behöver aldrig tänka på en extra faktura. Lojaliteten och reordrar är värda mer än 299 kr/år i subscriptionintäkt. Enkelt budskap: <em>"Köp ett kort — profilen sköts av oss, för alltid."</em>
     </div>
   </div>
 
-  <p style="font-size:12px; color:var(--sub); margin-bottom:14px; padding: 0 2px;">Tre alternativa prenumerationsplaner — välj en eller kör med alla:</p>
-
-  <div class="three-col">
-    <div class="price-card">
-      <span class="tag tag-blue">Bas</span>
-      <h2>Standard</h2>
-      <div class="amount">299 <span>kr/år</span></div>
-      <div class="per-year">= 25 kr/mån · ingår år 1 med kort</div>
-      <ul>
-        <li>En profil</li>
-        <li>Foto, kontaktinfo, sociala medier</li>
-        <li>.vcf-nedladdning</li>
-        <li>QR-kod</li>
-        <li>Uppdatera när som helst</li>
-      </ul>
-    </div>
-    <div class="price-card recommended">
-      <span class="tag tag-green">Pro <span class="rec-badge">Rekommenderas</span></span>
-      <h2>Pro</h2>
-      <div class="amount">499 <span>kr/år</span></div>
-      <div class="per-year">= 42 kr/mån · ingår år 1 med premiumkort</div>
-      <ul>
-        <li>Allt i Standard</li>
-        <li>Profilstatistik (visningar, klick)</li>
-        <li>E-postsignatur-generator</li>
-        <li>Bokningsknapp (Calendly m.fl.)</li>
-        <li>Valfritt profilsidans tema</li>
-      </ul>
-    </div>
-    <div class="price-card">
-      <span class="tag tag-purple">Företag</span>
-      <h2>Team</h2>
-      <div class="amount">349 <span>kr/pers/år</span></div>
-      <div class="per-year">= 29 kr/mån · min 5 personer</div>
-      <ul>
-        <li>Allt i Pro</li>
-        <li>En admin för hela företaget</li>
-        <li>Enhetlig design för alla</li>
-        <li>Bulkhantering</li>
-        <li>Fakturering till företaget</li>
-      </ul>
+  <div class="card" style="margin-bottom:16px;">
+    <h2>Alternativ: liten årsavgift</h2>
+    <p style="margin-bottom:12px;">Om ni vill ha en löpande intäkt och ett naturligt tillfälle att ta kontakt med kunden varje år kan ni ta ut en symbolisk avgift efter år 3:</p>
+    <table>
+      <thead><tr><th>År</th><th>Vad kunden betalar</th><th>Syfte</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>År 1–2</strong></td>
+          <td>Gratis (ingår i kortpriset)</td>
+          <td>Sänkt köptröskel, lojalitet</td>
+        </tr>
+        <tr>
+          <td><strong>År 3+</strong></td>
+          <td>99 kr/år</td>
+          <td>Täcker kostnad + naturlig kontaktpunkt ("dags att förnya — vill du uppdatera kortet?")</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="note-blue" style="margin-top:12px;">
+      99 kr/år är inte en vinstmotor — det är ett verktyg för att hålla kontakten och öppna dörren för reordrar.
     </div>
   </div>
 
   <!-- INTÄKTSPROGNOS -->
-  <p class="section-label">Intäktsprognos — hosting</p>
+  <p class="section-label">Intäktsprognos — kortförsäljning</p>
   <div class="card">
-    <p style="font-size:13px; color:var(--sub); margin-bottom:16px;">Baserat på Pro-plan (499 kr/år). Driftkostnad: 100 kr/mån = 1 200 kr/år oavsett antal kunder.</p>
+    <p style="font-size:13px; color:var(--sub); margin-bottom:16px;">Baserat på snittmarginal ~600 kr/kort (mitt i spannet 300–1 200 kr). Driftkostnad för hosting: 1 200 kr/år oavsett antal kunder.</p>
     <table>
       <thead>
-        <tr><th>Antal kunder</th><th>Intäkt/år (hosting)</th><th>Driftkostnad/år</th><th>Nettovinst hosting/år</th></tr>
+        <tr><th>Antal sålda kort/år</th><th>Intäkt kortförsäljning</th><th>Hostingkostnad/år</th><th>Netto</th></tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong>10 kunder</strong></td>
-          <td>4 990 kr</td>
+          <td><strong>10 kort</strong></td>
+          <td>6 000 kr</td>
           <td>1 200 kr</td>
-          <td class="td-green">3 790 kr</td>
+          <td class="td-green">4 800 kr</td>
         </tr>
         <tr>
-          <td><strong>25 kunder</strong></td>
-          <td>12 475 kr</td>
+          <td><strong>25 kort</strong></td>
+          <td>15 000 kr</td>
           <td>1 200 kr</td>
-          <td class="td-green">11 275 kr</td>
+          <td class="td-green">13 800 kr</td>
         </tr>
         <tr>
-          <td><strong>50 kunder</strong></td>
-          <td>24 950 kr</td>
+          <td><strong>50 kort</strong></td>
+          <td>30 000 kr</td>
           <td>1 200 kr</td>
-          <td class="td-green">23 750 kr</td>
+          <td class="td-green">28 800 kr</td>
         </tr>
         <tr>
-          <td><strong>100 kunder</strong></td>
-          <td>49 900 kr</td>
+          <td><strong>100 kort</strong></td>
+          <td>60 000 kr</td>
           <td>~2 400 kr (uppgradera server)</td>
-          <td class="td-green">47 500 kr</td>
+          <td class="td-green">57 600 kr</td>
         </tr>
         <tr>
-          <td><strong>300 kunder</strong></td>
-          <td>149 700 kr</td>
+          <td><strong>300 kort</strong></td>
+          <td>180 000 kr</td>
           <td>~4 800 kr</td>
-          <td class="td-green">144 900 kr</td>
+          <td class="td-green">175 200 kr</td>
         </tr>
       </tbody>
     </table>
     <div class="note-green">
-      <strong>Slutsats:</strong> Vid 50 kunder genererar hosting ~24 000 kr/år i ren vinst — utan att ni behöver göra något. Det är det riktiga värdet i affärsmodellen. Kortförsäljningen är startmotorn; hosting är motorn som sedan rullar av sig själv.
+      <strong>Slutsats:</strong> Hosting är en minimal kostnad jämfört med kortmarginalen. Inkludera hosting gratis — det höjer upplevt värde, sänker köptröskel och öppnar dörren för reordrar. Kortförsäljning är affärsmodellen.
     </div>
   </div>
 
@@ -497,7 +476,7 @@
         </tr>
         <tr>
           <td><strong>Ni</strong></td>
-          <td class="td-green">299–499 kr/år</td>
+          <td class="td-green">Gratis (ingår i kortet)</td>
           <td class="td-green">Sverige</td>
           <td class="td-green">100%</td>
           <td class="td-green">—</td>
@@ -512,9 +491,9 @@
     <h2>Plattformen är redo — sälj det första kortet</h2>
     <p>Allt som krävs för att leverera ett fungerande NFC-visitkort till en betalande kund finns på plats. Ni kan skapa en kund i admin-panelen, programmera ett NFC-chip med deras URL, och leverera ett kort idag.</p>
     <ul style="margin-top: 12px;">
-      <li><strong>Kortsiktigt:</strong> Byt admin-lösenord, lägg till välkomstmail, sätt en prislapp och sälj.</li>
-      <li><strong>Mellanlångt:</strong> Bygg statistik och e-postsignatur — stärker Pro-planen.</li>
-      <li><strong>Långsiktigt:</strong> Stripe-integration, företagspaket, och eventuell white-label till Tom för DE/CH-marknaden.</li>
+      <li><strong>Kortsiktigt:</strong> Sätt en prislapp, sälj det första kortet, leverera med gratis hosting.</li>
+      <li><strong>Mellanlångt:</strong> Profilsidans design, Stripe för kortbetalning, företagspaket.</li>
+      <li><strong>Långsiktigt:</strong> White-label till Tom för DE/CH-marknaden, eventuellt 99 kr/år från år 3 som kontaktpunkt.</li>
     </ul>
   </div>
 
