@@ -242,7 +242,7 @@
 <body>
 
 <h1>Partnerkartan</h1>
-<p class="subtitle">Premium NFC-visitkort — Sverige, Skandinavien &amp; Frankrike &nbsp;|&nbsp; Utkast v1</p>
+<p class="subtitle">Premium NFC-visitkort — Sverige, Skandinavien &amp; Frankrike &nbsp;|&nbsp; Uppdaterad juni 2026</p>
 
 <!-- PARTNER DETAIL CARDS -->
 <p class="section-title">Partnerprofiler</p>
@@ -363,50 +363,27 @@
     <div class="risk-tag">Medelberoende — hanteras via Frank. Testa alltid NFC-funktion vid leverans.</div>
   </div>
 
-  <!-- Bahnhof / VPS-hosting -->
+  <!-- Hosting / Techplattform -->
   <div class="partner-card">
     <div class="header">
-      <div class="partner-avatar av-tech">🇸🇪</div>
+      <div class="partner-avatar av-chan">☁️</div>
       <div>
-        <h3>Bahnhof VPS (Stockholm)</h3>
-        <span class="type-tag tt-tech">Teknisk infrastruktur</span>
+        <h3>Bahnhof VPS (vCard-hosting)</h3>
+        <span class="type-tag tt-chan">Teknisk infrastruktur</span>
       </div>
     </div>
-    <div class="desc">Svensk VPS-leverantör (158.174.210.254) som hostar vCard-plattformen vcard.oliveprojects.eu. Node.js/Express + PostgreSQL. Egenutvecklad lösning — ingen beroende av Tapni, Popl eller annan tredjepartsplattform. GDPR-kompatibel (data i Sverige). Driftkostnad ~100 kr/mån inkl. domän.</div>
+    <div class="desc">Egenbyggd plattform (Node.js/Express/PostgreSQL) hostad på Bahnhof VPS Stockholm. <strong>Live sedan juni 2026.</strong> 100 kr/mån fast kostnad oavsett antal kunder. GDPR-säker, inga tredjepartspartner. NFC-chip pekar alltid på privat UUID-URL; Standard-kunder får även en delbar namnslugg.</div>
     <div class="value-row">
       <div class="value-box">
         <div class="vb-label">Vi ger</div>
-        <p>Månadsavgift ~100 kr/mån</p>
+        <p>100 kr/mån serveravgift; underhåll av plattformen</p>
       </div>
       <div class="value-box">
         <div class="vb-label">Vi får</div>
-        <p>Stabil svensk hosting, full datakontroll, GDPR-kompatibilitet, ingen vendor lock-in</p>
+        <p>Stabil SE-baserad hosting, GDPR-säkert, inga beroenden av tredje part</p>
       </div>
     </div>
-    <div class="risk-tag">Låg risk — eget system, kan migreras. Svenska lagar gäller. Ingen tredjepartsrisk.</div>
-  </div>
-
-  <!-- Resend (e-post) -->
-  <div class="partner-card">
-    <div class="header">
-      <div class="partner-avatar av-pay">✉️</div>
-      <div>
-        <h3>Resend</h3>
-        <span class="type-tag tt-pay">E-postinfrastruktur</span>
-      </div>
-    </div>
-    <div class="desc">E-posttjänst för automatiska välkomstmail när admin skapar en ny kund. Domän: vcard.oliveprojects.eu. Mailet skickas automatiskt med inloggningsuppgifter. Används även för lösenordsåterställning via plattformen.</div>
-    <div class="value-row">
-      <div class="value-box">
-        <div class="vb-label">Vi ger</div>
-        <p>Volym, domänkonfiguration</p>
-      </div>
-      <div class="value-box">
-        <div class="vb-label">Vi får</div>
-        <p>Pålitlig transaktionell e-post, hög deliverabilitet, enkel API-integration</p>
-      </div>
-    </div>
-    <div class="risk-tag">Låg risk — lätt att byta leverantör. Håll koll på månadsgräns på fri plan.</div>
+    <div class="risk-tag">Strategisk — plattformen är live. Break-even vid 2 betalande prenumeranter (99 kr/år). Enkel att migrera om behov uppstår — egenägd kod.</div>
   </div>
 
 </div>
@@ -461,23 +438,16 @@
     </tr>
     <tr>
       <td>Bahnhof VPS (Stockholm)</td>
-      <td>Hosting av vCard-plattformen (vcard.oliveprojects.eu)</td>
+      <td>Digital vCard-hosting — egenbyggd plattform (Node.js)</td>
       <td class="dep-medium">Medel</td>
-      <td>Plattformen faller bort tills ny VPS konfigureras — max 1–2 dagars arbete</td>
-      <td>Egenutvecklad lösning — kan migreras till vilken VPS som helst. Backup nightly kl 03:00.</td>
-    </tr>
-    <tr>
-      <td>Resend</td>
-      <td>Automatiska välkomstmail och lösenordsåterställning</td>
-      <td class="dep-low">Låg</td>
-      <td>Välkomstmail skickas inte automatiskt — admin måste skicka manuellt</td>
-      <td>SendGrid, Postmark eller Mailgun som alternativ. Byte kräver 1–2 timmars konfiguration.</td>
+      <td>VPS faller bort → 1–2 dagars migrering till ny server</td>
+      <td>Egenägd kod; enkel att flytta. Bahnhof = GDPR-säkert, SE-datacenter. Backup: Digital Ocean / Hetzner.</td>
     </tr>
   </tbody>
 </table>
 
 <p style="text-align:center; font-size: 11px; color: #bbb;">
-  Partnerkarta — v2 &nbsp;|&nbsp; Skandinavien &amp; Frankrike &nbsp;|&nbsp; Partners: Tom (ifPrint.eu), Frank (tillverkning, Kina), Bahnhof (VPS, Stockholm), Resend (e-post) &nbsp;|&nbsp; Juni 2026
+  Partnerkarta — Utkast v1 &nbsp;|&nbsp; Skandinavien &amp; Frankrike &nbsp;|&nbsp; Partners: Tom (ifPrint.eu), Frank (tillverkning, Kina)
 </p>
 
 </body>
