@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRANOLAS Index · Olive Projects</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --nav-bg:         rgba(11,17,32,0.65);
+            --bg:             #0b1120;
+            --surface:        rgba(255,255,255,0.055);
+            --text:           #eef0f3;
+            --muted:          rgba(255,255,255,0.55);
+            --dim:            rgba(255,255,255,0.40);
+            --faint:          rgba(255,255,255,0.28);
+            --ghost:          rgba(255,255,255,0.20);
+            --border:         rgba(255,255,255,0.10);
+            --border-sm:      rgba(255,255,255,0.09);
+            --row-alt:        rgba(255,255,255,0.025);
+            --row-hover:      rgba(255,255,255,0.065);
+            --btn-bg:         rgba(255,255,255,0.07);
+            --btn-border:     rgba(255,255,255,0.12);
+            --accent:         #00a3e0;
+            --hint-bg:        rgba(0,163,224,0.08);
+            --hint-border:    rgba(0,163,224,0.20);
+            --tooltip-bg:     #0f1a30;
+            --tooltip-border: rgba(0,163,224,0.30);
+            --tooltip-text:   rgba(255,255,255,0.60);
+            --shadow:         rgba(0,0,0,0.80);
+            --q-bg:           rgba(255,255,255,0.10);
+            --q-border:       rgba(255,255,255,0.25);
+            --q-color:        rgba(255,255,255,0.60);
+            --th-dim:         rgba(255,255,255,0.18);
+            --scroll-thumb:   rgba(255,255,255,0.12);
+            --mode-box:       rgba(255,255,255,0.05);
+        }
+
+        [data-theme="light"] {
+            --nav-bg:         rgba(240,242,248,0.65);
+            --bg:             #f0f2f8;
+            --surface:        rgba(0,0,0,0.03);
+            --text:           #111318;
+            --muted:          rgba(0,0,0,0.60);
+            --dim:            rgba(0,0,0,0.48);
+            --faint:          rgba(0,0,0,0.38);
+            --ghost:          rgba(0,0,0,0.26);
+            --border:         rgba(0,0,0,0.10);
+            --border-sm:      rgba(0,0,0,0.07);
+            --row-alt:        rgba(0,0,0,0.018);
+            --row-hover:      rgba(0,0,0,0.04);
+            --btn-bg:         rgba(0,0,0,0.04);
+            --btn-border:     rgba(0,0,0,0.10);
+            --accent:         #0082c8;
+            --hint-bg:        rgba(0,130,200,0.07);
+            --hint-border:    rgba(0,130,200,0.20);
+            --tooltip-bg:     #ffffff;
+            --tooltip-border: rgba(0,130,200,0.30);
+            --tooltip-text:   rgba(0,0,0,0.60);
+            --shadow:         rgba(0,0,0,0.12);
+            --q-bg:           rgba(0,0,0,0.07);
+            --q-border:       rgba(0,0,0,0.18);
+            --q-color:        rgba(0,0,0,0.50);
+            --th-dim:         rgba(0,0,0,0.20);
+            --scroll-thumb:   rgba(0,0,0,0.15);
+            --mode-box:       rgba(0,0,0,0.02);
+        }
+
+        body { background: var(--bg); }
+
+        .topbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 56px;
+            z-index: 9998;
+            background: var(--nav-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            pointer-events: none;
+        }
+
+        .back-link {
+            position: fixed; top: 20px; left: 20px; z-index: 9999;
+            color: var(--dim); text-decoration: none;
+            font-family: monospace; font-size: 12px; letter-spacing: 0.1em;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: var(--text); }
+
+        .theme-toggle {
+            position: fixed; top: 16px; right: 20px; z-index: 9999;
+            background: var(--btn-bg); border: 1px solid var(--btn-border);
+            border-radius: 8px; padding: 5px 9px; cursor: pointer;
+            font-size: 15px; line-height: 1; color: var(--dim);
+            transition: all 0.2s;
+        }
+        .theme-toggle:hover { color: var(--text); border-color: var(--faint); }
+
+        .lang-dropdown-wrap { position: fixed; top: 16px; right: 64px; z-index: 9999; }
+        .lang-dropdown-btn {
+            display: flex; align-items: center; gap: 6px;
+            background: var(--btn-bg); border: 1px solid var(--btn-border);
+            border-radius: 8px; padding: 5px 10px; cursor: pointer;
+            font-size: 12px; font-family: monospace; color: var(--dim);
+            transition: all 0.2s; white-space: nowrap;
+        }
+        .lang-dropdown-btn:hover { color: var(--text); border-color: var(--faint); }
+        .lang-dropdown-btn .arrow { font-size: 9px; opacity: 0.6; transition: transform 0.2s; }
+        .lang-dropdown-btn.open .arrow { transform: rotate(180deg); }
+        .lang-menu {
+            position: absolute; top: calc(100% + 6px); right: 0;
+            background: var(--tooltip-bg); border: 1px solid var(--btn-border);
+            border-radius: 10px; overflow: hidden; min-width: 140px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            animation: fadeUp 0.15s ease both;
+        }
+        .lang-option {
+            display: flex; align-items: center; gap: 8px;
+            padding: 9px 14px; cursor: pointer;
+            font-size: 12px; font-family: monospace; color: var(--dim);
+            transition: background 0.15s, color 0.15s;
+            border: none; background: none; width: 100%; text-align: left;
+        }
+        .lang-option:hover { background: rgba(255,255,255,0.07); color: var(--text); }
+        .lang-option.active { color: var(--text); background: rgba(255,255,255,0.05); }
+
+        .view-counter {
+            position: fixed; bottom: 20px; right: 20px;
+            font-size: 12px; color: var(--muted); font-family: monospace;
+            cursor: default; user-select: none; z-index: 9998; transition: color 0.2s;
+        }
+        .view-counter:hover { color: var(--text); }
+    </style>
+</head>
+<body>
+    <div class="topbar"></div>
+    <a href="/" class="back-link">← Olive Projects</a>
+    <div id="root"></div>
+    <div class="view-counter" id="view-counter"><span id="view-count">–</span> views</div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useContext, createContext, useRef } = React;
+
+        const ThemeCtx = createContext("dark");
+        const LangCtx  = createContext("sv");
+
+        const BRAND_COLORS = ["#F36633","#005EB8","#009FE3","#921A20","#EF1621","#004A97","#AC0535","#B5983C","#702082","#0070F2","#7B2D8B"];
+        const SESSION_ACCENT = BRAND_COLORS[Math.floor(Math.random() * BRAND_COLORS.length)];
+
+        function applyAccent(hex) {
+            const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+            const root = document.documentElement;
+            root.style.setProperty("--accent",         hex);
+            root.style.setProperty("--hint-bg",        `rgba(${r},${g},${b},0.08)`);
+            root.style.setProperty("--hint-border",    `rgba(${r},${g},${b},0.20)`);
+            root.style.setProperty("--tooltip-border", `rgba(${r},${g},${b},0.30)`);
+        }
+        applyAccent(SESSION_ACCENT);
+
+        function initTheme() {
+            const s = localStorage.getItem("granolas-theme");
+            if (s === "dark" || s === "light") return s;
+            return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        }
+        function initLang() {
+            const s = localStorage.getItem("granolas-lang");
+            if (["sv","en","fr","es"].includes(s)) return s;
+            const nav = navigator.language.slice(0,2);
+            return ["sv","fr","es"].includes(nav) ? nav : "en";
+        }
+
+        const C = {
+            dark: {
+                rank: r => r<=2?"#00e676":r<=4?"#69f0ae":r<=7?"#fff176":r<=9?"#ff8a65":"#ff5252",
+                peg:  v => v<1?"#00e676":v<2?"#fff176":v<3?"#ff8a65":"#ff5252",
+                rev:  v => v>20?"#00e676":v>5?"#fff176":v>=0?"#ff8a65":"#ff5252",
+                rsi:  v => v>70?"#ff5252":v<30?"#00e676":v>60?"#ff8a65":"#fff176",
+                beta: v => v<1?"#00e676":v<1.5?"#fff176":v<2?"#ff8a65":"#ff5252",
+                cons: v => v<0.3?"#00e676":v<1?"#ffeb3b":"#ff5252",
+                buy:"#00e676", hold:"#ffeb3b", sell:"#ff5252",
+                pos:"#00e676", med:"#fff176",
+                pillHi:  { bg:"rgba(0,230,118,0.10)",  border:"rgba(0,230,118,0.25)",  color:"#00e676" },
+                pillMid: { bg:"rgba(255,235,59,0.08)",  border:"rgba(255,235,59,0.20)",  color:"#fff176" },
+                pillLow: { bg:"rgba(255,255,255,0.05)", border:"rgba(255,255,255,0.08)", color:"rgba(255,255,255,0.45)" },
+                pillOff: { bg:"rgba(255,255,255,0.03)", border:"rgba(255,255,255,0.05)", color:"rgba(255,255,255,0.20)" },
+            },
+            light: {
+                rank: r => r<=2?"#00903d":r<=4?"#007835":r<=7?"#7a6200":r<=9?"#b04400":"#c42020",
+                peg:  v => v<1?"#00903d":v<2?"#7a6200":v<3?"#b04400":"#c42020",
+                rev:  v => v>20?"#00903d":v>5?"#7a6200":v>=0?"#b04400":"#c42020",
+                rsi:  v => v>70?"#c42020":v<30?"#00903d":v>60?"#b04400":"#7a6200",
+                beta: v => v<1?"#00903d":v<1.5?"#7a6200":v<2?"#b04400":"#c42020",
+                cons: v => v<0.3?"#00903d":v<1?"#7a6200":"#c42020",
+                buy:"#00903d", hold:"#7a6200", sell:"#c42020",
+                pos:"#00903d", med:"#7a6200",
+                pillHi:  { bg:"rgba(0,160,70,0.12)",  border:"rgba(0,160,70,0.28)",  color:"#00903d" },
+                pillMid: { bg:"rgba(140,110,0,0.10)", border:"rgba(140,110,0,0.22)", color:"#7a6200" },
+                pillLow: { bg:"rgba(0,0,0,0.04)",     border:"rgba(0,0,0,0.09)",     color:"rgba(0,0,0,0.50)" },
+                pillOff: { bg:"rgba(0,0,0,0.03)",     border:"rgba(0,0,0,0.06)",     color:"rgba(0,0,0,0.30)" },
+            },
+        };
+
+        const ACCENT = {
+            GSK:"#F36633", RHHBY:"#005EB8", ASML:"#009FE3",
+            NSRGY:"#921A20", NVS:"#EF1621", NVO:"#004A97",
+            LRLCY:"#AC0535", LVMUY:"#B5983C", AZN:"#702082",
+            SAP:"#0070F2", SNY:"#7B2D8B",
+        };
+
+        const MODE_WEIGHTS = {
+            lowrisk:    { peg:1, upside:0, scoreDeviation:2, buyPct:2, roe:2, grossMargin:2, revenueGrowth:0, rsi:1, beta:3 },
+            value:      { peg:1, upside:1, scoreDeviation:1, buyPct:1, roe:1, grossMargin:1, revenueGrowth:1, rsi:1, beta:0 },
+            riskreward: { peg:1, upside:3, scoreDeviation:2, buyPct:2, roe:1, grossMargin:1, revenueGrowth:2, rsi:2, beta:1 },
+        };
+
+        const LANGUAGES = [
+            { code:"sv", flag:"🇸🇪", label:"Svenska"  },
+            { code:"en", flag:"🇬🇧", label:"English"  },
+            { code:"fr", flag:"🇫🇷", label:"Français" },
+            { code:"es", flag:"🇪🇸", label:"Español"  },
+        ];
+
+        const LANG = {
+            sv: {
+                date_locale: "sv-SE",
+                status_loading: "Laddar data...",
+                status_updated: t => `Uppdaterad ${t}`,
+                status_error:   "Kunde inte ladda data",
+                col_select_label: "VÄLJ RANKINGLÄGE",
+                mode_subtitles: { value:"Balanserad", lowrisk:"Stabilitet", riskreward:"Potential" },
+                th_company:"BOLAG", th_rank:"RANK", th_price:"KURS",
+                th_upside:"UPPSIDA", th_analyst:"ANALYTIKER", th_buy_pct:"KÖP%",
+                th_consensus:"KONSENSUS", th_gross_margin:"BRUTTOMARG.", th_rev_growth:"REV.TILLVÄXT",
+                buy:"köp", hold:"behåll", sell:"sälj",
+                pill_off:"av",
+                rsi_overbought:"Överköpt", rsi_oversold:"Översåld", rsi_neutral:"Neutral",
+                hint:"Håll muspekaren över ? bredvid en kolumnrubrik för att se förklaring · Klicka på rubrik för att sortera",
+                faq_label:"VANLIGA FRÅGOR",
+                modes: {
+                    lowrisk:    { label:"Lägst risk",       icon:"🛡️", headline:"Du prioriterar stabilitet och trygghet",             desc:"Beta och konsensus väger tyngst. Bolag som svänger lite, har starkt analytikerstöd och bevisad lönsamhet rankas upp.",                                                                      ignores:"Uppsida och tillväxt ignoreras – potential utan stabilitet räknas inte här." },
+                    value:      { label:"Köpvärde",          icon:"⚖️", headline:"Du söker bästa totala köpvärde",                     desc:"Alla mått vägs lika. Identifierar bolag som kombinerar rimlig värdering (PEG), stark analytikerkonsensus och god fundamental kvalitet.",                                            ignores:null },
+                    riskreward: { label:"Bäst risk/reward",  icon:"🎯", headline:"Du söker bäst möjlig avkastning för risken",          desc:"Uppsida, tillväxt och konsensus väger tyngst. RSI används för att hitta bra teknisk ingångspunkt.",                                                                              ignores:null },
+                },
+                col_info: ad => ({
+                    peg:           { label:"PEG – Pris/Tillväxt",         short:"P/E justerat för vinsttillväxt",                  long:"PEG = P/E delat med EPS-tillväxt. PEG 1.0 = rimligt värderad, under 1.0 = potentiellt undervärderad. Löser P/E's problem med tillväxtbolag – ett bolag med P/E 30 och 30% vinsttillväxt har PEG 1.0 och är rimligt värderat." },
+                    upside:        { label:"Uppsida",                      short:"Riktkurs vs live-kurs (timvis)",                   long:`Beräknas som (riktkurs − live-kurs) / live-kurs. Live-kursen uppdateras var 15:e minut. Riktkursen är analytikerkonsensus från Yahoo Finance, senast ${ad}. Uppsidan rör sig med både kursen och uppdaterade riktkurser.` },
+                    scoreDeviation:{ label:"Konsensus-avvikelse",          short:`Analytikerkonsensus (${ad})`,                      long:`Rekommendationer (köp/behåll/sälj) viktas 1–5 (5=alla säger köp) och avvikelsen från max visas. 0.00 = total enighet om köp. Lägre = starkare konsensus. Uppdateras automatiskt via Yahoo Finance (senast ${ad}).` },
+                    buyPct:        { label:"Köp%",                         short:`Andel analytiker som säger köp (${ad})`,           long:`Hur stor andel av analytikerna som aktivt rekommenderar köp. Data hämtas automatiskt från Yahoo Finance (senast ${ad}).` },
+                    roe:           { label:"ROE – Avkastning på kapital",  short:"Buffetts kvalitetsmått",                           long:"Return on Equity visar hur effektivt bolaget skapar vinst med ägarnas pengar. Warren Buffett söker konsekvent ROE över 15%. Novo Nordisk och L'Oréal utmärker sig med konsekvent höga ROE-tal." },
+                    grossMargin:   { label:"Bruttomarginal",               short:"Mungers pricing power-mått",                       long:"Andelen av intäkterna som blir kvar efter direkta kostnader. Hög marginal = stark marknadsposition och prissättningsförmåga. Läkemedels- och lyxbolag som AstraZeneca och LVMH har typiskt höga marginaler." },
+                    revenueGrowth: { label:"Omsättningstillväxt",          short:"Intäktstillväxt senaste räkenskapsåret",            long:"Hur snabbt bolaget växer sin omsättning. Tillväxt driver framtida vinster och motiverar höga P/E-tal. Novo Nordisk är ett exempel på ett GRANOLAS-bolag med stark tillväxt tack vare GLP-1-läkemedel." },
+                    rsi:           { label:"RSI – Relativ styrka",         short:"Teknisk ingångssignal (beräknad live)",            long:"Beräknad från 30 dagars stängningskurser via Wilders metod (14 perioder). Mäter om aktien är överköpt (>70) eller översåld (<30). Närmast 50 = neutralt momentum." },
+                    beta:          { label:"Beta – Volatilitet",           short:"Hur mycket aktien svänger",                        long:"Beta 1.0 = rör sig i takt med marknaden. GRANOLAS-bolag har generellt lägre beta än USA-tech – Nestlé och Roche brukar ligga under 0.8, vilket reflekterar deras defensiva karaktär." },
+                }),
+                footer: {
+                    note1:"Data uppdateras var 15:e minut under marknadstid",
+                    note2_prefix:"Rankingbadge:", note2_best:"1=bäst", note2_worst:"11=sämst",
+                    note3:"Kurser + RSI: Yahoo Finance · PEG, ROE, marginaler, tillväxt: FMP",
+                    note4:"P/E visas för referens men ingår ej i ranking. PEG används",
+                    note5_prefix:"Analytikerkonsensus, riktkurser och köp/behåll/sälj: Yahoo Finance (automatisk, senast",
+                    note6:"Uppsida = (riktkurs − live-kurs) / live-kurs. Riktkurs uppdateras automatiskt timvis",
+                },
+                faq_items: [
+                    { q:"Vad är GRANOLAS?",                                               a:"GRANOLAS är ett akronym myntat av Goldman Sachs för Europas elva ledande kvalitetsbolag: GSK, Roche, ASML, Nestlé, Novartis, Novo Nordisk, L'Oréal, LVMH, AstraZeneca, SAP och Sanofi. De kallas Europas svar på USA:s Magnificent Seven – dominerande bolag inom läkemedel, lyx, halvledare och programvara." },
+                    { q:"Hur rankas varje bolag?",                                        a:"Varje bolag tilldelas en placering 1–11 per parameter (1 = bäst i klassen). Placeringen multipliceras med parameterns vikt för det valda läget och summeras till ett totalvärde. Lägst totalvärde = bäst ranking. Bolagen rankas mot varandra, inte mot ett absolut mål." },
+                    { q:"Är det olika vikt på olika parametrar?",                         a:"Ja, vikterna bestäms av det rankingläge du valt. I 'Köpvärde' väger alla parametrar lika (x1). I 'Lägst risk' väger Beta x3 och konsensus/ROE/bruttomarginal x2 var. I 'Bäst risk/reward' väger Uppsida x3, och tillväxt/konsensus x2. Parametrar med vikt 0 ignoreras helt." },
+                    { q:"Varför är GRANOLAS intressanta för europeiska investerare?",     a:"GRANOLAS dominerar europeiska börsindex. De elva bolagen representerar en oproportionerligt stor del av Europas börsvärde och är kända för att kombinera stark lönsamhet med defensiv stabilitet. De är global ledare inom sina respektive sektorer." },
+                    { q:"Vad menas med PEG?",                                             a:"PEG = P/E delat med EPS-tillväxt i procent. P/E säger hur mycket du betalar per vinstkrona, men ignorerar hur snabbt vinsten växer. PEG löser det. Ett bolag med P/E 30 och 30% vinsttillväxt har PEG 1.0 (rimligt värderat). Under 1.0 anses potentiellt undervärderat." },
+                    { q:"Vad menas med Uppsida?",                                         a:"Analytikernas genomsnittliga riktkurs minus dagens kurs, uttryckt i procent. +30% innebär att analytikerkollektivet tror aktien stiger 30% det kommande året. Viktigt: analytiker tenderar att vara systematiskt optimistiska, så reell uppsida är ofta lägre." },
+                    { q:"Vad är Konsensus-avvikelse?",                                    a:"Analytikernas rekommendationer omvandlas till poäng: Köp=5, Behåll=3, Sälj=1. Vi beräknar viktat genomsnitt och visar avvikelsen från maxpoäng (5.0 = alla säger köp). 0.00 = total enighet om köp. Lägre avvikelse = starkare konsensus." },
+                    { q:"Vad är RSI och hur beräknas den?",                               a:"RSI (Relative Strength Index) mäter momentum. Över 70 = aktien kan vara överköpt. Under 30 = översåld. Närmast 50 = neutralt momentum. RSI beräknas från 30 dagars stängningskurser via Yahoo Finance med Wilders utjämningsmetod (14 perioder). En RSI nära 50 ger bäst ranking." },
+                    { q:"Vad är Beta?",                                                   a:"Beta mäter hur mycket en aktie rör sig relativt marknaden (S&P 500). Beta 1.0 = rör sig i takt med index. GRANOLAS-bolag är kända för lågt beta – defensiva läkemedels- och konsumentbolag som Nestlé och Roche brukar ligga runt 0.5–0.8, vilket gör dem attraktiva i 'Lägst risk'-läget." },
+                    { q:"Varför visas P/E men ingår inte i rankningen?",                  a:"P/E är välkänt men missvisande för tillväxtbolag. PEG tar hänsyn till tillväxttakten och ger en rättvisare bild. P/E visas som referens för de som är vana vid måttet." },
+                    { q:"Hur ofta uppdateras datan?",                                     a:"Kurser och RSI uppdateras var 15:e minut under marknadstid (måndag–fredag, ca 15:00–23:00 svensk tid). PEG, ROE, marginaler, tillväxt, analytikerkonsensus och riktkurser uppdateras en gång per timme automatiskt via FMP och Yahoo Finance." },
+                ],
+            },
+
+            en: {
+                date_locale: "en-US",
+                status_loading: "Loading data...",
+                status_updated: t => `Updated ${t}`,
+                status_error:   "Could not load data",
+                col_select_label: "SELECT RANKING MODE",
+                mode_subtitles: { value:"Balanced", lowrisk:"Stability", riskreward:"Potential" },
+                th_company:"COMPANY", th_rank:"RANK", th_price:"PRICE",
+                th_upside:"UPSIDE", th_analyst:"ANALYSTS", th_buy_pct:"BUY%",
+                th_consensus:"CONSENSUS", th_gross_margin:"MARGIN.", th_rev_growth:"REV.GROWTH",
+                buy:"buy", hold:"hold", sell:"sell",
+                pill_off:"off",
+                rsi_overbought:"Overbought", rsi_oversold:"Oversold", rsi_neutral:"Neutral",
+                hint:"Hover over ? next to a column header for an explanation · Click a header to sort",
+                faq_label:"FREQUENTLY ASKED QUESTIONS",
+                modes: {
+                    lowrisk:    { label:"Lowest risk",       icon:"🛡️", headline:"You prioritize stability and safety",                          desc:"Beta and consensus weigh most. Companies with low volatility, strong analyst support and proven profitability are ranked higher.",                                          ignores:"Upside and growth are ignored — potential without stability doesn't count here." },
+                    value:      { label:"Best value",         icon:"⚖️", headline:"You're looking for the best overall value",                    desc:"All metrics are weighted equally. Identifies companies that combine reasonable valuation (PEG), strong analyst consensus and solid fundamental quality.",               ignores:null },
+                    riskreward: { label:"Best risk/reward",   icon:"🎯", headline:"You're looking for the best possible return for the risk",     desc:"Upside, growth and consensus weigh most. RSI is used to find a good technical entry point.",                                                                       ignores:null },
+                },
+                col_info: ad => ({
+                    peg:           { label:"PEG – Price/Growth",           short:"P/E adjusted for earnings growth",                long:"PEG = P/E divided by EPS growth. PEG 1.0 = fairly valued, below 1.0 = potentially undervalued. A company with P/E 30 and 30% earnings growth has PEG 1.0 and is fairly valued." },
+                    upside:        { label:"Upside",                        short:"Price target vs live price (hourly)",             long:`Calculated as (price target − live price) / live price. Live price updates every 15 minutes. Price target is analyst consensus from Yahoo Finance, last updated ${ad}. Upside moves with both the price and updated targets.` },
+                    scoreDeviation:{ label:"Consensus deviation",           short:`Analyst consensus (${ad})`,                      long:`Recommendations (buy/hold/sell) are weighted 1–5 (5 = all say buy) and the deviation from max is shown. 0.00 = total agreement on buy. Lower = stronger consensus. Updated automatically via Yahoo Finance (last updated ${ad}).` },
+                    buyPct:        { label:"Buy%",                          short:`Share of analysts recommending buy (${ad})`,     long:`How large a share of analysts actively recommend buying. Data fetched automatically from Yahoo Finance (last updated ${ad}).` },
+                    roe:           { label:"ROE – Return on equity",        short:"Buffett's quality metric",                        long:"Return on Equity shows how efficiently a company generates profit with shareholders' money. Warren Buffett consistently seeks ROE above 15%. Novo Nordisk and L'Oréal stand out with consistently high ROE figures." },
+                    grossMargin:   { label:"Gross margin",                  short:"Munger's pricing power metric",                   long:"The share of revenue remaining after direct costs. High margin = strong market position and pricing power. Pharmaceutical and luxury companies like AstraZeneca and LVMH typically achieve high gross margins." },
+                    revenueGrowth: { label:"Revenue growth",                short:"Revenue growth last fiscal year",                 long:"How fast the company is growing its revenue. Growth drives future earnings and justifies high P/E ratios. Novo Nordisk is an example of a GRANOLAS company with exceptional growth, driven by GLP-1 medicines." },
+                    rsi:           { label:"RSI – Relative strength",       short:"Technical entry signal (calculated live)",        long:"Calculated from 30 days of closing prices using Wilder's method (14 periods). Measures whether the stock is overbought (>70) or oversold (<30). Closest to 50 = neutral momentum." },
+                    beta:          { label:"Beta – Volatility",             short:"How much the stock swings",                       long:"Beta 1.0 = moves in line with the market. GRANOLAS companies generally have lower beta than US tech — Nestlé and Roche typically sit below 0.8, reflecting their defensive character." },
+                }),
+                footer: {
+                    note1:"Data updates every 15 minutes during market hours",
+                    note2_prefix:"Ranking badge:", note2_best:"1=best", note2_worst:"11=worst",
+                    note3:"Prices + RSI: Yahoo Finance · PEG, ROE, margins, growth: FMP",
+                    note4:"P/E shown for reference only, not included in ranking. PEG is used instead",
+                    note5_prefix:"Analyst consensus, price targets and buy/hold/sell: Yahoo Finance (automatic, last updated",
+                    note6:"Upside = (price target − live price) / live price. Price target updates automatically every hour",
+                },
+                faq_items: [
+                    { q:"What is GRANOLAS?",                                               a:"GRANOLAS is an acronym coined by Goldman Sachs for Europe's eleven leading quality companies: GSK, Roche, ASML, Nestlé, Novartis, Novo Nordisk, L'Oréal, LVMH, AstraZeneca, SAP and Sanofi. They are considered Europe's answer to the US Magnificent Seven — dominant companies in pharmaceuticals, luxury goods, semiconductors and enterprise software." },
+                    { q:"How is each company ranked?",                                     a:"Each company is assigned a rank of 1–11 per parameter (1 = best in class). The rank is multiplied by the parameter's weight for the selected mode and summed into a total score. Lowest total = best ranking. Companies are ranked against each other, not against an absolute target." },
+                    { q:"Do different parameters have different weights?",                 a:"Yes, weights are determined by the selected ranking mode. In 'Best value' all parameters are weighted equally (×1). In 'Lowest risk', Beta is weighted ×3 and consensus/ROE/gross margin ×2 each. In 'Best risk/reward', Upside is ×3 and growth/consensus ×2. Parameters with weight 0 are ignored entirely." },
+                    { q:"Why are GRANOLAS interesting for European investors?",            a:"GRANOLAS dominate European stock indices. The eleven companies represent a disproportionately large share of Europe's market cap and are known for combining strong profitability with defensive stability. They are global leaders in their respective sectors." },
+                    { q:"What is PEG?",                                                    a:"PEG = P/E divided by EPS growth in percent. P/E tells you how much you pay per dollar of earnings, but ignores how fast earnings are growing. PEG solves that. A company with P/E 30 and 30% earnings growth has PEG 1.0 (fairly valued). Below 1.0 is considered potentially undervalued." },
+                    { q:"What is Upside?",                                                 a:"The average analyst price target minus the current price, expressed as a percentage. +30% means analyst consensus expects the stock to rise 30% over the coming year. Important: analysts tend to be systematically optimistic, so real upside is often lower." },
+                    { q:"What is Consensus deviation?",                                   a:"Analyst recommendations are converted to scores: Buy=5, Hold=3, Sell=1. We calculate the weighted average and show the deviation from the maximum score (5.0 = everyone says buy). 0.00 = total agreement on buy. Lower deviation = stronger consensus." },
+                    { q:"What is RSI and how is it calculated?",                          a:"RSI (Relative Strength Index) measures momentum. Above 70 = the stock may be overbought. Below 30 = oversold. Closest to 50 = neutral momentum. RSI is calculated from 30 days of closing prices via Yahoo Finance using Wilder's smoothing method (14 periods). An RSI close to 50 receives the best ranking." },
+                    { q:"What is Beta?",                                                   a:"Beta measures how much a stock moves relative to the market (S&P 500). Beta 1.0 = moves in line with the index. GRANOLAS companies are known for low beta — defensive healthcare and consumer names like Nestlé and Roche typically sit around 0.5–0.8, making them attractive in the 'Lowest risk' mode." },
+                    { q:"Why is P/E shown but not included in the ranking?",              a:"P/E is well-known but misleading for growth companies. PEG accounts for the growth rate and gives a fairer picture. P/E is shown as a reference for those familiar with the metric." },
+                    { q:"How often is data updated?",                                     a:"Prices and RSI update every 15 minutes during market hours (Monday–Friday, approximately 9:00 AM–5:00 PM ET). PEG, ROE, margins, growth, analyst consensus and price targets update once per hour automatically via FMP and Yahoo Finance." },
+                ],
+            },
+
+            fr: {
+                date_locale: "fr-FR",
+                status_loading: "Chargement des données...",
+                status_updated: t => `Mis à jour ${t}`,
+                status_error:   "Impossible de charger les données",
+                col_select_label: "CHOISIR LE MODE DE CLASSEMENT",
+                mode_subtitles: { value:"Équilibré", lowrisk:"Stabilité", riskreward:"Potentiel" },
+                th_company:"SOCIÉTÉ", th_rank:"RANG", th_price:"COURS",
+                th_upside:"POTENTIEL", th_analyst:"ANALYSTES", th_buy_pct:"ACHAT%",
+                th_consensus:"CONSENSUS", th_gross_margin:"MARGE BR.", th_rev_growth:"CROISSANCE",
+                buy:"achat", hold:"neutre", sell:"vente",
+                pill_off:"inact.",
+                rsi_overbought:"Suracheté", rsi_oversold:"Survendu", rsi_neutral:"Neutre",
+                hint:"Passez la souris sur ? à côté d'une colonne pour voir l'explication · Cliquez sur l'en-tête pour trier",
+                faq_label:"QUESTIONS FRÉQUENTES",
+                modes: {
+                    lowrisk:    { label:"Risque minimal",           icon:"🛡️", headline:"Vous privilégiez la stabilité et la sécurité",                      desc:"Le bêta et le consensus pèsent le plus. Les sociétés peu volatiles, avec un fort soutien analytique et une rentabilité prouvée sont mieux classées.",                   ignores:"La hausse potentielle et la croissance sont ignorées — le potentiel sans stabilité ne compte pas ici." },
+                    value:      { label:"Meilleure valeur",          icon:"⚖️", headline:"Vous cherchez la meilleure valeur globale",                          desc:"Tous les critères sont pondérés à égalité. Identifie les sociétés combinant une valorisation raisonnable (PEG), un fort consensus analytique et une solide qualité fondamentale.", ignores:null },
+                    riskreward: { label:"Meilleur risque/rendement", icon:"🎯", headline:"Vous cherchez le meilleur rendement pour le risque pris",            desc:"La hausse potentielle, la croissance et le consensus pèsent le plus. Le RSI est utilisé pour trouver un bon point d'entrée technique.",                                    ignores:null },
+                },
+                col_info: ad => ({
+                    peg:           { label:"PEG – Prix/Croissance",              short:"P/E ajusté pour la croissance des bénéfices",   long:"PEG = P/E divisé par la croissance du BPA. PEG 1,0 = valorisation raisonnable, sous 1,0 = potentiellement sous-évalué. Une société avec un P/E de 30 et une croissance de 30 % a un PEG de 1,0 et est raisonnablement valorisée." },
+                    upside:        { label:"Potentiel",                           short:"Objectif de cours vs cours en direct (horaire)", long:`Calculé comme (objectif − cours en direct) / cours en direct. Le cours en direct est mis à jour toutes les 15 minutes. L'objectif est le consensus des analystes de Yahoo Finance, dernière mise à jour ${ad}.` },
+                    scoreDeviation:{ label:"Écart de consensus",                  short:`Consensus des analystes (${ad})`,                long:`Les recommandations (achat/neutre/vente) sont pondérées de 1 à 5 (5 = tous recommandent l'achat) et l'écart par rapport au maximum est affiché. 0,00 = accord total sur l'achat. Mis à jour via Yahoo Finance (${ad}).` },
+                    buyPct:        { label:"Achat%",                              short:`Part d'analystes recommandant l'achat (${ad})`, long:`Quelle part des analystes recommande activement l'achat. Données récupérées automatiquement de Yahoo Finance (dernière mise à jour ${ad}).` },
+                    roe:           { label:"ROE – Rendement des capitaux propres",short:"La mesure de qualité de Buffett",                long:"Le Return on Equity montre l'efficacité avec laquelle une entreprise génère des bénéfices avec l'argent des actionnaires. Warren Buffett recherche un ROE supérieur à 15 %. Novo Nordisk et L'Oréal se distinguent par des ROE élevés et constants." },
+                    grossMargin:   { label:"Marge brute",                         short:"La mesure du pricing power de Munger",           long:"La part des revenus restante après les coûts directs. Marge élevée = position de marché forte. Les sociétés pharmaceutiques et de luxe comme AstraZeneca et LVMH atteignent typiquement des marges brutes élevées." },
+                    revenueGrowth: { label:"Croissance du chiffre d'affaires",    short:"Croissance des revenus lors du dernier exercice", long:"La vitesse à laquelle l'entreprise fait croître ses revenus. Novo Nordisk illustre bien comment une croissance forte justifie un P/E élevé — c'est pourquoi le PEG est plus révélateur que le P/E seul." },
+                    rsi:           { label:"RSI – Force relative",                short:"Signal d'entrée technique (calculé en direct)", long:"Calculé à partir de 30 jours de cours de clôture avec la méthode de Wilder (14 périodes). Mesure si l'action est suracheté (>70) ou survendue (<30). Le plus proche de 50 = momentum neutre." },
+                    beta:          { label:"Bêta – Volatilité",                   short:"À quel point l'action fluctue",                  long:"Bêta 1,0 = évolue en phase avec le marché. Les valeurs GRANOLAS ont généralement un bêta bas — Nestlé et Roche se situent typiquement sous 0,8, ce qui reflète leur caractère défensif." },
+                }),
+                footer: {
+                    note1:"Données mises à jour toutes les 15 minutes pendant les heures de marché",
+                    note2_prefix:"Badge de classement :", note2_best:"1=meilleur", note2_worst:"11=pire",
+                    note3:"Cours + RSI : Yahoo Finance · PEG, ROE, marges, croissance : FMP",
+                    note4:"Le P/E est affiché à titre indicatif uniquement, non inclus dans le classement. Le PEG est utilisé",
+                    note5_prefix:"Consensus, objectifs et achat/neutre/vente : Yahoo Finance (automatique, dernière mise à jour",
+                    note6:"Potentiel = (objectif − cours en direct) / cours en direct. L'objectif est mis à jour automatiquement chaque heure",
+                },
+                faq_items: [
+                    { q:"Qu'est-ce que GRANOLAS ?",                                              a:"GRANOLAS est un acronyme créé par Goldman Sachs pour désigner les onze principaux groupes européens de qualité : GSK, Roche, ASML, Nestlé, Novartis, Novo Nordisk, L'Oréal, LVMH, AstraZeneca, SAP et Sanofi. Ils sont considérés comme l'équivalent européen des Magnificent Seven américains — des leaders mondiaux dans la pharmacie, le luxe, les semi-conducteurs et les logiciels d'entreprise." },
+                    { q:"Comment chaque société est-elle classée ?",                              a:"Chaque société se voit attribuer un rang de 1 à 11 par paramètre (1 = meilleur de sa catégorie). Le rang est multiplié par le poids du paramètre pour le mode sélectionné et additionné pour obtenir un score total. Le total le plus bas = le meilleur classement." },
+                    { q:"Les paramètres ont-ils des poids différents ?",                          a:"Oui, les poids sont déterminés par le mode de classement sélectionné. En 'Meilleure valeur', tous les paramètres sont pondérés à égalité (×1). En 'Risque minimal', le bêta est pondéré ×3 et le consensus/ROE/marge brute ×2 chacun. En 'Meilleur risque/rendement', le potentiel est ×3 et la croissance/consensus ×2." },
+                    { q:"Pourquoi les GRANOLAS intéressent-ils les investisseurs européens ?",    a:"Les GRANOLAS dominent les indices boursiers européens. Ces onze sociétés représentent une part disproportionnée de la capitalisation boursière européenne et sont reconnues pour combiner une forte rentabilité avec une stabilité défensive. Elles sont des leaders mondiaux dans leurs secteurs respectifs." },
+                    { q:"Qu'est-ce que le PEG ?",                                                 a:"PEG = P/E divisé par la croissance du BPA en pourcentage. Le P/E indique combien vous payez par euro de bénéfices, mais ignore la vitesse de croissance. Le PEG résout ce problème. Une société avec un P/E de 30 et une croissance de 30 % a un PEG de 1,0 (valorisation raisonnable). Sous 1,0 est potentiellement sous-évalué." },
+                    { q:"Qu'est-ce que le Potentiel ?",                                           a:"L'objectif de cours moyen des analystes moins le cours actuel, exprimé en pourcentage. +30 % signifie que le consensus s'attend à une hausse de 30 % sur l'année. Important : les analystes tendent à être systématiquement optimistes, donc le potentiel réel est souvent inférieur." },
+                    { q:"Qu'est-ce que l'Écart de consensus ?",                                   a:"Les recommandations sont converties en scores : Achat=5, Neutre=3, Vente=1. On calcule la moyenne pondérée et on affiche l'écart par rapport au score maximum (5,0 = tout le monde dit achat). 0,00 = accord total. Plus l'écart est faible, plus le consensus est fort." },
+                    { q:"Qu'est-ce que le RSI ?",                                                  a:"Le RSI mesure le momentum. Au-dessus de 70 = l'action peut être suracheté. En dessous de 30 = survendu. Le plus proche de 50 = momentum neutre. Calculé à partir de 30 jours de clôtures via Yahoo Finance avec la méthode de Wilder (14 périodes)." },
+                    { q:"Qu'est-ce que le Bêta ?",                                                a:"Le bêta mesure à quel point une action évolue par rapport au marché. Bêta 1,0 = évolue en phase avec l'indice. Les valeurs GRANOLAS sont connues pour leur faible bêta — Nestlé et Roche se situent typiquement autour de 0,5–0,8, ce qui les rend attractives en mode 'Risque minimal'." },
+                    { q:"Pourquoi le P/E est-il affiché mais pas inclus dans le classement ?",   a:"Le P/E est bien connu mais peut être trompeur. Le PEG tient compte du taux de croissance et donne une image plus juste. Le P/E est affiché comme référence pour ceux habitués à cet indicateur." },
+                    { q:"À quelle fréquence les données sont-elles mises à jour ?",               a:"Les cours et le RSI sont mis à jour toutes les 15 minutes pendant les heures de marché (lundi–vendredi). Le PEG, ROE, les marges, la croissance, le consensus et les objectifs de cours sont mis à jour une fois par heure automatiquement via FMP et Yahoo Finance." },
+                ],
+            },
+
+            es: {
+                date_locale: "es-ES",
+                status_loading: "Cargando datos...",
+                status_updated: t => `Actualizado ${t}`,
+                status_error:   "No se pudieron cargar los datos",
+                col_select_label: "SELECCIONAR MODO DE CLASIFICACIÓN",
+                mode_subtitles: { value:"Equilibrado", lowrisk:"Estabilidad", riskreward:"Potencial" },
+                th_company:"EMPRESA", th_rank:"RANGO", th_price:"PRECIO",
+                th_upside:"POTENCIAL", th_analyst:"ANALISTAS", th_buy_pct:"COMPRA%",
+                th_consensus:"CONSENSO", th_gross_margin:"MARGEN BR.", th_rev_growth:"CRECIMIENTO",
+                buy:"compra", hold:"mantener", sell:"venta",
+                pill_off:"inact.",
+                rsi_overbought:"Sobrecomprado", rsi_oversold:"Sobrevendido", rsi_neutral:"Neutral",
+                hint:"Pase el ratón sobre ? junto a un encabezado de columna para ver la explicación · Haga clic en el encabezado para ordenar",
+                faq_label:"PREGUNTAS FRECUENTES",
+                modes: {
+                    lowrisk:    { label:"Menor riesgo",              icon:"🛡️", headline:"Prioriza la estabilidad y la seguridad",                          desc:"El beta y el consenso pesan más. Las empresas con baja volatilidad, fuerte respaldo analítico y rentabilidad probada se clasifican más alto.",                        ignores:"El potencial alcista y el crecimiento se ignoran — el potencial sin estabilidad no cuenta aquí." },
+                    value:      { label:"Mejor valor",                icon:"⚖️", headline:"Busca el mejor valor global",                                     desc:"Todos los criterios tienen el mismo peso. Identifica empresas que combinan una valoración razonable (PEG), un fuerte consenso analítico y sólida calidad fundamental.",  ignores:null },
+                    riskreward: { label:"Mejor riesgo/rentabilidad",  icon:"🎯", headline:"Busca el mejor rendimiento posible para el riesgo asumido",        desc:"El potencial alcista, el crecimiento y el consenso pesan más. El RSI se usa para encontrar un buen punto de entrada técnico.",                                        ignores:null },
+                },
+                col_info: ad => ({
+                    peg:           { label:"PEG – Precio/Crecimiento",                short:"P/E ajustado por crecimiento de beneficios",      long:"PEG = P/E dividido entre el crecimiento del BPA. PEG 1,0 = valoración razonable, por debajo de 1,0 = potencialmente infravalorado. Una empresa con P/E 30 y crecimiento del 30 % tiene PEG 1,0 y está razonablemente valorada." },
+                    upside:        { label:"Potencial alcista",                        short:"Objetivo de precio vs precio en vivo (cada hora)", long:`Calculado como (objetivo − precio en vivo) / precio en vivo. El precio en vivo se actualiza cada 15 minutos. El objetivo es el consenso de analistas de Yahoo Finance, última actualización ${ad}.` },
+                    scoreDeviation:{ label:"Desviación del consenso",                 short:`Consenso de analistas (${ad})`,                    long:`Las recomendaciones (compra/mantener/venta) se ponderan de 1 a 5 (5 = todos recomiendan compra) y se muestra la desviación respecto al máximo. 0,00 = acuerdo total en compra. Actualizado via Yahoo Finance (${ad}).` },
+                    buyPct:        { label:"Compra%",                                  short:`Porcentaje de analistas que recomiendan compra (${ad})`, long:`Qué parte de los analistas recomienda activamente comprar. Datos obtenidos automáticamente de Yahoo Finance (última actualización ${ad}).` },
+                    roe:           { label:"ROE – Rentabilidad sobre recursos propios",short:"La métrica de calidad de Buffett",                  long:"El Return on Equity muestra la eficiencia con que una empresa genera beneficios. Warren Buffett busca un ROE superior al 15 %. Novo Nordisk y L'Oréal destacan con ROE consistentemente elevados." },
+                    grossMargin:   { label:"Margen bruto",                             short:"La métrica de poder de precios de Munger",          long:"La parte de los ingresos que queda tras los costes directos. Margen alto = posición de mercado fuerte. Las empresas farmacéuticas y de lujo como AstraZeneca y LVMH logran típicamente altos márgenes brutos." },
+                    revenueGrowth: { label:"Crecimiento de ingresos",                 short:"Crecimiento de ingresos en el último ejercicio fiscal",long:"La velocidad a la que la empresa hace crecer sus ingresos. Novo Nordisk es un ejemplo de empresa GRANOLAS con crecimiento excepcional, impulsado por los medicamentos GLP-1." },
+                    rsi:           { label:"RSI – Fuerza relativa",                   short:"Señal de entrada técnica (calculada en vivo)",      long:"Calculado a partir de 30 días de precios de cierre usando el método de Wilder (14 períodos). Mide si la acción está sobrecomprada (>70) o sobrevendida (<30). Más cercano a 50 = momentum neutro." },
+                    beta:          { label:"Beta – Volatilidad",                      short:"Cuánto oscila la acción",                           long:"Beta 1,0 = se mueve en línea con el mercado. Las empresas GRANOLAS tienen generalmente un beta bajo — Nestlé y Roche suelen situarse por debajo de 0,8, lo que refleja su carácter defensivo." },
+                }),
+                footer: {
+                    note1:"Datos actualizados cada 15 minutos durante el horario de mercado",
+                    note2_prefix:"Insignia de clasificación:", note2_best:"1=mejor", note2_worst:"11=peor",
+                    note3:"Precios + RSI: Yahoo Finance · PEG, ROE, márgenes, crecimiento: FMP",
+                    note4:"El P/E se muestra solo como referencia, no incluido en la clasificación. Se usa el PEG",
+                    note5_prefix:"Consenso, objetivos y compra/mantener/venta: Yahoo Finance (automático, última actualización",
+                    note6:"Potencial = (objetivo − precio en vivo) / precio en vivo. El objetivo se actualiza automáticamente cada hora",
+                },
+                faq_items: [
+                    { q:"¿Qué es GRANOLAS?",                                                      a:"GRANOLAS es un acrónimo acuñado por Goldman Sachs para las once principales empresas europeas de calidad: GSK, Roche, ASML, Nestlé, Novartis, Novo Nordisk, L'Oréal, LVMH, AstraZeneca, SAP y Sanofi. Se consideran el equivalente europeo de los Magnificent Seven estadounidenses — líderes globales en farmacéutica, lujo, semiconductores y software empresarial." },
+                    { q:"¿Cómo se clasifica cada empresa?",                                        a:"Cada empresa recibe un rango de 1 a 11 por parámetro (1 = mejor de su clase). El rango se multiplica por el peso del parámetro para el modo seleccionado y se suma para obtener una puntuación total. El total más bajo = mejor clasificación." },
+                    { q:"¿Los parámetros tienen pesos diferentes?",                                a:"Sí, los pesos los determina el modo de clasificación. En 'Mejor valor', todos tienen el mismo peso (×1). En 'Menor riesgo', el beta tiene peso ×3 y el consenso/ROE/margen bruto ×2. En 'Mejor riesgo/rentabilidad', el potencial es ×3 y crecimiento/consenso ×2. Los parámetros con peso 0 se ignoran." },
+                    { q:"¿Por qué son interesantes las GRANOLAS para inversores europeos?",        a:"Las GRANOLAS dominan los índices bursátiles europeos. Las once empresas representan una parte desproporcionadamente grande de la capitalización bursátil de Europa y son conocidas por combinar fuerte rentabilidad con estabilidad defensiva. Son líderes mundiales en sus respectivos sectores." },
+                    { q:"¿Qué es el PEG?",                                                        a:"PEG = P/E dividido entre el crecimiento del BPA en porcentaje. El P/E indica cuánto pagas por cada euro de beneficios, pero ignora la velocidad de crecimiento. El PEG lo resuelve. Una empresa con P/E 30 y crecimiento del 30 % tiene PEG 1,0 (valoración razonable). Por debajo de 1,0 se considera potencialmente infravalorado." },
+                    { q:"¿Qué es el Potencial alcista?",                                          a:"El objetivo de precio promedio de los analistas menos el precio actual, expresado en porcentaje. +30 % significa que el consenso espera que la acción suba un 30 % en el próximo año. Importante: los analistas tienden a ser sistemáticamente optimistas." },
+                    { q:"¿Qué es la Desviación del consenso?",                                    a:"Las recomendaciones se convierten en puntuaciones: Compra=5, Mantener=3, Venta=1. Calculamos el promedio ponderado y mostramos la desviación respecto a la puntuación máxima (5,0 = todos dicen compra). 0,00 = acuerdo total. Menor desviación = consenso más fuerte." },
+                    { q:"¿Qué es el RSI?",                                                         a:"El RSI mide el momentum. Por encima de 70 = la acción puede estar sobrecomprada. Por debajo de 30 = sobrevendida. Más cercano a 50 = momentum neutro. Calculado a partir de 30 días de cierres via Yahoo Finance con el método de Wilder (14 períodos)." },
+                    { q:"¿Qué es el Beta?",                                                       a:"El beta mide cuánto se mueve una acción en relación al mercado. Beta 1,0 = se mueve en línea con el índice. Las empresas GRANOLAS son conocidas por su bajo beta — Nestlé y Roche suelen situarse entre 0,5–0,8, lo que las hace atractivas en el modo 'Menor riesgo'." },
+                    { q:"¿Por qué se muestra el P/E pero no se incluye en la clasificación?",    a:"El P/E es conocido pero puede ser engañoso. El PEG tiene en cuenta la tasa de crecimiento y da una imagen más justa. El P/E se muestra como referencia para quienes están familiarizados con este indicador." },
+                    { q:"¿Con qué frecuencia se actualizan los datos?",                          a:"Los precios y el RSI se actualizan cada 15 minutos durante el horario de mercado (lunes–viernes). El PEG, ROE, márgenes, crecimiento, consenso y objetivos de precio se actualizan una vez por hora automáticamente via FMP y Yahoo Finance." },
+                ],
+            },
+        };
+
+        function enrich(stocks) {
+            return stocks.map(s => {
+                const buy = s.buy||0, hold = s.hold||0, sell = s.sell||0;
+                const total = (buy+hold+sell)||1;
+                const buyPct  = Math.round((buy/total)*100);
+                const holdPct = Math.round((hold/total)*100);
+                const sellPct = 100-buyPct-holdPct;
+                const upside  = s.target && s.price ? ((s.target-s.price)/s.price)*100 : null;
+                const score   = (buy*5+hold*3+sell*1)/total;
+                const scoreDeviation = parseFloat((5-score).toFixed(2));
+                return { ...s, total, buyPct, holdPct, sellPct, upside, score, scoreDeviation };
+            });
+        }
+
+        function rankArr(rows, key, asc) {
+            const sorted = [...rows].sort((a,b) => {
+                const av = a[key]!=null?a[key]:(asc?99999:-99999);
+                const bv = b[key]!=null?b[key]:(asc?99999:-99999);
+                return asc?av-bv:bv-av;
+            });
+            return Object.fromEntries(sorted.map((r,i) => [r.ticker, i+1]));
+        }
+
+        function addRanks(rows, mode) {
+            const w    = MODE_WEIGHTS[mode];
+            const rPEG = rankArr(rows,"peg",true);
+            const rUp  = rankArr(rows,"upside",false);
+            const rSc  = rankArr(rows,"scoreDeviation",true);
+            const rBuy = rankArr(rows,"buyPct",false);
+            const rROE = rankArr(rows,"roe",false);
+            const rGM  = rankArr(rows,"grossMargin",false);
+            const rRG  = rankArr(rows,"revenueGrowth",false);
+            const rBeta= rankArr(rows,"beta",true);
+            const rsiS = [...rows].sort((a,b) => Math.abs(a.rsi-50)-Math.abs(b.rsi-50));
+            const rRSI = Object.fromEntries(rsiS.map((r,i) => [r.ticker,i+1]));
+            return rows.map(r => {
+                const ind = { rankPEG:rPEG[r.ticker], rankUpside:rUp[r.ticker], rankScore:rSc[r.ticker], rankBuyPct:rBuy[r.ticker], rankROE:rROE[r.ticker], rankGM:rGM[r.ticker], rankRG:rRG[r.ticker], rankRSI:rRSI[r.ticker], rankBeta:rBeta[r.ticker] };
+                const total = parseFloat((
+                    (w.peg?ind.rankPEG*w.peg:0)+(w.upside?ind.rankUpside*w.upside:0)+
+                    (w.scoreDeviation?r.scoreDeviation*w.scoreDeviation:0)+(w.buyPct?ind.rankBuyPct*w.buyPct:0)+
+                    (w.roe?ind.rankROE*w.roe:0)+(w.grossMargin?ind.rankGM*w.grossMargin:0)+
+                    (w.revenueGrowth?ind.rankRG*w.revenueGrowth:0)+(w.rsi?ind.rankRSI*w.rsi:0)+
+                    (w.beta?ind.rankBeta*w.beta:0)
+                ).toFixed(1));
+                return { ...r, ...ind, totalRank:total };
+            });
+        }
+
+        function Tooltip({ info, children }) {
+            const [pos, setPos] = useState(null);
+            const ref = useRef();
+            const show = () => { const r = ref.current.getBoundingClientRect(); setPos({ x:r.left+r.width/2, y:r.top }); };
+            return (
+                <span style={{ display:"inline-flex", alignItems:"center", gap:5 }}>
+                    {children}
+                    <span ref={ref} onMouseEnter={show} onMouseLeave={() => setPos(null)} onClick={e => e.stopPropagation()}
+                        style={{ width:16, height:16, borderRadius:"50%", background:pos?"rgba(0,163,224,0.3)":"var(--q-bg)", border:"1px solid "+(pos?"rgba(0,163,224,0.7)":"var(--q-border)"), display:"inline-flex", alignItems:"center", justifyContent:"center", fontFamily:"monospace", fontSize:10, fontWeight:700, color:pos?"var(--accent)":"var(--q-color)", cursor:"help", transition:"all 0.15s", flexShrink:0 }}>?</span>
+                    {pos && ReactDOM.createPortal(
+                        <div style={{ position:"fixed", left:pos.x, top:pos.y-10, transform:"translate(-50%,-100%)", zIndex:9999, width:260, background:"var(--tooltip-bg)", border:"1px solid var(--tooltip-border)", borderRadius:12, padding:"14px 16px", boxShadow:"0 12px 40px var(--shadow)", pointerEvents:"none" }}>
+                            <div style={{ fontFamily:"'Sora',sans-serif", fontSize:12, fontWeight:700, color:"var(--text)", marginBottom:4 }}>{info.label}</div>
+                            <div style={{ fontFamily:"monospace", fontSize:10, color:"var(--accent)", marginBottom:8 }}>{info.short}</div>
+                            <div style={{ fontFamily:"sans-serif", fontSize:11.5, color:"var(--tooltip-text)", lineHeight:1.65 }}>{info.long}</div>
+                        </div>, document.body
+                    )}
+                </span>
+            );
+        }
+
+        function RankBadge({ r }) {
+            const theme = useContext(ThemeCtx);
+            const rc = C[theme].rank(r);
+            return <span style={{ display:"inline-block", minWidth:22, height:22, lineHeight:"22px", textAlign:"center", borderRadius:4, background:`${rc}22`, color:rc, fontFamily:"monospace", fontSize:12, fontWeight:700, flexShrink:0 }}>{r}</span>;
+        }
+
+        function AnalystBar({ buyPct, holdPct, sellPct }) {
+            const theme = useContext(ThemeCtx);
+            const lang  = useContext(LangCtx);
+            const cl = C[theme], T = LANG[lang];
+            return (
+                <div style={{ display:"flex", flexDirection:"column", gap:4, minWidth:100 }}>
+                    <div style={{ display:"flex", height:5, borderRadius:3, overflow:"hidden", gap:1 }}>
+                        <div style={{ width:`${buyPct}%`, background:cl.buy }} />
+                        <div style={{ width:`${holdPct}%`, background:cl.hold }} />
+                        <div style={{ width:`${sellPct}%`, background:cl.sell }} />
+                    </div>
+                    <div style={{ display:"flex", gap:6, fontFamily:"monospace", fontSize:10 }}>
+                        <span style={{ color:cl.buy }}>{buyPct}% {T.buy}</span>
+                        <span style={{ color:cl.hold }}>{holdPct}% {T.hold}</span>
+                        <span style={{ color:cl.sell }}>{sellPct}% {T.sell}</span>
+                    </div>
+                </div>
+            );
+        }
+
+        function FAQItem({ q, a }) {
+            const [open, setOpen] = useState(false);
+            return (
+                <div style={{ borderBottom:"1px solid var(--border-sm)" }}>
+                    <button onClick={() => setOpen(o => !o)} style={{ width:"100%", textAlign:"left", background:"none", border:"none", cursor:"pointer", padding:"14px 0", display:"flex", alignItems:"center", justifyContent:"space-between", gap:16 }}>
+                        <span style={{ fontFamily:"'Sora',sans-serif", fontSize:13, fontWeight:600, color:open?"var(--accent)":"var(--text)", transition:"color 0.2s" }}>{q}</span>
+                        <span style={{ fontFamily:"monospace", fontSize:16, color:open?"var(--accent)":"var(--faint)", flexShrink:0, transition:"all 0.2s", transform:open?"rotate(45deg)":"none" }}>+</span>
+                    </button>
+                    {open && <div style={{ fontFamily:"sans-serif", fontSize:13, color:"var(--muted)", lineHeight:1.7, paddingBottom:16, paddingRight:32 }}>{a}</div>}
+                </div>
+            );
+        }
+
+        function LangSelect({ lang, setLang }) {
+            const [open, setOpen] = useState(false);
+            const ref = useRef();
+            const current = LANGUAGES.find(l => l.code === lang) || LANGUAGES[0];
+            useEffect(() => {
+                const h = e => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+                document.addEventListener("mousedown", h);
+                return () => document.removeEventListener("mousedown", h);
+            }, []);
+            return (
+                <div className="lang-dropdown-wrap" ref={ref}>
+                    <button className={`lang-dropdown-btn${open?" open":""}`} onClick={() => setOpen(o => !o)}>
+                        <span>{current.flag} {current.code.toUpperCase()}</span>
+                        <span className="arrow">▼</span>
+                    </button>
+                    {open && (
+                        <div className="lang-menu">
+                            {LANGUAGES.map(l => (
+                                <button key={l.code} className={`lang-option${lang===l.code?" active":""}`}
+                                    onClick={() => { setLang(l.code); setOpen(false); }}>
+                                    <span>{l.flag}</span>
+                                    <span>{l.label}</span>
+                                    {lang===l.code && <span style={{ marginLeft:"auto", color:"var(--accent)", fontSize:10 }}>✓</span>}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        function GranolasTable() {
+            const [theme,     setTheme]     = useState(initTheme);
+            const [lang,      setLang]      = useState(initLang);
+            const [data,      setData]      = useState(null);
+            const [loadState, setLoadState] = useState({ type:"loading", iso:null });
+            const [mode,      setMode]      = useState("value");
+            const [sortCol,   setSortCol]   = useState("totalRank");
+            const [sortDir,   setSortDir]   = useState(1);
+            const [hovered,   setHovered]   = useState(null);
+
+            useEffect(() => {
+                document.documentElement.dataset.theme = theme;
+                localStorage.setItem("granolas-theme", theme);
+                applyAccent(SESSION_ACCENT);
+            }, [theme]);
+
+            useEffect(() => { localStorage.setItem("granolas-lang", lang); }, [lang]);
+
+            useEffect(() => {
+                const bust = Math.floor(Date.now()/(15*60*1000));
+                fetch(`https://raw.githubusercontent.com/OliveProjects/granolas/main/data/granolas.json?v=${bust}`)
+                    .then(r => r.json())
+                    .then(json => { setData(json); setLoadState({ type:"updated", iso:json.lastYahooUpdate }); })
+                    .catch(() => setLoadState({ type:"error", iso:null }));
+            }, []);
+
+            const T = LANG[lang];
+            const MODES = T.modes;
+            const w = MODE_WEIGHTS[mode];
+
+            const statusText = loadState.type==="loading" ? T.status_loading
+                : loadState.type==="error" ? T.status_error
+                : loadState.iso ? T.status_updated(new Date(loadState.iso).toLocaleTimeString(T.date_locale, { hour:"2-digit", minute:"2-digit" }))
+                : "";
+
+            if (!data) return (
+                <ThemeCtx.Provider value={theme}><LangCtx.Provider value={lang}>
+                    <button className="theme-toggle" onClick={() => setTheme(t => t==="dark"?"light":"dark")}>{theme==="dark"?"☀":"🌙"}</button>
+                    <LangSelect lang={lang} setLang={setLang} />
+                    <div style={{ minHeight:"100vh", background:"var(--bg)", display:"flex", alignItems:"center", justifyContent:"center" }}>
+                        <div style={{ fontFamily:"monospace", fontSize:13, color:"var(--faint)" }}>{statusText}</div>
+                    </div>
+                </LangCtx.Provider></ThemeCtx.Provider>
+            );
+
+            const cl       = C[theme];
+            const enriched = enrich(data.stocks);
+            const ranked   = addRanks(enriched, mode);
+            const rankOrder    = [...ranked].sort((a,b) => a.totalRank-b.totalRank);
+            const positionMap  = Object.fromEntries(rankOrder.map((r,i) => [r.ticker, i+1]));
+            const sorted       = [...ranked].sort((a,b) => sortDir*((a[sortCol]??9999)-(b[sortCol]??9999)));
+
+            const analystDate = data.lastAnalystUpdate
+                ? new Date(data.lastAnalystUpdate).toLocaleDateString(T.date_locale, { day:"numeric", month:"short", year:"numeric" })
+                : "–";
+
+            const COL_INFO = T.col_info(analystDate);
+            const F = T.footer;
+
+            const handleSort = col => { if (sortCol===col) setSortDir(d => -d); else { setSortCol(col); setSortDir(1); } };
+            const thBase  = { padding:"10px 10px", textAlign:"right", cursor:"pointer", whiteSpace:"nowrap", fontFamily:"monospace", fontSize:10, letterSpacing:"0.07em", userSelect:"none", borderBottom:"1px solid var(--border-sm)", transition:"color 0.2s" };
+            const thColor = (col, key) => key&&w[key]===0?"var(--th-dim)":sortCol===col?"var(--accent)":"var(--faint)";
+            const arr     = col => sortCol===col?(sortDir===1?" ↑":" ↓"):"";
+            const pillStyle = wv => wv===0?cl.pillOff:wv>=3?cl.pillHi:wv>=2?cl.pillMid:cl.pillLow;
+
+            const [ar,ag,ab] = [parseInt(SESSION_ACCENT.slice(1,3),16),parseInt(SESSION_ACCENT.slice(3,5),16),parseInt(SESSION_ACCENT.slice(5,7),16)];
+            const grad = theme==="dark"
+                ? `radial-gradient(ellipse 100% 40% at 50% -5%, rgba(${ar},${ag},${ab},0.18) 0%, transparent 70%), radial-gradient(ellipse 40% 40% at 95% 100%, rgba(${ar},${ag},${ab},0.07) 0%, transparent 60%)`
+                : `radial-gradient(ellipse 100% 40% at 50% -5%, rgba(${ar},${ag},${ab},0.09) 0%, transparent 70%)`;
+
+            return (
+                <ThemeCtx.Provider value={theme}><LangCtx.Provider value={lang}>
+                    <button className="theme-toggle" onClick={() => setTheme(t => t==="dark"?"light":"dark")}>{theme==="dark"?"☀":"🌙"}</button>
+                    <LangSelect lang={lang} setLang={setLang} />
+
+                    <div style={{ minHeight:"100vh", background:"var(--bg)", color:"var(--text)", padding:"60px 12px 80px", backgroundImage:grad }}>
+                        <style>{`
+                            @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&display=swap');
+                            @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+                            .trow{transition:background 0.12s;}.trow:hover{background:var(--row-hover)!important;}
+                            ::-webkit-scrollbar{height:4px;}::-webkit-scrollbar-thumb{background:var(--scroll-thumb);border-radius:2px;}
+                        `}</style>
+                        <div style={{ maxWidth:1440, margin:"0 auto" }}>
+
+                            {/* Header */}
+                            <div style={{ marginBottom:24, animation:"fadeUp 0.4s ease both" }}>
+                                <div style={{ fontFamily:"monospace", fontSize:10, color:"var(--ghost)", letterSpacing:"0.2em", marginBottom:8 }}>
+                                    EUROPEAN QUALITY STOCKS · ANALYST TRACKER{loadState.type!=="loading"&&statusText?<span style={{ color:"var(--dim)", letterSpacing:"0.1em" }}> · {statusText}</span>:""}
+                                </div>
+                                <h1 style={{ fontFamily:"'Sora',sans-serif", fontSize:"clamp(24px,4vw,38px)", fontWeight:700, letterSpacing:"-0.03em" }}>
+                                    GRAN<span style={{ color:"var(--accent)" }}>OLAS</span> <span style={{ fontWeight:300, color:"var(--faint)" }}>Index</span>
+                                </h1>
+                            </div>
+
+                            {/* Mode toggles */}
+                            <div style={{ marginBottom:16 }}>
+                                <div style={{ fontFamily:"monospace", fontSize:10, color:"var(--faint)", letterSpacing:"0.12em", marginBottom:10 }}>{T.col_select_label}</div>
+                                <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:12 }}>
+                                    {Object.entries(MODES).map(([key,m]) => {
+                                        const active = mode===key;
+                                        return (
+                                            <button key={key} onClick={() => { setMode(key); setSortCol("totalRank"); setSortDir(1); }} style={{ padding:"11px 18px", borderRadius:12, cursor:"pointer", background:active?"rgba(0,163,224,0.15)":"var(--btn-bg)", border:active?"1px solid rgba(0,163,224,0.5)":"1px solid var(--btn-border)", color:active?"var(--accent)":"var(--dim)", fontFamily:"'Sora',sans-serif", fontWeight:active?700:400, fontSize:13, transition:"all 0.2s" }}>
+                                                {m.icon} {m.label}
+                                                <div style={{ fontFamily:"monospace", fontSize:9, marginTop:3, opacity:0.6, fontWeight:400 }}>{T.mode_subtitles[key]}</div>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                                <div style={{ padding:"12px 16px", background:"var(--mode-box)", borderLeft:"3px solid var(--accent)", borderRadius:"0 8px 8px 0", marginBottom:10 }}>
+                                    <div style={{ fontFamily:"'Sora',sans-serif", fontSize:13, fontWeight:600, color:"var(--text)", marginBottom:4 }}>{MODES[mode].headline}</div>
+                                    <div style={{ fontFamily:"sans-serif", fontSize:12, color:"var(--muted)", lineHeight:1.5 }}>{MODES[mode].desc}</div>
+                                    {MODES[mode].ignores && <div style={{ fontFamily:"monospace", fontSize:10, color:"#ff8a65", marginTop:6 }}>⚠ {MODES[mode].ignores}</div>}
+                                </div>
+                                <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
+                                    {Object.entries(COL_INFO).map(([k,info]) => {
+                                        const wv = w[k]??0, ps = pillStyle(wv);
+                                        return (
+                                            <div key={k} style={{ padding:"3px 10px", borderRadius:20, fontFamily:"monospace", fontSize:10, background:ps.bg, border:`1px solid ${ps.border}`, color:ps.color }}>
+                                                {info.label.split("–")[0].trim()} {wv===0?T.pill_off:"×"+wv}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            {/* Table */}
+                            <div style={{ overflowX:"auto", borderRadius:14, border:"1px solid var(--border)" }}>
+                                <table style={{ width:"100%", minWidth:900, borderCollapse:"collapse", fontFamily:"'Sora',sans-serif" }}>
+                                    <thead>
+                                        <tr style={{ background:"var(--surface)" }}>
+                                            <th style={{ padding:"10px 16px", textAlign:"left", fontFamily:"monospace", fontSize:10, color:"var(--faint)", letterSpacing:"0.08em", borderBottom:"1px solid var(--border-sm)", whiteSpace:"nowrap" }}>{T.th_company}</th>
+                                            <th onClick={() => handleSort("totalRank")} style={{...thBase, color:thColor("totalRank",null)}}>{T.th_rank+arr("totalRank")}</th>
+                                            <th onClick={() => handleSort("price")} style={{...thBase, color:thColor("price",null)}}>{T.th_price+arr("price")}</th>
+                                            <th onClick={() => handleSort("peg")} style={{...thBase, color:thColor("peg","peg")}}><Tooltip info={COL_INFO.peg}><span>{"PEG"+arr("peg")}</span></Tooltip></th>
+                                            <th onClick={() => handleSort("upside")} style={{...thBase, color:thColor("upside","upside")}}><Tooltip info={COL_INFO.upside}><span>{T.th_upside+arr("upside")}</span></Tooltip></th>
+                                            <th style={{ padding:"10px 10px", textAlign:"left", fontFamily:"monospace", fontSize:10, color:"var(--faint)", borderBottom:"1px solid var(--border-sm)", whiteSpace:"nowrap" }}>{T.th_analyst}</th>
+                                            <th onClick={() => handleSort("buyPct")} style={{...thBase, color:thColor("buyPct","buyPct")}}><Tooltip info={COL_INFO.buyPct}><span>{T.th_buy_pct+arr("buyPct")}</span></Tooltip></th>
+                                            <th onClick={() => handleSort("scoreDeviation")} style={{...thBase, color:thColor("scoreDeviation","scoreDeviation")}}><Tooltip info={COL_INFO.scoreDeviation}><span>{T.th_consensus+arr("scoreDeviation")}</span></Tooltip></th>
+                                            <th onClick={() => handleSort("roe")} style={{...thBase, color:thColor("roe","roe")}}><Tooltip info={COL_INFO.roe}><span>{"ROE%"+arr("roe")}</span></Tooltip></th>
+                                            <th onClick={() => handleSort("grossMargin")} style={{...thBase, color:thColor("grossMargin","grossMargin")}}><Tooltip info={COL_INFO.grossMargin}><span>{T.th_gross_margin+arr("grossMargin")}</span></Tooltip></th>
+                                            <th onClick={() => handleSort("revenueGrowth")} style={{...thBase, color:thColor("revenueGrowth","revenueGrowth")}}><Tooltip info={COL_INFO.revenueGrowth}><span>{T.th_rev_growth+arr("revenueGrowth")}</span></Tooltip></th>
+                                            <th onClick={() => handleSort("rsi")} style={{...thBase, color:thColor("rsi","rsi")}}><Tooltip info={COL_INFO.rsi}><span>{"RSI"+arr("rsi")}</span></Tooltip></th>
+                                            <th onClick={() => handleSort("beta")} style={{...thBase, color:thColor("beta","beta")}}><Tooltip info={COL_INFO.beta}><span>{"BETA"+arr("beta")}</span></Tooltip></th>
+                                            <th style={{...thBase, color:"var(--th-dim)", cursor:"default"}}>P/E</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {sorted.map((r,i) => {
+                                            const pos = positionMap[r.ticker], tc = cl.rank(pos);
+                                            const accent = ACCENT[r.ticker] || "#888";
+                                            return (
+                                                <tr key={r.ticker} className="trow" onMouseEnter={() => setHovered(r.ticker)} onMouseLeave={() => setHovered(null)}
+                                                    style={{ background:hovered===r.ticker?"var(--row-hover)":i%2===0?"var(--row-alt)":"transparent", borderBottom:"1px solid var(--border-sm)", animation:`fadeUp 0.4s ease ${i*0.04}s both` }}>
+                                                    <td style={{ padding:"13px 16px", whiteSpace:"nowrap" }}>
+                                                        <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+                                                            <div style={{ width:3, height:30, borderRadius:2, background:accent, flexShrink:0 }} />
+                                                            <div>
+                                                                <div style={{ fontWeight:600, fontSize:13 }}>{r.name}</div>
+                                                                <div style={{ fontFamily:"monospace", fontSize:10, color:accent, letterSpacing:"0.1em", marginTop:1 }}>{r.ticker}</div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap" }}>
+                                                        <div style={{ display:"inline-flex", alignItems:"center", justifyContent:"center", minWidth:46, height:38, borderRadius:8, padding:"0 8px", background:`${tc}18`, border:`1px solid ${tc}44`, fontFamily:"monospace", fontSize:14, fontWeight:700, color:tc }}>{r.totalRank.toFixed(1)}</div>
+                                                    </td>
+                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap" }}>
+                                                        <span style={{ fontFamily:"monospace", fontSize:13, fontWeight:600 }}>${r.price!=null?r.price.toFixed(2):"–"}</span>
+                                                    </td>
+                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.peg===0?0.3:1 }}>
+                                                        <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
+                                                            <span style={{ fontFamily:"monospace", fontSize:13, color:r.peg!=null?cl.peg(r.peg):"var(--ghost)" }}>{r.peg!=null?r.peg.toFixed(2):"–"}</span>
+                                                            <RankBadge r={r.rankPEG} />
+                                                        </div>
+                                                    </td>
+                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.upside===0?0.3:1 }}>
+                                                        <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
+                                                            <span style={{ fontFamily:"monospace", fontSize:13, color:r.upside!=null?(r.upside>0?cl.pos:cl.sell):"var(--ghost)" }}>{r.upside!=null?(r.upside>0?"+":"")+r.upside.toFixed(1)+"%":"–"}</span>
+                                                            <RankBadge r={r.rankUpside} />
+                                                        </div>
+                                                    </td>
+                                                    <td style={{ padding:"13px 10px" }}><AnalystBar buyPct={r.buyPct} holdPct={r.holdPct} sellPct={r.sellPct} /></td>
+                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.buyPct===0?0.3:1 }}>
+                                                        <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
+                                                            <span style={{ fontFamily:"monospace", fontSize:13, color:cl.buy }}>{r.buyPct}%</span>
+                                                            <RankBadge r={r.rankBuyPct} />
+                                                        </div>
+                                                    </td>
+                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.scoreDeviation===0?0.3:1 }}>
+                                                        <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
+                                                            <div style={{ textAlign:"right" }}>
+                                                                <div style={{ fontFamily:"monospace", fontSize:13 }}>{r.score.toFixed(2)}</div>
+                                                                <div style={{ fontFamily:"monospace", fontSize:10, color:cl.cons(5-r.score) }}>−{r.scoreDeviation.toFixed(2)}</div>
+                                                            </div>
+                                                            <RankBadge r={r.rankScore} />
+                                                        </div>
+                                                    </td>
+                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.roe===0?0.3:1 }}>
+                                                        <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
+                                                            <span style={{ fontFamily:"monospace", fontSize:13 }}>{r.roe!=null?r.roe.toFixed(1)+"%":"–"}</span>
+                                                            <RankBadge r={r.rankROE} />
+                                                        </div>
+                                                    </td>
+                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.grossMargin===0?0.3:1 }}>
+                                                        <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
+                                                            <span style={{ fontFamily:"monospace", fontSize:13 }}>{r.grossMargin!=null?r.grossMargin.toFixed(1)+"%":"–"}</span>
+                                                            <RankBadge r={r.rankGM} />
+                                                        </div>
+                                                    </td>
+                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.revenueGrowth===0?0.3:1 }}>
+                                                        <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
+                                                            <span style={{ fontFamily:"monospace", fontSize:13, color:r.revenueGrowth!=null?cl.rev(r.revenueGrowth):"var(--ghost)" }}>{r.revenueGrowth!=null?(r.revenueGrowth>0?"+":"")+r.revenueGrowth.toFixed(1)+"%":"–"}</span>
+                                                            <RankBadge r={r.rankRG} />
+                                                        </div>
+                                                    </td>
+                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.rsi===0?0.3:1 }}>
+                                                        <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
+                                                            <div style={{ textAlign:"right" }}>
+                                                                <div style={{ fontFamily:"monospace", fontSize:13, color:r.rsi!=null?cl.rsi(r.rsi):"var(--ghost)" }}>{r.rsi??"–"}</div>
+                                                                <div style={{ fontFamily:"monospace", fontSize:10, color:"var(--ghost)" }}>{r.rsi>70?T.rsi_overbought:r.rsi<30?T.rsi_oversold:T.rsi_neutral}</div>
+                                                            </div>
+                                                            <RankBadge r={r.rankRSI} />
+                                                        </div>
+                                                    </td>
+                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.beta===0?0.3:1 }}>
+                                                        <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
+                                                            <span style={{ fontFamily:"monospace", fontSize:13, color:cl.beta(r.beta) }}>{r.beta.toFixed(2)}</span>
+                                                            <RankBadge r={r.rankBeta} />
+                                                        </div>
+                                                    </td>
+                                                    <td style={{ padding:"13px 16px", textAlign:"right", whiteSpace:"nowrap", opacity:0.35 }}>
+                                                        <span style={{ fontFamily:"monospace", fontSize:13 }}>{r.pe!=null?r.pe.toFixed(1):"–"}</span>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* Footer notes */}
+                            <div style={{ marginTop:16, display:"flex", flexWrap:"wrap", gap:"6px 20px", fontFamily:"monospace", fontSize:10, color:"var(--muted)" }}>
+                                <span>● {F.note1}</span>
+                                <span>● {F.note2_prefix} <span style={{color:cl.pos}}>{F.note2_best}</span> → <span style={{color:cl.sell}}>{F.note2_worst}</span></span>
+                                <span>● {F.note3}</span>
+                                <span>● {F.note4}</span>
+                                <span>● {F.note5_prefix} <strong>{analystDate}</strong>)</span>
+                                <span>● {F.note6}</span>
+                            </div>
+
+                            {/* Hint */}
+                            <div style={{ display:"flex", alignItems:"center", gap:8, marginTop:14, padding:"8px 14px", background:"var(--hint-bg)", border:"1px solid var(--hint-border)", borderRadius:8 }}>
+                                <span style={{ fontFamily:"monospace", fontSize:11, color:"var(--text)" }}>{T.hint}</span>
+                            </div>
+
+                            {/* FAQ */}
+                            <div style={{ marginTop:48 }}>
+                                <div style={{ fontFamily:"monospace", fontSize:10, color:"var(--dim)", letterSpacing:"0.2em", marginBottom:20 }}>{T.faq_label}</div>
+                                <div style={{ maxWidth:780, borderTop:"1px solid var(--border-sm)" }}>
+                                    {T.faq_items.map((item,i) => <FAQItem key={`${lang}-${i}`} q={item.q} a={item.a} />)}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </LangCtx.Provider></ThemeCtx.Provider>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById("root")).render(<GranolasTable />);
+    </script>
+
+    <script>
+        (async () => {
+            try {
+                const r = await fetch('https://api.counterapi.dev/v1/oliveprojects-granolas/visits/up');
+                const d = await r.json();
+                document.getElementById('view-count').textContent = d.count.toLocaleString('sv-SE');
+            } catch { document.getElementById('view-count').textContent = '–'; }
+        })();
+
+        const counterEl = document.getElementById('view-counter');
+        const burstColors = ['#00E676','#FDD835','#FF7043','#E53935','#009FE3'];
+        let burstCooldown = false;
+        counterEl.addEventListener('mouseenter', () => {
+            if (burstCooldown) return;
+            burstCooldown = true;
+            setTimeout(() => burstCooldown = false, 700);
+            const rect = counterEl.getBoundingClientRect();
+            const cx = rect.left+rect.width/2, cy = rect.top+rect.height/2;
+            for (let i=0; i<14; i++) {
+                const p = document.createElement('div');
+                const color = burstColors[Math.floor(Math.random()*burstColors.length)];
+                const angle = (Math.PI*2*i)/14+(Math.random()-0.5)*0.4;
+                const dist = 36+Math.random()*32, size = 4+Math.random()*5;
+                Object.assign(p.style, { position:'fixed', left:cx+'px', top:cy+'px', width:size+'px', height:size+'px', borderRadius:'50%', background:color, pointerEvents:'none', zIndex:'99999', transform:'translate(-50%,-50%)', transition:'transform 0.55s ease-out, opacity 0.55s ease-out', opacity:'1' });
+                document.body.appendChild(p);
+                requestAnimationFrame(() => requestAnimationFrame(() => {
+                    p.style.transform = `translate(calc(-50% + ${Math.cos(angle)*dist}px), calc(-50% + ${Math.sin(angle)*dist}px))`;
+                    p.style.opacity = '0';
+                }));
+                setTimeout(() => p.remove(), 600);
+            }
+        });
+    </script>
+</body>
+</html>
