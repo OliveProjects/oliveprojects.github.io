@@ -292,6 +292,7 @@
         .project-card.card-2:hover { box-shadow: 0 20px 60px rgba(253,216,53,0.07); }
         .project-card.card-3:hover { box-shadow: 0 20px 60px rgba(252,176,69,0.09); }
         .project-card.card-4:hover { box-shadow: 0 20px 60px rgba(229,57,53,0.07); }
+        .project-card.card-5:hover { box-shadow: 0 20px 60px rgba(100,181,246,0.08); }
 
         .card-accent {
             position: absolute;
@@ -307,6 +308,8 @@
         .card-3 .card-accent { background: linear-gradient(90deg, transparent, #833ab4 15%, #c13584 30%, #e1306c 45%, #fd1d1d 60%, #f56040 75%, #fcb045 90%, transparent); }
         /* iOS In Progress — red */
         .card-4 .card-accent { background: linear-gradient(90deg, transparent, var(--z1), transparent); }
+        /* Portfolio — blue */
+        .card-5 .card-accent { background: linear-gradient(90deg, transparent, #64B5F6, transparent); }
 
         .card-tag {
             font-size: 11px;
@@ -321,6 +324,7 @@
         .card-2 .card-tag { color: var(--z3); }
         .card-3 .card-tag { color: var(--z2); }
         .card-4 .card-tag { color: var(--z1); }
+        .card-5 .card-tag { color: #64B5F6; }
 
         .card-title {
             font-size: 24px;
@@ -362,6 +366,7 @@
         .card-2 .card-link { color: var(--z3); }
         .card-3 .card-link { color: var(--z2); }
         .card-4 .card-link { color: var(--z1); }
+        .card-5 .card-link { color: #64B5F6; }
 
         /* ── ABOUT ── */
         .about-grid {
@@ -640,6 +645,13 @@
                 <span class="card-tag">In Progress · iOS</span>
                 <h3 class="card-title">Market Moood for iOS</h3>
                 <p class="card-desc">Bringing Market Moood to iPhone. The same minimalist Fear &amp; Greed tracker, rebuilt natively for iOS with home screen widgets. The Android version ships weekly updates while the iOS version takes shape.</p>
+            </div>
+            <div class="project-card card-5 fade-in">
+                <div class="card-accent"></div>
+                <span class="card-tag">Finance · Personal</span>
+                <h3 class="card-title">Portfolio</h3>
+                <p class="card-desc">An anonymous window into my stock portfolio. Rooted in Graham, Munger and Buffett — undervalued quality, Swedish investment companies and American tech. Tickers and percentages only, no amounts.</p>
+                <a href="/stocks" class="card-link">View portfolio →</a>
             </div>
         </div>
     </section>
