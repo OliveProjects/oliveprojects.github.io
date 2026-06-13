@@ -266,7 +266,7 @@
             useEffect(() => { localStorage.setItem("mag7-lang", lang); }, [lang]);
 
             useEffect(() => {
-                const bust = Math.floor(Date.now() / (60 * 60 * 1000));
+                const bust = Math.floor(Date.now() / (15 * 60 * 1000));
                 fetch(`https://raw.githubusercontent.com/OliveProjects/financial-tools/main/data/vs.json?v=${bust}`)
                     .then(r => r.json())
                     .then(json => { setData(json); setLoadState({ type:"updated", iso:json.generatedAt }); })
