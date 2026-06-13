@@ -144,6 +144,24 @@
         .tool-nav a:hover { color: var(--text); }
         .tool-nav a.active { color: var(--accent); }
 
+        .scroll-hint {
+            display: none; font-family: monospace; font-size: 10px;
+            color: var(--dim); align-items: center; justify-content: center;
+            gap: 8px; padding: 6px 0 10px; letter-spacing: 0.08em;
+        }
+        @media (max-width: 700px) {
+            .col-hide-mobile { display: none; }
+            .scroll-hint { display: flex; }
+        }
+        @media (max-width: 480px) {
+            .topbar { height: 88px; }
+            .tool-nav { height: 88px; align-items: flex-end; padding-bottom: 10px; }
+            .back-link { top: 14px; }
+            .theme-toggle { top: 12px; }
+            .lang-dropdown-wrap { top: 12px; }
+            .main-wrap { padding-top: 96px !important; }
+        }
+
     </style>
 </head>
 <body>
@@ -505,13 +523,30 @@
 
         function Tooltip({ info, children }) {
             const [pos, setPos] = useState(null);
+            const [pinned, setPinned] = useState(false);
             const ref = useRef();
             const show = () => { const r = ref.current.getBoundingClientRect(); setPos({ x:r.left+r.width/2, y:r.top }); };
+            const handleClick = e => {
+                e.stopPropagation();
+                if (pinned) { setPinned(false); setPos(null); }
+                else { show(); setPinned(true); }
+            };
+            useEffect(() => {
+                if (!pinned) return;
+                const close = e => { if (ref.current && !ref.current.contains(e.target)) { setPinned(false); setPos(null); } };
+                document.addEventListener("mousedown", close);
+                document.addEventListener("touchstart", close);
+                return () => { document.removeEventListener("mousedown", close); document.removeEventListener("touchstart", close); };
+            }, [pinned]);
+            const active = pos || pinned;
             return (
                 <span style={{ display:"inline-flex", alignItems:"center", gap:5 }}>
                     {children}
-                    <span ref={ref} onMouseEnter={show} onMouseLeave={() => setPos(null)} onClick={e => e.stopPropagation()}
-                        style={{ width:16, height:16, borderRadius:"50%", background:pos?"rgba(0,163,224,0.3)":"var(--q-bg)", border:"1px solid "+(pos?"rgba(0,163,224,0.7)":"var(--q-border)"), display:"inline-flex", alignItems:"center", justifyContent:"center", fontFamily:"monospace", fontSize:10, fontWeight:700, color:pos?"var(--accent)":"var(--q-color)", cursor:"help", transition:"all 0.15s", flexShrink:0 }}>?</span>
+                    <span ref={ref}
+                        onMouseEnter={!pinned ? show : undefined}
+                        onMouseLeave={!pinned ? () => setPos(null) : undefined}
+                        onClick={handleClick}
+                        style={{ width:16, height:16, borderRadius:"50%", background:active?"rgba(0,163,224,0.3)":"var(--q-bg)", border:"1px solid "+(active?"rgba(0,163,224,0.7)":"var(--q-border)"), display:"inline-flex", alignItems:"center", justifyContent:"center", fontFamily:"monospace", fontSize:10, fontWeight:700, color:active?"var(--accent)":"var(--q-color)", cursor:"pointer", transition:"all 0.15s", flexShrink:0 }}>?</span>
                     {pos && ReactDOM.createPortal(
                         <div style={{ position:"fixed", left:pos.x, top:pos.y-10, transform:"translate(-50%,-100%)", zIndex:9999, width:260, background:"var(--tooltip-bg)", border:"1px solid var(--tooltip-border)", borderRadius:12, padding:"14px 16px", boxShadow:"0 12px 40px var(--shadow)", pointerEvents:"none" }}>
                             <div style={{ fontFamily:"'Sora',sans-serif", fontSize:12, fontWeight:700, color:"var(--text)", marginBottom:4 }}>{info.label}</div>
@@ -668,7 +703,7 @@
                     <button className="theme-toggle" onClick={() => setTheme(t => t==="dark"?"light":"dark")}>{theme==="dark"?"☀":"🌙"}</button>
                     <LangSelect lang={lang} setLang={setLang} />
 
-                    <div style={{ minHeight:"100vh", background:"var(--bg)", color:"var(--text)", padding:"60px 12px 80px", backgroundImage:grad }}>
+                    <div className="main-wrap" style={{ minHeight:"100vh", background:"var(--bg)", color:"var(--text)", padding:"60px 12px 80px", backgroundImage:grad }}>
                         <style>{`
                             @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&display=swap');
                             @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -719,8 +754,9 @@
                             </div>
 
                             {/* Table */}
+                            <div className="scroll-hint">← swipe →</div>
                             <div style={{ overflowX:"auto", borderRadius:14, border:"1px solid var(--border)" }}>
-                                <table style={{ width:"100%", minWidth:900, borderCollapse:"collapse", fontFamily:"'Sora',sans-serif" }}>
+                                <table style={{ width:"100%", minWidth:720, borderCollapse:"collapse", fontFamily:"'Sora',sans-serif" }}>
                                     <thead>
                                         <tr style={{ background:"var(--surface)" }}>
                                             <th style={{ padding:"10px 16px", textAlign:"left", fontFamily:"monospace", fontSize:10, color:"var(--faint)", letterSpacing:"0.08em", borderBottom:"1px solid var(--border-sm)", whiteSpace:"nowrap" }}>{T.th_company}</th>
@@ -729,14 +765,14 @@
                                             <th onClick={() => handleSort("peg")} style={{...thBase, color:thColor("peg","peg")}}><Tooltip info={COL_INFO.peg}><span>{"PEG"+arr("peg")}</span></Tooltip></th>
                                             <th onClick={() => handleSort("upside")} style={{...thBase, color:thColor("upside","upside")}}><Tooltip info={COL_INFO.upside}><span>{T.th_upside+arr("upside")}</span></Tooltip></th>
                                             <th style={{ padding:"10px 10px", textAlign:"left", fontFamily:"monospace", fontSize:10, color:"var(--faint)", borderBottom:"1px solid var(--border-sm)", whiteSpace:"nowrap" }}>{T.th_analyst}</th>
-                                            <th onClick={() => handleSort("buyPct")} style={{...thBase, color:thColor("buyPct","buyPct")}}><Tooltip info={COL_INFO.buyPct}><span>{T.th_buy_pct+arr("buyPct")}</span></Tooltip></th>
+                                            <th onClick={() => handleSort("buyPct")} className="col-hide-mobile" style={{...thBase, color:thColor("buyPct","buyPct")}}><Tooltip info={COL_INFO.buyPct}><span>{T.th_buy_pct+arr("buyPct")}</span></Tooltip></th>
                                             <th onClick={() => handleSort("scoreDeviation")} style={{...thBase, color:thColor("scoreDeviation","scoreDeviation")}}><Tooltip info={COL_INFO.scoreDeviation}><span>{T.th_consensus+arr("scoreDeviation")}</span></Tooltip></th>
                                             <th onClick={() => handleSort("roe")} style={{...thBase, color:thColor("roe","roe")}}><Tooltip info={COL_INFO.roe}><span>{"ROE%"+arr("roe")}</span></Tooltip></th>
                                             <th onClick={() => handleSort("grossMargin")} style={{...thBase, color:thColor("grossMargin","grossMargin")}}><Tooltip info={COL_INFO.grossMargin}><span>{T.th_gross_margin+arr("grossMargin")}</span></Tooltip></th>
                                             <th onClick={() => handleSort("revenueGrowth")} style={{...thBase, color:thColor("revenueGrowth","revenueGrowth")}}><Tooltip info={COL_INFO.revenueGrowth}><span>{T.th_rev_growth+arr("revenueGrowth")}</span></Tooltip></th>
                                             <th onClick={() => handleSort("rsi")} style={{...thBase, color:thColor("rsi","rsi")}}><Tooltip info={COL_INFO.rsi}><span>{"RSI"+arr("rsi")}</span></Tooltip></th>
-                                            <th onClick={() => handleSort("beta")} style={{...thBase, color:thColor("beta","beta")}}><Tooltip info={COL_INFO.beta}><span>{"BETA"+arr("beta")}</span></Tooltip></th>
-                                            <th style={{...thBase, color:"var(--th-dim)", cursor:"default"}}>P/E</th>
+                                            <th onClick={() => handleSort("beta")} className="col-hide-mobile" style={{...thBase, color:thColor("beta","beta")}}><Tooltip info={COL_INFO.beta}><span>{"BETA"+arr("beta")}</span></Tooltip></th>
+                                            <th className="col-hide-mobile" style={{...thBase, color:"var(--th-dim)", cursor:"default"}}>P/E</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -774,7 +810,7 @@
                                                         </div>
                                                     </td>
                                                     <td style={{ padding:"13px 10px" }}><AnalystBar buyPct={r.buyPct} holdPct={r.holdPct} sellPct={r.sellPct} /></td>
-                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.buyPct===0?0.3:1 }}>
+                                                    <td className="col-hide-mobile" style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.buyPct===0?0.3:1 }}>
                                                         <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
                                                             <span style={{ fontFamily:"monospace", fontSize:13, color:cl.buy }}>{r.buyPct}%</span>
                                                             <RankBadge r={r.rankBuyPct} />
@@ -816,13 +852,13 @@
                                                             <RankBadge r={r.rankRSI} />
                                                         </div>
                                                     </td>
-                                                    <td style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.beta===0?0.3:1 }}>
+                                                    <td className="col-hide-mobile" style={{ padding:"13px 10px", textAlign:"right", whiteSpace:"nowrap", opacity:w.beta===0?0.3:1 }}>
                                                         <div style={{ display:"flex", alignItems:"center", justifyContent:"flex-end", gap:6 }}>
                                                             <span style={{ fontFamily:"monospace", fontSize:13, color:cl.beta(r.beta) }}>{r.beta.toFixed(2)}</span>
                                                             <RankBadge r={r.rankBeta} />
                                                         </div>
                                                     </td>
-                                                    <td style={{ padding:"13px 16px", textAlign:"right", whiteSpace:"nowrap", opacity:0.35 }}>
+                                                    <td className="col-hide-mobile" style={{ padding:"13px 16px", textAlign:"right", whiteSpace:"nowrap", opacity:0.35 }}>
                                                         <span style={{ fontFamily:"monospace", fontSize:13 }}>{r.pe!=null?r.pe.toFixed(1):"–"}</span>
                                                     </td>
                                                 </tr>
