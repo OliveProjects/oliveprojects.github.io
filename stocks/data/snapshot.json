@@ -1,0 +1,16 @@
+{
+  "date": "2026-06-13",
+  "fetched_at": 1781352000000,
+  "totalValueSEK": 1184441.46,
+  "positions": {
+    "INVE B":  { "name": "Investor B",             "quantity": 1000, "unrealizedPct": 22.02 },
+    "GOOG":    { "name": "Alphabet C",             "quantity": 35,   "unrealizedPct": 27.74 },
+    "CRED A":  { "name": "Creades A",              "quantity": 700,  "unrealizedPct": 9.85  },
+    "LUND B":  { "name": "Lundbergföretagen B",    "quantity": 100,  "unrealizedPct": 5.24  },
+    "BURE":    { "name": "Bure Equity",            "quantity": 200,  "unrealizedPct": 1.32  },
+    "MSFT":    { "name": "Microsoft",              "quantity": 100,  "unrealizedPct": -0.64 },
+    "LATO B":  { "name": "Latour B",               "quantity": 250,  "unrealizedPct": -1.81 },
+    "VNV":     { "name": "VNV Global",             "quantity": 2600, "unrealizedPct": -18.59 },
+    "FLAT B":  { "name": "Flat Capital B",         "quantity": 3750, "unrealizedPct": -29.37 }
+  }
+}
