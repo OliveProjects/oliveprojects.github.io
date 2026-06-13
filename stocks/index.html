@@ -562,7 +562,21 @@
                     </div>`;
                 return;
             }
-            list.innerHTML = trades.slice().reverse().map(t => `
+            const cutoff = new Date();
+            cutoff.setMonth(cutoff.getMonth() - 3);
+            const recent = trades
+                .filter(t => new Date(t.date + 'T12:00:00Z') >= cutoff)
+                .slice(-10)
+                .reverse();
+            if (recent.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📋</div>
+                        <div>No trades in the last 3 months.</div>
+                    </div>`;
+                return;
+            }
+            list.innerHTML = recent.map(t => `
                 <div class="trade-item">
                     <span class="trade-badge ${t.action === 'BUY' ? 'badge-buy' : 'badge-sell'}">${t.action}</span>
                     <div>
