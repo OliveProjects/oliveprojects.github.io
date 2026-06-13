@@ -7,6 +7,8 @@
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -85,9 +87,9 @@
         }
 
         .back-link {
-            position: fixed; top: 20px; left: 20px; z-index: 9999;
+            position: fixed; top: 18px; left: 20px; z-index: 9999;
             color: var(--dim); text-decoration: none;
-            font-family: monospace; font-size: 12px; letter-spacing: 0.1em;
+            font-family: 'Inter', system-ui, sans-serif; font-size: 14px; font-weight: 700; letter-spacing: -0.3px;
             transition: color 0.2s;
         }
         .back-link:hover { color: var(--text); }
@@ -136,18 +138,12 @@
         }
         .tool-nav a {
             pointer-events: all; color: var(--dim); text-decoration: none;
-            font-family: monospace; font-size: 11px; letter-spacing: 0.14em;
-            transition: color 0.2s; text-transform: uppercase;
+            font-family: 'Inter', system-ui, sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0.1px;
+            transition: color 0.2s;
         }
         .tool-nav a:hover { color: var(--text); }
         .tool-nav a.active { color: var(--accent); }
 
-        .view-counter {
-            position: fixed; bottom: 20px; right: 20px;
-            font-size: 12px; color: var(--muted); font-family: monospace;
-            cursor: default; user-select: none; z-index: 9998; transition: color 0.2s;
-        }
-        .view-counter:hover { color: var(--text); }
     </style>
 </head>
 <body>
@@ -158,7 +154,6 @@
         <a href="/granolas.html" class="active">GRANOLAS</a>
     </nav>
     <div id="root"></div>
-    <div class="view-counter" id="view-counter"><span id="view-count">–</span> views</div>
 
     <script type="text/babel">
         const { useState, useEffect, useContext, createContext, useRef } = React;
@@ -869,38 +864,5 @@
         ReactDOM.createRoot(document.getElementById("root")).render(<GranolasTable />);
     </script>
 
-    <script>
-        (async () => {
-            try {
-                const r = await fetch('https://api.counterapi.dev/v1/oliveprojects-granolas/visits/up');
-                const d = await r.json();
-                document.getElementById('view-count').textContent = d.count.toLocaleString('sv-SE');
-            } catch { document.getElementById('view-count').textContent = '–'; }
-        })();
-
-        const counterEl = document.getElementById('view-counter');
-        const burstColors = ['#00E676','#FDD835','#FF7043','#E53935','#009FE3'];
-        let burstCooldown = false;
-        counterEl.addEventListener('mouseenter', () => {
-            if (burstCooldown) return;
-            burstCooldown = true;
-            setTimeout(() => burstCooldown = false, 700);
-            const rect = counterEl.getBoundingClientRect();
-            const cx = rect.left+rect.width/2, cy = rect.top+rect.height/2;
-            for (let i=0; i<14; i++) {
-                const p = document.createElement('div');
-                const color = burstColors[Math.floor(Math.random()*burstColors.length)];
-                const angle = (Math.PI*2*i)/14+(Math.random()-0.5)*0.4;
-                const dist = 36+Math.random()*32, size = 4+Math.random()*5;
-                Object.assign(p.style, { position:'fixed', left:cx+'px', top:cy+'px', width:size+'px', height:size+'px', borderRadius:'50%', background:color, pointerEvents:'none', zIndex:'99999', transform:'translate(-50%,-50%)', transition:'transform 0.55s ease-out, opacity 0.55s ease-out', opacity:'1' });
-                document.body.appendChild(p);
-                requestAnimationFrame(() => requestAnimationFrame(() => {
-                    p.style.transform = `translate(calc(-50% + ${Math.cos(angle)*dist}px), calc(-50% + ${Math.sin(angle)*dist}px))`;
-                    p.style.opacity = '0';
-                }));
-                setTimeout(() => p.remove(), 600);
-            }
-        });
-    </script>
 </body>
 </html>
