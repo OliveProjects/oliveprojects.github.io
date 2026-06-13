@@ -152,38 +152,6 @@
             margin-bottom: 40px;
         }
 
-        .meta-row {
-            display: flex;
-            gap: 32px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .meta-item {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .meta-value {
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: -0.8px;
-            color: var(--text);
-        }
-
-        .meta-label {
-            font-size: 12px;
-            color: var(--subtext);
-            font-weight: 400;
-        }
-
-        .meta-divider {
-            width: 1px;
-            height: 32px;
-            background: var(--border);
-        }
-
         /* DIVIDER */
         .divider {
             border: none;
@@ -415,25 +383,8 @@
     </nav>
 
     <div class="page-hero">
-        <p class="hero-eyebrow">Retail Investor · Montrose</p>
         <h1 class="hero-title">Portfolio.</h1>
-        <p class="hero-sub">An anonymous window into my stock portfolio. Tickers and percentages, no amounts. Synced manually via Claude + Montrose.</p>
-        <div class="meta-row">
-            <div class="meta-item">
-                <span class="meta-value" id="meta-positions">–</span>
-                <span class="meta-label">Positions</span>
-            </div>
-            <div class="meta-divider"></div>
-            <div class="meta-item">
-                <span class="meta-value" id="meta-winners">–</span>
-                <span class="meta-label">Winners</span>
-            </div>
-            <div class="meta-divider"></div>
-            <div class="meta-item">
-                <span class="meta-value" id="meta-updated">–</span>
-                <span class="meta-label">Last synced</span>
-            </div>
-        </div>
+        <p class="hero-sub">Skin in the game. What I hold, what I'm up on — and what I'm not. No amounts, just the honest percentages.</p>
     </div>
 
     <div class="divider"></div>
@@ -511,18 +462,8 @@
                 fetch('data/trades.json').then(r => r.json()),
             ]);
 
-            renderMeta(snapshot);
             renderHoldings(snapshot.positions);
             renderTrades(trades);
-        }
-
-        /* ── META ── */
-        function renderMeta(snap) {
-            const positions = Object.values(snap.positions);
-            const winners = positions.filter(p => p.unrealizedPct > 0).length;
-            document.getElementById('meta-positions').textContent = positions.length;
-            document.getElementById('meta-winners').textContent = `${winners}/${positions.length}`;
-            document.getElementById('meta-updated').textContent = formatDate(snap.date);
         }
 
         /* ── HOLDINGS ── */
