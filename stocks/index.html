@@ -213,57 +213,6 @@
             margin-bottom: 40px;
         }
 
-        /* CHART */
-        .chart-container {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 32px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .chart-top-accent {
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--z5), transparent);
-        }
-
-        .chart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 32px;
-        }
-
-        .chart-value {
-            font-size: 36px;
-            font-weight: 800;
-            letter-spacing: -1.5px;
-        }
-
-        .chart-since {
-            font-size: 13px;
-            color: var(--subtext);
-            margin-top: 4px;
-        }
-
-        .chart-notice {
-            font-size: 12px;
-            color: var(--subtext);
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 8px 14px;
-            align-self: flex-start;
-        }
-
-        #portfolio-chart {
-            width: 100%;
-            height: 220px;
-        }
-
         /* HOLDINGS GRID */
         .holdings-grid {
             display: grid;
@@ -450,7 +399,6 @@
             section { padding: 56px 24px; }
             .holdings-grid { grid-template-columns: 1fr 1fr; }
             footer { flex-direction: column; gap: 16px; text-align: center; }
-            .chart-header { flex-direction: column; gap: 12px; }
         }
     </style>
 </head>
@@ -460,7 +408,6 @@
         <a href="/" class="nav-logo">Olive Projects<span class="nav-dot"></span></a>
         <ul class="nav-links">
             <li><a href="/">← Home</a></li>
-            <li><a href="#performance">Performance</a></li>
             <li><a href="#holdings">Holdings</a></li>
             <li><a href="#trades">Trades</a></li>
         </ul>
@@ -488,25 +435,6 @@
             </div>
         </div>
     </div>
-
-    <div class="divider"></div>
-
-    <!-- PERFORMANCE -->
-    <section id="performance">
-        <p class="section-label fade-in">Performance</p>
-        <h2 class="section-title fade-in">Portfolio since tracking started.</h2>
-        <div class="chart-container fade-in">
-            <div class="chart-top-accent"></div>
-            <div class="chart-header">
-                <div>
-                    <div class="chart-value" id="chart-current-value">–</div>
-                    <div class="chart-since" id="chart-since">–</div>
-                </div>
-                <div class="chart-notice" id="chart-notice"></div>
-            </div>
-            <canvas id="portfolio-chart"></canvas>
-        </div>
-    </section>
 
     <div class="divider"></div>
 
@@ -578,14 +506,12 @@
 
         /* ── LOAD DATA ── */
         async function loadAll() {
-            const [snapshot, trades, history] = await Promise.all([
+            const [snapshot, trades] = await Promise.all([
                 fetch('data/snapshot.json').then(r => r.json()),
                 fetch('data/trades.json').then(r => r.json()),
-                fetch('data/history.json').then(r => r.json()),
             ]);
 
             renderMeta(snapshot);
-            renderChart(history, snapshot.date);
             renderHoldings(snapshot.positions);
             renderTrades(trades);
         }
@@ -597,126 +523,6 @@
             document.getElementById('meta-positions').textContent = positions.length;
             document.getElementById('meta-winners').textContent = `${winners}/${positions.length}`;
             document.getElementById('meta-updated').textContent = formatDate(snap.date);
-        }
-
-        /* ── CHART ── */
-        function renderChart(history, latestDate) {
-            const current = history[history.length - 1].valueIndexed;
-            const first   = history[0].valueIndexed;
-            const change  = current - first;
-            const sign    = change >= 0 ? '+' : '';
-            const color   = change >= 0 ? 'var(--z5)' : 'var(--z1)';
-
-            document.getElementById('chart-current-value').innerHTML =
-                `<span style="color:${color}">${sign}${change.toFixed(2)}%</span> <span style="font-size:18px;color:var(--subtext);font-weight:400">since ${formatDate(history[0].date)}</span>`;
-
-            const days = history.length;
-            document.getElementById('chart-since').textContent = `${days} day${days !== 1 ? 's' : ''} of data`;
-
-            const notice = document.getElementById('chart-notice');
-            if (days < 5) {
-                notice.textContent = 'Chart builds over time as data is synced daily.';
-            }
-
-            const canvas = document.getElementById('portfolio-chart');
-            const ctx = canvas.getContext('2d');
-            const dpr = window.devicePixelRatio || 1;
-            const W = canvas.parentElement.clientWidth - 64;
-            const H = 220;
-            canvas.width  = W * dpr;
-            canvas.height = H * dpr;
-            canvas.style.width  = W + 'px';
-            canvas.style.height = H + 'px';
-            ctx.scale(dpr, dpr);
-
-            const values = history.map(h => h.valueIndexed);
-            const minV = Math.min(...values) - 1;
-            const maxV = Math.max(...values) + 1;
-            const range = maxV - minV || 2;
-
-            const padL = 8, padR = 8, padT = 16, padB = 24;
-            const plotW = W - padL - padR;
-            const plotH = H - padT - padB;
-
-            const xOf = i => padL + (i / Math.max(values.length - 1, 1)) * plotW;
-            const yOf = v => padT + (1 - (v - minV) / range) * plotH;
-
-            // baseline at 100
-            const y100 = yOf(100);
-            ctx.beginPath();
-            ctx.setLineDash([4, 6]);
-            ctx.strokeStyle = 'rgba(255,255,255,0.08)';
-            ctx.lineWidth = 1;
-            ctx.moveTo(padL, y100);
-            ctx.lineTo(padL + plotW, y100);
-            ctx.stroke();
-            ctx.setLineDash([]);
-
-            // gradient fill
-            const grad = ctx.createLinearGradient(0, padT, 0, padT + plotH);
-            const isUp = current >= 100;
-            grad.addColorStop(0, isUp ? 'rgba(0,230,118,0.18)' : 'rgba(229,57,53,0.15)');
-            grad.addColorStop(1, 'rgba(0,0,0,0)');
-
-            if (values.length > 1) {
-                ctx.beginPath();
-                ctx.moveTo(xOf(0), yOf(values[0]));
-                values.forEach((v, i) => i > 0 && ctx.lineTo(xOf(i), yOf(v)));
-                ctx.lineTo(xOf(values.length - 1), padT + plotH);
-                ctx.lineTo(xOf(0), padT + plotH);
-                ctx.closePath();
-                ctx.fillStyle = grad;
-                ctx.fill();
-
-                // line
-                ctx.beginPath();
-                ctx.moveTo(xOf(0), yOf(values[0]));
-                values.forEach((v, i) => i > 0 && ctx.lineTo(xOf(i), yOf(v)));
-                ctx.strokeStyle = isUp ? 'var(--z5)' : 'var(--z1)';
-
-                // resolve CSS vars for canvas
-                const testDiv = document.createElement('div');
-                testDiv.style.color = isUp ? 'var(--z5)' : 'var(--z1)';
-                document.body.appendChild(testDiv);
-                const resolvedColor = getComputedStyle(testDiv).color;
-                testDiv.remove();
-
-                ctx.strokeStyle = resolvedColor;
-                ctx.lineWidth = 2;
-                ctx.lineJoin = 'round';
-                ctx.stroke();
-            }
-
-            // dot at last point
-            const lx = xOf(values.length - 1);
-            const ly = yOf(values[values.length - 1]);
-
-            const testDiv2 = document.createElement('div');
-            testDiv2.style.color = isUp ? 'var(--z5)' : 'var(--z1)';
-            document.body.appendChild(testDiv2);
-            const dotColor = getComputedStyle(testDiv2).color;
-            testDiv2.remove();
-
-            ctx.beginPath();
-            ctx.arc(lx, ly, 5, 0, Math.PI * 2);
-            ctx.fillStyle = dotColor;
-            ctx.fill();
-
-            ctx.beginPath();
-            ctx.arc(lx, ly, 9, 0, Math.PI * 2);
-            ctx.fillStyle = isUp ? 'rgba(0,230,118,0.2)' : 'rgba(229,57,53,0.2)';
-            ctx.fill();
-
-            // x-axis date labels
-            ctx.font = '11px Inter, system-ui, sans-serif';
-            ctx.fillStyle = 'rgba(119,119,119,0.8)';
-            ctx.textAlign = 'center';
-            if (history.length > 1) {
-                ctx.fillText(formatDate(history[0].date), xOf(0), H - 4);
-                ctx.fillText(formatDate(history[history.length - 1].date), xOf(history.length - 1), H - 4);
-            } else {
-                ctx.fillText(formatDate(history[0].date), xOf(0), H - 4);
-            }
         }
 
         /* ── HOLDINGS ── */
