@@ -368,6 +368,25 @@
         .card-4 .card-link { color: var(--z1); }
         .card-5 .card-link { color: #C41E3A; }
 
+        /* ── KITE AVATAR ── */
+        .kite-avatar-wrap {
+            display: inline-block;
+            padding: 3px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #833ab4, #c13584, #e1306c, #fd1d1d, #f56040, #fcb045);
+            margin-bottom: 20px;
+        }
+
+        .kite-avatar {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: top center;
+            display: block;
+            border: 3px solid var(--card);
+        }
+
         /* ── ABOUT ── */
         .about-grid {
             display: grid;
@@ -635,6 +654,9 @@
             </div>
             <div class="project-card card-3 fade-in">
                 <div class="card-accent"></div>
+                <div class="kite-avatar-wrap">
+                    <img src="assets/kite-aero-view.jpg" alt="Kite Aero View" class="kite-avatar">
+                </div>
                 <span class="card-tag">Hobby · FPV & Cinematic</span>
                 <h3 class="card-title">Kite Aero View</h3>
                 <p class="card-desc">FPV racing and cinematic drone footage. Building, tuning and flying custom drones, with a preference for filming cars and landscapes. Follow the builds and crashes at @kiteaeroview.</p>
