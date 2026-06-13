@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mag7 vs GRANOLAS · Olive Projects</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --nav-bg:         rgba(11,17,32,0.65);
+            --bg:             #0b1120;
+            --surface:        rgba(255,255,255,0.055);
+            --text:           #eef0f3;
+            --muted:          rgba(255,255,255,0.55);
+            --dim:            rgba(255,255,255,0.40);
+            --faint:          rgba(255,255,255,0.28);
+            --ghost:          rgba(255,255,255,0.20);
+            --border:         rgba(255,255,255,0.10);
+            --btn-bg:         rgba(255,255,255,0.07);
+            --btn-border:     rgba(255,255,255,0.12);
+            --accent:         #00a3e0;
+            --tooltip-bg:     #0f1a30;
+            --scroll-thumb:   rgba(255,255,255,0.12);
+        }
+
+        [data-theme="light"] {
+            --nav-bg:         rgba(240,242,248,0.65);
+            --bg:             #f0f2f8;
+            --surface:        rgba(0,0,0,0.03);
+            --text:           #111318;
+            --muted:          rgba(0,0,0,0.60);
+            --dim:            rgba(0,0,0,0.48);
+            --faint:          rgba(0,0,0,0.38);
+            --ghost:          rgba(0,0,0,0.26);
+            --border:         rgba(0,0,0,0.10);
+            --btn-bg:         rgba(0,0,0,0.04);
+            --btn-border:     rgba(0,0,0,0.10);
+            --accent:         #0082c8;
+            --tooltip-bg:     #ffffff;
+            --scroll-thumb:   rgba(0,0,0,0.15);
+        }
+
+        body { background: var(--bg); }
+
+        .topbar {
+            position: fixed; top: 0; left: 0; right: 0; height: 56px;
+            z-index: 9998; background: var(--nav-bg);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border); pointer-events: none;
+        }
+
+        .back-link {
+            position: fixed; top: 18px; left: 20px; z-index: 9999;
+            color: var(--dim); text-decoration: none;
+            font-family: 'Inter', system-ui, sans-serif; font-size: 14px; font-weight: 700; letter-spacing: -0.3px;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: var(--text); }
+
+        .theme-toggle {
+            position: fixed; top: 16px; right: 20px; z-index: 9999;
+            background: var(--btn-bg); border: 1px solid var(--btn-border);
+            border-radius: 8px; padding: 5px 9px; cursor: pointer;
+            font-size: 15px; line-height: 1; color: var(--dim); transition: all 0.2s;
+        }
+        .theme-toggle:hover { color: var(--text); border-color: var(--faint); }
+
+        .lang-dropdown-wrap { position: fixed; top: 16px; right: 64px; z-index: 9999; }
+        .lang-dropdown-btn {
+            display: flex; align-items: center; gap: 6px;
+            background: var(--btn-bg); border: 1px solid var(--btn-border);
+            border-radius: 8px; padding: 5px 10px; cursor: pointer;
+            font-size: 12px; font-family: monospace; color: var(--dim);
+            transition: all 0.2s; white-space: nowrap;
+        }
+        .lang-dropdown-btn:hover { color: var(--text); border-color: var(--faint); }
+        .lang-dropdown-btn .arrow { font-size: 9px; opacity: 0.6; transition: transform 0.2s; }
+        .lang-dropdown-btn.open .arrow { transform: rotate(180deg); }
+        .lang-menu {
+            position: absolute; top: calc(100% + 6px); right: 0;
+            background: var(--tooltip-bg); border: 1px solid var(--btn-border);
+            border-radius: 10px; overflow: hidden; min-width: 140px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            animation: fadeUp 0.15s ease both;
+        }
+        .lang-option {
+            display: flex; align-items: center; gap: 8px; padding: 9px 14px; cursor: pointer;
+            font-size: 12px; font-family: monospace; color: var(--dim);
+            transition: background 0.15s, color 0.15s;
+            border: none; background: none; width: 100%; text-align: left;
+        }
+        .lang-option:hover { background: rgba(255,255,255,0.07); color: var(--text); }
+        .lang-option.active { color: var(--text); background: rgba(255,255,255,0.05); }
+
+        .tool-nav {
+            position: fixed; top: 0; left: 0; right: 0; height: 56px;
+            display: flex; align-items: center; justify-content: center; gap: 28px;
+            z-index: 9999; pointer-events: none;
+        }
+        .tool-nav a {
+            pointer-events: all; color: var(--dim); text-decoration: none;
+            font-family: 'Inter', system-ui, sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0.1px;
+            transition: color 0.2s;
+        }
+        .tool-nav a:hover { color: var(--text); }
+        .tool-nav a.active { color: var(--accent); }
+
+        @media (max-width: 480px) {
+            .topbar { height: 88px; }
+            .tool-nav { height: 88px; align-items: flex-end; padding-bottom: 10px; }
+            .back-link { top: 14px; }
+            .theme-toggle { top: 12px; }
+            .lang-dropdown-wrap { top: 12px; }
+            .main-wrap { padding-top: 96px !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar"></div>
+    <a href="/" class="back-link">← Olive Projects</a>
+    <nav class="tool-nav">
+        <a href="/mag7.html">Mag7</a>
+        <a href="/vs.html" class="active">VS</a>
+        <a href="/granolas.html">GRANOLAS</a>
+    </nav>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useContext, createContext, useRef } = React;
+
+        const ThemeCtx = createContext("dark");
+        const LangCtx  = createContext("sv");
+
+        function initTheme() {
+            const s = localStorage.getItem("mag7-theme");
+            if (s === "dark" || s === "light") return s;
+            return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        }
+        function initLang() {
+            const s = localStorage.getItem("mag7-lang");
+            if (["sv","en","fr","es"].includes(s)) return s;
+            const nav = navigator.language.slice(0,2);
+            return ["sv","fr","es"].includes(nav) ? nav : "en";
+        }
+
+        const PERIOD_KEYS = ["1w","1m","3m","6m","ytd","1y","3y","5y"];
+
+        const LANGUAGES = [
+            { code:"sv", flag:"🇸🇪", label:"Svenska"  },
+            { code:"en", flag:"🇬🇧", label:"English"  },
+            { code:"fr", flag:"🇫🇷", label:"Français" },
+            { code:"es", flag:"🇪🇸", label:"Español"  },
+        ];
+
+        const LANG = {
+            sv: {
+                date_locale: "sv-SE",
+                status_loading: "Laddar data...",
+                status_updated: t => `Uppdaterad ${t}`,
+                status_error:   "Kunde inte ladda data",
+                subtitle:       "PERFORMANCE · JÄMFÖRELSE",
+                period_label:   "TIDSPERIOD",
+                winner_label:   "Vinnare",
+                draw_label:     "Lika",
+                diff_label:     "Skillnad",
+                note_equal:     "Lika viktning: genomsnittsavkastning för alla 7 resp. 11 bolag, startindex = 100.",
+                note_currency:  "US ADR-priser i USD · GRANOLAS-avkastning inkluderar valutaeffekter USD/EUR.",
+                note_update:    "Uppdateras dagligen efter US-marknadens stängning.",
+            },
+            en: {
+                date_locale: "en-US",
+                status_loading: "Loading data...",
+                status_updated: t => `Updated ${t}`,
+                status_error:   "Could not load data",
+                subtitle:       "PERFORMANCE · COMPARISON",
+                period_label:   "TIME PERIOD",
+                winner_label:   "Winner",
+                draw_label:     "Draw",
+                diff_label:     "Difference",
+                note_equal:     "Equal weight: average return across all 7 and 11 stocks respectively, base = 100.",
+                note_currency:  "US ADR prices in USD · GRANOLAS returns include USD/EUR currency effects.",
+                note_update:    "Updated daily after US market close.",
+            },
+            fr: {
+                date_locale: "fr-FR",
+                status_loading: "Chargement...",
+                status_updated: t => `Mis à jour ${t}`,
+                status_error:   "Impossible de charger les données",
+                subtitle:       "PERFORMANCE · COMPARAISON",
+                period_label:   "PÉRIODE",
+                winner_label:   "Gagnant",
+                draw_label:     "Égalité",
+                diff_label:     "Écart",
+                note_equal:     "Pondération égale : performance moyenne des 7 et 11 valeurs, base = 100.",
+                note_currency:  "Prix ADR en USD · performance GRANOLAS inclut effets de change USD/EUR.",
+                note_update:    "Mis à jour quotidiennement après la clôture US.",
+            },
+            es: {
+                date_locale: "es-ES",
+                status_loading: "Cargando datos...",
+                status_updated: t => `Actualizado ${t}`,
+                status_error:   "No se pudo cargar los datos",
+                subtitle:       "RENDIMIENTO · COMPARACIÓN",
+                period_label:   "PERÍODO",
+                winner_label:   "Ganador",
+                draw_label:     "Empate",
+                diff_label:     "Diferencia",
+                note_equal:     "Ponderación igual: rentabilidad media de las 7 y 11 acciones, base = 100.",
+                note_currency:  "Precios ADR en USD · rentabilidad GRANOLAS incluye efecto divisa USD/EUR.",
+                note_update:    "Actualizado diariamente tras el cierre del mercado estadounidense.",
+            },
+        };
+
+        function LangSelect({ lang, setLang }) {
+            const [open, setOpen] = useState(false);
+            const ref = useRef();
+            const current = LANGUAGES.find(l => l.code === lang) || LANGUAGES[0];
+            useEffect(() => {
+                const h = e => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+                document.addEventListener("mousedown", h);
+                return () => document.removeEventListener("mousedown", h);
+            }, []);
+            return (
+                <div className="lang-dropdown-wrap" ref={ref}>
+                    <button className={`lang-dropdown-btn${open?" open":""}`} onClick={() => setOpen(o => !o)}>
+                        <span>{current.flag} {current.code.toUpperCase()}</span>
+                        <span className="arrow">▼</span>
+                    </button>
+                    {open && (
+                        <div className="lang-menu">
+                            {LANGUAGES.map(l => (
+                                <button key={l.code} className={`lang-option${lang===l.code?" active":""}`}
+                                    onClick={() => { setLang(l.code); setOpen(false); }}>
+                                    <span>{l.flag}</span><span>{l.label}</span>
+                                    {lang===l.code && <span style={{ marginLeft:"auto", color:"var(--accent)", fontSize:10 }}>✓</span>}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        function VSPage() {
+            const [theme,     setTheme]     = useState(initTheme);
+            const [lang,      setLang]      = useState(initLang);
+            const [data,      setData]      = useState(null);
+            const [loadState, setLoadState] = useState({ type:"loading", iso:null });
+            const [period,    setPeriod]    = useState("1y");
+
+            const canvasRef = useRef(null);
+            const chartRef  = useRef(null);
+
+            useEffect(() => {
+                document.documentElement.dataset.theme = theme;
+                localStorage.setItem("mag7-theme", theme);
+            }, [theme]);
+
+            useEffect(() => { localStorage.setItem("mag7-lang", lang); }, [lang]);
+
+            useEffect(() => {
+                const bust = Math.floor(Date.now() / (60 * 60 * 1000));
+                fetch(`https://raw.githubusercontent.com/OliveProjects/financial-tools/main/data/vs.json?v=${bust}`)
+                    .then(r => r.json())
+                    .then(json => { setData(json); setLoadState({ type:"updated", iso:json.generatedAt }); })
+                    .catch(() => setLoadState({ type:"error", iso:null }));
+            }, []);
+
+            useEffect(() => {
+                if (!data || !canvasRef.current) return;
+                const series = data.series[period];
+                if (!series || !series.mag7.length) return;
+
+                if (chartRef.current) { chartRef.current.destroy(); chartRef.current = null; }
+
+                const isDark  = theme === "dark";
+                const gridC   = isDark ? "rgba(255,255,255,0.055)" : "rgba(0,0,0,0.055)";
+                const zeroC   = isDark ? "rgba(255,255,255,0.20)"  : "rgba(0,0,0,0.20)";
+                const tickC   = isDark ? "rgba(255,255,255,0.38)"  : "rgba(0,0,0,0.42)";
+                const T       = LANG[lang];
+
+                const shortPeriod = ["1w","1m","3m","6m","ytd"].includes(period);
+                const dateOpts = shortPeriod
+                    ? { day:"numeric", month:"short" }
+                    : { month:"short", year:"2-digit" };
+
+                const labels       = series.mag7.map(p => new Date(p.t).toLocaleDateString(T.date_locale, dateOpts));
+                const mag7Data     = series.mag7.map(p => parseFloat((p.v - 100).toFixed(2)));
+                const granolasData = series.granolas.map(p => parseFloat((p.v - 100).toFixed(2)));
+
+                chartRef.current = new Chart(canvasRef.current, {
+                    type: "line",
+                    data: {
+                        labels,
+                        datasets: [
+                            {
+                                label: "Mag7",
+                                data: mag7Data,
+                                borderColor: "#00a3e0",
+                                backgroundColor: "rgba(0,163,224,0.07)",
+                                borderWidth: 2.5,
+                                pointRadius: 0,
+                                pointHoverRadius: 5,
+                                tension: 0.35,
+                                fill: true,
+                            },
+                            {
+                                label: "GRANOLAS",
+                                data: granolasData,
+                                borderColor: "#00e676",
+                                backgroundColor: "rgba(0,230,118,0.07)",
+                                borderWidth: 2.5,
+                                pointRadius: 0,
+                                pointHoverRadius: 5,
+                                tension: 0.35,
+                                fill: true,
+                            },
+                        ],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: { duration: 500, easing: "easeInOutQuart" },
+                        interaction: { mode: "index", intersect: false },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: isDark ? "#0f1a30" : "#ffffff",
+                                borderColor:     isDark ? "rgba(0,163,224,0.3)" : "rgba(0,0,0,0.10)",
+                                borderWidth: 1,
+                                titleColor: isDark ? "rgba(255,255,255,0.85)" : "#111318",
+                                bodyColor:  isDark ? "rgba(255,255,255,0.65)" : "rgba(0,0,0,0.65)",
+                                padding: 12,
+                                callbacks: {
+                                    label: ctx => {
+                                        const v = ctx.parsed.y;
+                                        return `${ctx.dataset.label}: ${v >= 0 ? "+" : ""}${v.toFixed(1)}%`;
+                                    },
+                                },
+                            },
+                        },
+                        scales: {
+                            x: {
+                                grid:   { color: gridC },
+                                ticks:  { color: tickC, maxTicksLimit: 8, maxRotation: 0 },
+                                border: { display: false },
+                            },
+                            y: {
+                                grid: { color: ctx => ctx.tick.value === 0 ? zeroC : gridC },
+                                ticks: {
+                                    color: tickC,
+                                    callback: v => (v >= 0 ? "+" : "") + v.toFixed(0) + "%",
+                                },
+                                border: { display: false },
+                            },
+                        },
+                    },
+                });
+
+                return () => { if (chartRef.current) { chartRef.current.destroy(); chartRef.current = null; } };
+            }, [data, period, theme, lang]);
+
+            const T = LANG[lang];
+
+            const statusText = loadState.type === "loading" ? T.status_loading
+                : loadState.type === "error" ? T.status_error
+                : loadState.iso ? T.status_updated(new Date(loadState.iso).toLocaleString(T.date_locale, { day:"numeric", month:"short", hour:"2-digit", minute:"2-digit" }))
+                : "";
+
+            const series        = data?.series[period];
+            const mag7Final     = series?.mag7?.length     ? parseFloat((series.mag7[series.mag7.length-1].v         - 100).toFixed(2)) : null;
+            const granolassFinal = series?.granolas?.length ? parseFloat((series.granolas[series.granolas.length-1].v - 100).toFixed(2)) : null;
+            const diff    = mag7Final != null && granolassFinal != null ? Math.abs(mag7Final - granolassFinal).toFixed(1) : null;
+            const mag7Wins = mag7Final != null && granolassFinal != null && mag7Final > granolassFinal;
+            const draw     = mag7Final != null && granolassFinal != null && mag7Final === granolassFinal;
+
+            const isDark = theme === "dark";
+            const posC   = isDark ? "#00e676" : "#00903d";
+            const negC   = isDark ? "#ff5252" : "#c42020";
+            const retColor = v => v == null ? "var(--faint)" : v >= 0 ? posC : negC;
+
+            const grad = isDark
+                ? "radial-gradient(ellipse 80% 35% at 15% -5%, rgba(0,163,224,0.14) 0%, transparent 65%), radial-gradient(ellipse 60% 35% at 85% -5%, rgba(0,230,118,0.10) 0%, transparent 65%)"
+                : "radial-gradient(ellipse 80% 35% at 15% -5%, rgba(0,130,200,0.07) 0%, transparent 65%), radial-gradient(ellipse 60% 35% at 85% -5%, rgba(0,180,80,0.07) 0%, transparent 65%)";
+
+            if (!data) return (
+                <ThemeCtx.Provider value={theme}><LangCtx.Provider value={lang}>
+                    <button className="theme-toggle" onClick={() => setTheme(t => t==="dark"?"light":"dark")}>{isDark?"☀":"🌙"}</button>
+                    <LangSelect lang={lang} setLang={setLang} />
+                    <div style={{ minHeight:"100vh", background:"var(--bg)", display:"flex", alignItems:"center", justifyContent:"center" }}>
+                        <div style={{ fontFamily:"monospace", fontSize:13, color:"var(--faint)" }}>{statusText}</div>
+                    </div>
+                </LangCtx.Provider></ThemeCtx.Provider>
+            );
+
+            return (
+                <ThemeCtx.Provider value={theme}><LangCtx.Provider value={lang}>
+                    <button className="theme-toggle" onClick={() => setTheme(t => t==="dark"?"light":"dark")}>{isDark?"☀":"🌙"}</button>
+                    <LangSelect lang={lang} setLang={setLang} />
+
+                    <div className="main-wrap" style={{ minHeight:"100vh", background:"var(--bg)", color:"var(--text)", padding:"60px 12px 80px", backgroundImage:grad }}>
+                        <style>{`
+                            @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&display=swap');
+                            @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+                            ::-webkit-scrollbar{height:4px;}::-webkit-scrollbar-thumb{background:var(--scroll-thumb);border-radius:2px;}
+                        `}</style>
+                        <div style={{ maxWidth:1100, margin:"0 auto" }}>
+
+                            {/* Header */}
+                            <div style={{ marginBottom:28, animation:"fadeUp 0.4s ease both" }}>
+                                <div style={{ fontFamily:"monospace", fontSize:10, color:"var(--ghost)", letterSpacing:"0.2em", marginBottom:8 }}>
+                                    {T.subtitle}{statusText ? <span style={{ color:"var(--dim)", letterSpacing:"0.1em" }}> · {statusText}</span> : ""}
+                                </div>
+                                <h1 style={{ fontFamily:"'Sora',sans-serif", fontSize:"clamp(24px,4vw,38px)", fontWeight:700, letterSpacing:"-0.03em" }}>
+                                    Mag<span style={{ color:"#00a3e0" }}>7</span>
+                                    <span style={{ color:"#ffab00", fontWeight:300, margin:"0 14px", fontSize:"0.8em" }}>vs</span>
+                                    Gran<span style={{ color:"#00e676" }}>olas</span>
+                                </h1>
+                            </div>
+
+                            {/* Period selector */}
+                            <div style={{ marginBottom:20, animation:"fadeUp 0.4s ease 0.05s both" }}>
+                                <div style={{ fontFamily:"monospace", fontSize:10, color:"var(--faint)", letterSpacing:"0.12em", marginBottom:10 }}>{T.period_label}</div>
+                                <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
+                                    {PERIOD_KEYS.map(p => {
+                                        const active = period === p;
+                                        return (
+                                            <button key={p} onClick={() => setPeriod(p)} style={{
+                                                padding:"8px 16px", borderRadius:10, cursor:"pointer",
+                                                background:active?"rgba(0,163,224,0.15)":"var(--btn-bg)",
+                                                border:active?"1px solid rgba(0,163,224,0.5)":"1px solid var(--btn-border)",
+                                                color:active?"var(--accent)":"var(--dim)",
+                                                fontFamily:"monospace", fontSize:12, fontWeight:active?700:400,
+                                                transition:"all 0.2s", letterSpacing:"0.05em",
+                                            }}>{p.toUpperCase()}</button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            {/* Stats cards */}
+                            <div style={{ display:"flex", gap:12, marginBottom:16, flexWrap:"wrap", animation:"fadeUp 0.4s ease 0.1s both" }}>
+                                {[
+                                    { key:"mag7",     label:"MAG7",     color:"#00a3e0", val:mag7Final,      wins:mag7Wins && !draw },
+                                    { key:"granolas", label:"GRANOLAS", color:"#00e676", val:granolassFinal, wins:!mag7Wins && !draw },
+                                ].map(s => (
+                                    <div key={s.key} style={{ flex:"1 1 160px", minWidth:160, padding:"16px 20px", background:"var(--surface)", borderRadius:12, border:"1px solid var(--border)", position:"relative", overflow:"hidden" }}>
+                                        <div style={{ position:"absolute", top:0, left:0, right:0, height:3, background:s.color, opacity:0.7 }} />
+                                        <div style={{ fontFamily:"monospace", fontSize:10, color:s.color, letterSpacing:"0.12em", marginBottom:6 }}>{s.label}</div>
+                                        <div style={{ fontFamily:"'Sora',sans-serif", fontSize:32, fontWeight:700, color:retColor(s.val), lineHeight:1.1 }}>
+                                            {s.val != null ? (s.val >= 0 ? "+" : "") + s.val.toFixed(1) + "%" : "–"}
+                                        </div>
+                                        {s.wins && (
+                                            <div style={{ marginTop:8, display:"inline-flex", alignItems:"center", gap:5, padding:"3px 10px", background:`${s.color}18`, border:`1px solid ${s.color}44`, borderRadius:20 }}>
+                                                <span style={{ fontSize:12 }}>🏆</span>
+                                                <span style={{ fontFamily:"monospace", fontSize:10, color:s.color }}>{T.winner_label}</span>
+                                            </div>
+                                        )}
+                                        {draw && <div style={{ marginTop:8, fontFamily:"monospace", fontSize:10, color:"var(--faint)" }}>{T.draw_label}</div>}
+                                    </div>
+                                ))}
+                                <div style={{ flex:"1 1 130px", minWidth:130, padding:"16px 20px", background:"var(--surface)", borderRadius:12, border:"1px solid var(--border)" }}>
+                                    <div style={{ fontFamily:"monospace", fontSize:10, color:"var(--dim)", letterSpacing:"0.12em", marginBottom:6 }}>Δ {T.diff_label.toUpperCase()}</div>
+                                    <div style={{ fontFamily:"'Sora',sans-serif", fontSize:32, fontWeight:700, color:"var(--text)", lineHeight:1.1 }}>
+                                        {diff != null ? diff + "pp" : "–"}
+                                    </div>
+                                    <div style={{ marginTop:6, fontFamily:"monospace", fontSize:10, color:"var(--faint)" }}>
+                                        {diff != null && !draw ? (mag7Wins ? "Mag7 +" : "GRANOLAS +") + diff + "pp" : ""}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Chart */}
+                            <div style={{ background:"var(--surface)", borderRadius:14, border:"1px solid var(--border)", padding:"16px 16px 12px", animation:"fadeUp 0.4s ease 0.15s both" }}>
+                                <div style={{ display:"flex", gap:20, marginBottom:14, paddingLeft:4 }}>
+                                    {[["Mag7","#00a3e0"],["GRANOLAS","#00e676"]].map(([lbl,col]) => (
+                                        <div key={lbl} style={{ display:"flex", alignItems:"center", gap:8 }}>
+                                            <div style={{ width:28, height:3, background:col, borderRadius:2 }} />
+                                            <span style={{ fontFamily:"monospace", fontSize:11, color:"var(--dim)" }}>{lbl}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div style={{ height:360, position:"relative" }}>
+                                    <canvas ref={canvasRef} />
+                                </div>
+                            </div>
+
+                            {/* Notes */}
+                            <div style={{ marginTop:16, display:"flex", flexWrap:"wrap", gap:"6px 20px", fontFamily:"monospace", fontSize:10, color:"var(--muted)" }}>
+                                <span>● {T.note_equal}</span>
+                                <span>● {T.note_currency}</span>
+                                <span>● {T.note_update}</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </LangCtx.Provider></ThemeCtx.Provider>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById("root")).render(<VSPage />);
+    </script>
+</body>
+</html>
