@@ -267,11 +267,14 @@
         /* ── PROJECT CARDS ── */
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(12, 1fr);
             gap: 16px;
         }
 
-        .project-card:last-child:nth-child(odd) { grid-column: span 2; }
+        .col-6  { grid-column: span 6; }
+        .col-7  { grid-column: span 7; }
+        .col-5  { grid-column: span 5; }
+        .col-12 { grid-column: span 12; }
 
         .project-card {
             background: var(--card);
@@ -589,6 +592,7 @@
         /* ── RESPONSIVE ── */
         @media (max-width: 900px) {
             .projects-grid { grid-template-columns: 1fr; }
+            .col-6, .col-7, .col-5, .col-12 { grid-column: span 1; }
             .about-grid { grid-template-columns: 1fr; gap: 48px; }
         }
 
@@ -636,7 +640,7 @@
         <p class="section-desc fade-in">A market sentiment app, a live stock tracker, FPV drone footage and an iOS app in the works. Projects I actually use and keep building.</p>
 
         <div class="projects-grid">
-            <div class="project-card card-1 fade-in">
+            <div class="project-card card-1 col-6 fade-in">
                 <div class="card-accent"></div>
                 <a href="https://play.google.com/store/apps/details?id=com.kite.marketmood" target="_blank"><img src="assets/market-moood.jpg" alt="Market Moood app" class="card-img"></a>
                 <span class="card-tag">App · Android</span>
@@ -644,34 +648,38 @@
                 <p class="card-desc">A minimalist Android app and home screen widget that tracks the CNN Fear &amp; Greed Index in real time. Know the market's emotional temperature at a glance, from Extreme Fear to Extreme Greed, with quotes from Buffett, Munger and Morgan Housel.</p>
                 <a href="https://play.google.com/store/apps/details?id=com.kite.marketmood" target="_blank" class="card-link">View on Play Store →</a>
             </div>
-            <div class="project-card card-2 fade-in">
+            <div class="project-card card-2 col-6 fade-in">
                 <div class="card-accent"></div>
                 <a href="/mag7.html"><img id="mag7-img" src="assets/mag7-dark.png" alt="Mag7 Index tool" class="card-img" style="object-position:top;"></a>
                 <span class="card-tag">Tool · Finance</span>
                 <h3 class="card-title">Mag7 & GRANOLAS</h3>
-                <p class="card-desc">Two live analyst trackers. Mag7 ranks the Magnificent Seven US tech stocks by value, risk and risk/reward. GRANOLAS does the same for Europe's eleven defensive quality giants — from LVMH to Nestlé to Novo Nordisk.</p>
+                <p class="card-desc">Two live analyst trackers. Mag7 ranks the Magnificent Seven US tech stocks by value, risk and risk/reward. GRANOLAS does the same for Europe's eleven defensive quality giants, from LVMH to Nestlé to Novo Nordisk.</p>
                 <div style="display:flex;gap:16px;flex-wrap:wrap;">
                     <a href="/mag7.html" class="card-link">Mag7 →</a>
                     <a href="/granolas.html" class="card-link">GRANOLAS →</a>
                 </div>
             </div>
-            <div class="project-card card-3 fade-in">
+            <div class="project-card card-3 col-7 fade-in">
                 <div class="card-accent"></div>
-                <div class="kite-avatar-wrap">
-                    <img src="assets/kite-aero-view.jpg" alt="Kite Aero View" class="kite-avatar">
+                <div style="display:flex;gap:24px;align-items:flex-start;">
+                    <div class="kite-avatar-wrap" style="flex-shrink:0;margin-bottom:0;">
+                        <img src="assets/kite-aero-view.jpg" alt="Kite Aero View" class="kite-avatar">
+                    </div>
+                    <div>
+                        <span class="card-tag">Hobby · FPV & Cinematic</span>
+                        <h3 class="card-title">Kite Aero View</h3>
+                        <p class="card-desc">FPV racing and cinematic drone footage. Building, tuning and flying custom drones, with a preference for filming cars and landscapes. Follow the builds and crashes at @kiteaeroview.</p>
+                        <a href="https://www.instagram.com/kiteaeroview" target="_blank" class="card-link">Follow on Instagram →</a>
+                    </div>
                 </div>
-                <span class="card-tag">Hobby · FPV & Cinematic</span>
-                <h3 class="card-title">Kite Aero View</h3>
-                <p class="card-desc">FPV racing and cinematic drone footage. Building, tuning and flying custom drones, with a preference for filming cars and landscapes. Follow the builds and crashes at @kiteaeroview.</p>
-                <a href="https://www.instagram.com/kiteaeroview" target="_blank" class="card-link">Follow on Instagram →</a>
             </div>
-            <div class="project-card card-4 fade-in">
+            <div class="project-card card-4 col-5 fade-in">
                 <div class="card-accent"></div>
                 <span class="card-tag">In Progress · iOS</span>
                 <h3 class="card-title">Market Moood for iOS</h3>
                 <p class="card-desc">Bringing Market Moood to iPhone. The same minimalist Fear &amp; Greed tracker, rebuilt natively for iOS with home screen widgets. The Android version ships weekly updates while the iOS version takes shape.</p>
             </div>
-            <div class="project-card card-5 fade-in">
+            <div class="project-card card-5 col-12 fade-in">
                 <div class="card-accent"></div>
                 <span class="card-tag">Finance · Personal</span>
                 <h3 class="card-title">Portfolio</h3>
