@@ -659,7 +659,7 @@
 
             const statusText = loadState.type==="loading" ? T.status_loading
                 : loadState.type==="error" ? T.status_error
-                : loadState.iso ? T.status_updated(new Date(loadState.iso).toLocaleTimeString(T.date_locale, { hour:"2-digit", minute:"2-digit" }))
+                : loadState.iso ? T.status_updated(new Date(loadState.iso).toLocaleString(T.date_locale, { day:"numeric", month:"short", hour:"2-digit", minute:"2-digit" }))
                 : "";
 
             if (!data) return (
