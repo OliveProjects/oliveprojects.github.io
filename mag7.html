@@ -11,6 +11,7 @@
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
+            --nav-bg:         rgba(11,17,32,0.65);
             --bg:             #0b1120;
             --surface:        rgba(255,255,255,0.055);
             --text:           #eef0f3;
@@ -40,6 +41,7 @@
         }
 
         [data-theme="light"] {
+            --nav-bg:         rgba(240,242,248,0.65);
             --bg:             #f0f2f8;
             --surface:        rgba(0,0,0,0.03);
             --text:           #111318;
@@ -69,6 +71,18 @@
         }
 
         body { background: var(--bg); }
+
+        .topbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 56px;
+            z-index: 9998;
+            background: var(--nav-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            pointer-events: none;
+        }
 
         .back-link {
             position: fixed; top: 20px; left: 20px; z-index: 9999;
@@ -124,6 +138,7 @@
     </style>
 </head>
 <body>
+    <div class="topbar"></div>
     <a href="/" class="back-link">← Olive Projects</a>
     <div id="root"></div>
     <div class="view-counter" id="view-counter"><span id="view-count">–</span> views</div>
@@ -640,7 +655,7 @@
                     <button className="theme-toggle" onClick={() => setTheme(t => t==="dark"?"light":"dark")}>{theme==="dark"?"☀":"🌙"}</button>
                     <LangSelect lang={lang} setLang={setLang} />
 
-                    <div style={{ minHeight:"100vh", background:"var(--bg)", color:"var(--text)", padding:"60px 12px 48px", backgroundImage:grad }}>
+                    <div style={{ minHeight:"100vh", background:"var(--bg)", color:"var(--text)", padding:"60px 12px 80px", backgroundImage:grad }}>
                         <style>{`
                             @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&display=swap');
                             @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -692,7 +707,7 @@
 
                             {/* Table */}
                             <div style={{ overflowX:"auto", borderRadius:14, border:"1px solid var(--border)" }}>
-                                <table style={{ width:"100%", borderCollapse:"collapse", fontFamily:"'Sora',sans-serif" }}>
+                                <table style={{ width:"100%", minWidth:900, borderCollapse:"collapse", fontFamily:"'Sora',sans-serif" }}>
                                     <thead>
                                         <tr style={{ background:"var(--surface)" }}>
                                             <th style={{ padding:"10px 16px", textAlign:"left", fontFamily:"monospace", fontSize:10, color:"var(--faint)", letterSpacing:"0.08em", borderBottom:"1px solid var(--border-sm)", whiteSpace:"nowrap" }}>{T.th_company}</th>
