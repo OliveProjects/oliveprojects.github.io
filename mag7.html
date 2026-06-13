@@ -129,6 +129,19 @@
         .lang-option:hover { background: rgba(255,255,255,0.07); color: var(--text); }
         .lang-option.active { color: var(--text); background: rgba(255,255,255,0.05); }
 
+        .tool-nav {
+            position: fixed; top: 0; left: 0; right: 0; height: 56px;
+            display: flex; align-items: center; justify-content: center; gap: 28px;
+            z-index: 9999; pointer-events: none;
+        }
+        .tool-nav a {
+            pointer-events: all; color: var(--dim); text-decoration: none;
+            font-family: monospace; font-size: 11px; letter-spacing: 0.14em;
+            transition: color 0.2s; text-transform: uppercase;
+        }
+        .tool-nav a:hover { color: var(--text); }
+        .tool-nav a.active { color: var(--accent); }
+
         .view-counter {
             position: fixed; bottom: 20px; right: 20px;
             font-size: 12px; color: var(--muted); font-family: monospace;
@@ -140,6 +153,10 @@
 <body>
     <div class="topbar"></div>
     <a href="/" class="back-link">← Olive Projects</a>
+    <nav class="tool-nav">
+        <a href="/mag7.html" class="active">Mag7</a>
+        <a href="/granolas.html">GRANOLAS</a>
+    </nav>
     <div id="root"></div>
     <div class="view-counter" id="view-counter"><span id="view-count">–</span> views</div>
 
@@ -600,7 +617,7 @@
 
             useEffect(() => {
                 const bust = Math.floor(Date.now()/(15*60*1000));
-                fetch(`https://raw.githubusercontent.com/OliveProjects/mag7/main/data/mag7.json?v=${bust}`)
+                fetch(`https://raw.githubusercontent.com/OliveProjects/financial-tools/main/data/mag7.json?v=${bust}`)
                     .then(r => r.json())
                     .then(json => { setData(json); setLoadState({ type:"updated", iso:json.lastYahooUpdate }); })
                     .catch(() => setLoadState({ type:"error", iso:null }));
