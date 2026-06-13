@@ -618,7 +618,7 @@
 
             useEffect(() => {
                 const bust = Math.floor(Date.now()/(15*60*1000));
-                fetch(`https://raw.githubusercontent.com/OliveProjects/financial-tools/main/data/granolas.json?v=${bust}`)
+                fetch(`https://raw.githubusercontent.com/OliveProjects/mag7/main/data/granolas.json?v=${bust}`)
                     .then(r => r.json())
                     .then(json => { setData(json); setLoadState({ type:"updated", iso:json.lastYahooUpdate }); })
                     .catch(() => setLoadState({ type:"error", iso:null }));
