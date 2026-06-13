@@ -258,11 +258,6 @@
             const [data,      setData]      = useState(null);
             const [loadState, setLoadState] = useState({ type:"loading", iso:null });
             const [period,    setPeriod]    = useState("1y");
-            const [chartType, setChartType] = useState(() => {
-                const s = localStorage.getItem("vs-chart-type");
-                return ["smooth","sharp","bar"].includes(s) ? s : "smooth";
-            });
-
             const canvasRef = useRef(null);
             const chartRef  = useRef(null);
 
@@ -272,7 +267,6 @@
             }, [theme]);
 
             useEffect(() => { localStorage.setItem("mag7-lang", lang); }, [lang]);
-            useEffect(() => { localStorage.setItem("vs-chart-type", chartType); }, [chartType]);
 
             useEffect(() => {
                 const bust = Math.floor(Date.now() / (15 * 60 * 1000));
@@ -304,11 +298,8 @@
                 const mag7Data     = series.mag7.map(p => parseFloat((p.v - 100).toFixed(2)));
                 const granolasData = series.granolas.map(p => parseFloat((p.v - 100).toFixed(2)));
 
-                const isBar     = chartType === "bar";
-                const lineTension = chartType === "smooth" ? 0.35 : 0;
-
                 chartRef.current = new Chart(canvasRef.current, {
-                    type: isBar ? "bar" : "line",
+                    type: "line",
                     data: {
                         labels,
                         datasets: [
@@ -316,25 +307,23 @@
                                 label: "Mag7",
                                 data: mag7Data,
                                 borderColor: "#00a3e0",
-                                backgroundColor: isBar ? "rgba(0,163,224,0.55)" : "rgba(0,163,224,0.07)",
-                                borderWidth: isBar ? 0 : 2.5,
-                                borderRadius: isBar ? 4 : 0,
+                                backgroundColor: "rgba(0,163,224,0.07)",
+                                borderWidth: 2.5,
                                 pointRadius: 0,
-                                pointHoverRadius: isBar ? 0 : 5,
-                                tension: lineTension,
-                                fill: !isBar,
+                                pointHoverRadius: 5,
+                                tension: 0,
+                                fill: true,
                             },
                             {
                                 label: "GRANOLAS",
                                 data: granolasData,
                                 borderColor: "#00e676",
-                                backgroundColor: isBar ? "rgba(0,230,118,0.55)" : "rgba(0,230,118,0.07)",
-                                borderWidth: isBar ? 0 : 2.5,
-                                borderRadius: isBar ? 4 : 0,
+                                backgroundColor: "rgba(0,230,118,0.07)",
+                                borderWidth: 2.5,
                                 pointRadius: 0,
-                                pointHoverRadius: isBar ? 0 : 5,
-                                tension: lineTension,
-                                fill: !isBar,
+                                pointHoverRadius: 5,
+                                tension: 0,
+                                fill: true,
                             },
                         ],
                     },
@@ -379,7 +368,7 @@
                 });
 
                 return () => { if (chartRef.current) { chartRef.current.destroy(); chartRef.current = null; } };
-            }, [data, period, theme, lang, chartType]);
+            }, [data, period, theme, lang]);
 
             const T = LANG[lang];
 
@@ -493,34 +482,13 @@
 
                             {/* Chart */}
                             <div style={{ background:"var(--surface)", borderRadius:14, border:"1px solid var(--border)", padding:"16px 16px 12px", animation:"fadeUp 0.4s ease 0.15s both" }}>
-                                <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:10, marginBottom:14, paddingLeft:4 }}>
-                                    <div style={{ display:"flex", gap:20 }}>
-                                        {[["Mag7","#00a3e0"],["GRANOLAS","#00e676"]].map(([lbl,col]) => (
-                                            <div key={lbl} style={{ display:"flex", alignItems:"center", gap:8 }}>
-                                                <div style={{ width:chartType==="bar"?10:28, height:chartType==="bar"?10:3, background:col, borderRadius:chartType==="bar"?2:2 }} />
-                                                <span style={{ fontFamily:"monospace", fontSize:11, color:"var(--dim)" }}>{lbl}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <div style={{ display:"flex", gap:6 }}>
-                                        {[
-                                            { key:"smooth", icon:"〜", title:"Smooth" },
-                                            { key:"sharp",  icon:"⌇", title:"Sharp"  },
-                                            { key:"bar",    icon:"▋", title:"Bar"    },
-                                        ].map(({ key, icon, title }) => {
-                                            const active = chartType === key;
-                                            return (
-                                                <button key={key} onClick={() => setChartType(key)} title={title} style={{
-                                                    padding:"5px 10px", borderRadius:8, cursor:"pointer",
-                                                    background:active?"rgba(0,163,224,0.15)":"var(--btn-bg)",
-                                                    border:active?"1px solid rgba(0,163,224,0.45)":"1px solid var(--btn-border)",
-                                                    color:active?"var(--accent)":"var(--dim)",
-                                                    fontFamily:"monospace", fontSize:13, lineHeight:1,
-                                                    transition:"all 0.18s",
-                                                }}>{icon}</button>
-                                            );
-                                        })}
-                                    </div>
+                                <div style={{ display:"flex", gap:20, marginBottom:14, paddingLeft:4 }}>
+                                    {[["Mag7","#00a3e0"],["GRANOLAS","#00e676"]].map(([lbl,col]) => (
+                                        <div key={lbl} style={{ display:"flex", alignItems:"center", gap:8 }}>
+                                            <div style={{ width:28, height:3, background:col, borderRadius:2 }} />
+                                            <span style={{ fontFamily:"monospace", fontSize:11, color:"var(--dim)" }}>{lbl}</span>
+                                        </div>
+                                    ))}
                                 </div>
                                 <div style={{ height:360, position:"relative" }}>
                                     <canvas ref={canvasRef} />
