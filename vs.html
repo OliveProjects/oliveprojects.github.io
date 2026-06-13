@@ -172,6 +172,7 @@
                 diff_label:     "Skillnad",
                 note_equal:     "Lika viktning: genomsnittsavkastning för alla 7 resp. 11 bolag, startindex = 100.",
                 note_currency:  "US ADR-priser i USD · GRANOLAS-avkastning inkluderar valutaeffekter USD/EUR.",
+                note_dividends: "Prisavkastning — ej justerat för utdelningar. GRANOLAS ger ~2–3% utdelning/år vilket ej syns i graferna.",
                 note_update:    "Uppdateras dagligen efter US-marknadens stängning.",
             },
             en: {
@@ -186,6 +187,7 @@
                 diff_label:     "Difference",
                 note_equal:     "Equal weight: average return across all 7 and 11 stocks respectively, base = 100.",
                 note_currency:  "US ADR prices in USD · GRANOLAS returns include USD/EUR currency effects.",
+                note_dividends: "Price return only — dividends excluded. GRANOLAS yields ~2–3%/yr not reflected in the chart.",
                 note_update:    "Updated daily after US market close.",
             },
             fr: {
@@ -200,6 +202,7 @@
                 diff_label:     "Écart",
                 note_equal:     "Pondération égale : performance moyenne des 7 et 11 valeurs, base = 100.",
                 note_currency:  "Prix ADR en USD · performance GRANOLAS inclut effets de change USD/EUR.",
+                note_dividends: "Performance en prix — dividendes exclus. GRANOLAS verse ~2–3 %/an non reflétés dans le graphique.",
                 note_update:    "Mis à jour quotidiennement après la clôture US.",
             },
             es: {
@@ -214,6 +217,7 @@
                 diff_label:     "Diferencia",
                 note_equal:     "Ponderación igual: rentabilidad media de las 7 y 11 acciones, base = 100.",
                 note_currency:  "Precios ADR en USD · rentabilidad GRANOLAS incluye efecto divisa USD/EUR.",
+                note_dividends: "Rentabilidad en precio — dividendos excluidos. GRANOLAS rinde ~2–3 %/año no reflejado en el gráfico.",
                 note_update:    "Actualizado diariamente tras el cierre del mercado estadounidense.",
             },
         };
@@ -527,6 +531,7 @@
                             <div style={{ marginTop:16, display:"flex", flexWrap:"wrap", gap:"6px 20px", fontFamily:"monospace", fontSize:10, color:"var(--muted)" }}>
                                 <span>● {T.note_equal}</span>
                                 <span>● {T.note_currency}</span>
+                                <span>● {T.note_dividends}</span>
                                 <span>● {T.note_update}</span>
                             </div>
 
